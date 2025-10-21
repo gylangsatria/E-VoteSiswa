@@ -90,6 +90,8 @@ Class Admin_Model extends CI_Model {
 		);
 		$this->db->insert('tb_kelas', $data);
 	}
+
+	/*
 	public function tambahcalon($nisn, $no , $nama, $photo) {
 		$data		= array (
 			'nisn'	=> $nisn,
@@ -98,7 +100,19 @@ Class Admin_Model extends CI_Model {
 			'photo' => $photo
 		);
 		$this->db->insert('tb_pilihan', $data);
+	} */
+
+	public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
+		$data = array(
+			'nisn'          => $nisn,
+			'no'            => $no,
+			'nama'          => $nama,
+			'photo'         => $photo,
+        'opsi_mpkosis'  => $opsi_mpkosis // 0 = MPK, 1 = OSIS
+    );
+		$this->db->insert('tb_pilihan', $data);
 	}
+
 	public function hapuskelas($kd_kelas) {
 		$hapus = $this->db->query("DELETE FROM tb_kelas WHERE kd_kelas='$kd_kelas'");
 		return $hapus;
@@ -107,10 +121,24 @@ Class Admin_Model extends CI_Model {
 		$hapus = $this->db->query("DELETE FROM tb_kelas");
 		return $hapus;
 	}
+
+	/*
 	public function updatecalon($nisn, $no , $nama) {
 		$save		= $this->db->query("UPDATE tb_pilihan SET no='$no', nama='$nama' WHERE nisn='$nisn'");
 		return $save;
+	} */
+
+	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis) {
+		$save = $this->db->query("
+			UPDATE tb_pilihan 
+				SET no = '$no', 
+				nama = '$nama', 
+				opsi_mpkosis = '$opsi_mpkosis' 
+				WHERE nisn = '$nisn'
+				");
+		return $save;
 	}
+
 	public function hapuscalon($nisn) {
 		$hapus		= $this->db->query("DELETE FROM tb_pilihan WHERE nisn='$nisn'");
 		return $hapus;
@@ -173,7 +201,7 @@ Class Admin_Model extends CI_Model {
 	}
 	public function hasilvote() {
 		$count	= $this->db->query("SELECT * , (
-		SELECT COUNT(tb_pilih.id_pilih)) AS jumlah
+			SELECT COUNT(tb_pilih.id_pilih)) AS jumlah
 		FROM
 		tb_pilihan
 		INNER JOIN tb_pilih
@@ -197,26 +225,26 @@ Class Admin_Model extends CI_Model {
 	}
 	public function jmlvoteL() {
 		$data = $this->db->query("
-		SELECT COUNT(tb_siswa.jk) as L 
-		FROM 
-		tb_siswa 
-		INNER JOIN 
-		tb_pilih
-		ON 
-		tb_siswa.username = tb_pilih.username
-		WHERE jk='L'");
+			SELECT COUNT(tb_siswa.jk) as L 
+			FROM 
+			tb_siswa 
+			INNER JOIN 
+			tb_pilih
+			ON 
+			tb_siswa.username = tb_pilih.username
+			WHERE jk='L'");
 		return $data->result_array();
 	}
 	public function jmlvoteP() {
 		$data = $this->db->query("
-		SELECT COUNT(tb_siswa.jk) as P 
-		FROM 
-		tb_siswa 
-		INNER JOIN 
-		tb_pilih
-		ON 
-		tb_siswa.username = tb_pilih.username
-		WHERE jk='P'");
+			SELECT COUNT(tb_siswa.jk) as P 
+			FROM 
+			tb_siswa 
+			INNER JOIN 
+			tb_pilih
+			ON 
+			tb_siswa.username = tb_pilih.username
+			WHERE jk='P'");
 		return $data->result_array();
 	}
 	public function kuncivote() {
