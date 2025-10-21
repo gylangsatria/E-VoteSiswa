@@ -200,21 +200,20 @@ Class Admin_Model extends CI_Model {
 		return $count->result_array();
 	}
 	public function hasilvote() {
-		$count	= $this->db->query("SELECT * , (
-			SELECT COUNT(tb_pilih.id_pilih)) AS jumlah
-		FROM
-		tb_pilihan
-		INNER JOIN tb_pilih
-		ON
-		tb_pilihan.nisn = tb_pilih.nisn
-		INNER JOIN tb_siswa
-		ON 
-		tb_siswa.username = tb_pilih.username
-		GROUP BY tb_pilih.nisn
-		ORDER BY tb_pilihan.no ASC
-		");
-		return $count->result_array();
+		$query = $this->db->query("
+			SELECT 
+			tb_pilihan.no,
+			tb_pilihan.nama,
+			tb_pilihan.photo,
+			COUNT(tb_pilih.id_pilih) AS jumlah
+			FROM tb_pilihan
+			LEFT JOIN tb_pilih ON tb_pilihan.nisn = tb_pilih.nisn
+			GROUP BY tb_pilihan.no, tb_pilihan.nama, tb_pilihan.photo
+			ORDER BY tb_pilihan.no ASC
+			");
+		return $query->result_array();
 	}
+
 	public function jmldptL() {
 		$data = $this->db->query("SELECT COUNT(jk) as L FROM tb_siswa WHERE jk='L'");
 		return $data->result_array();
