@@ -1,6 +1,7 @@
 # DAFTAR PERUBAHAN
 <ol>
   <li>Perubahan Template dari Charisma ke AdminLTE</b></li>
+  <li>21 Oktober 2025 : Penambahan Calon MPK dan OSIS</b></li>
 
 </ol>
 
