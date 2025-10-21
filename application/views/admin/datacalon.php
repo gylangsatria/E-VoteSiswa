@@ -1,71 +1,72 @@
-<div class="box">
-	<div class="box-inner">
-	<div class="box-header well">
-		<h2>Tambah Kandidat Ketua Osis</h2>
-	</div>
-	<div class="box-content">
-		<?php if($this->session->flashdata('info')) { ?>
-			<div class="alert alert-success alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('info'); ?>
-			</div>
-			<?php } ?>
-			<?php if($this->session->flashdata('failed')) { ?>
-			<div class="alert alert-danger alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('failed'); ?>
-			</div>
-		<?php } ?>
-		<?php 
-			$form_attribute = array (
-				'method'	=> 'post',
-				'class'		=> 'form-horizontal'
-			);
-			echo form_open_multipart('admin/simpancalon', $form_attribute);
-		?>
-		<div class="form-container" style="width: 400px;">
-			<label class="label-control"> NISN</label>
-			<?php 
-				$form_attribute	= array (
-					'type'		=> 'text',
-					'name'		=> 'nisn',
-					'class'		=> 'form-control'
-				);
-				echo form_input($form_attribute);
-			?>
-			<label class="label-control"> No Kandidat</label>
-			<?php 
-				$form_attribute	= array (
-					'type'		=> 'text',
-					'name'		=> 'no',
-					'class'		=> 'form-control'
-				);
-				echo form_input($form_attribute);
-			?>
-			<label class="label-control"> Nama Kandidat</label>
-			<?php 
-				$form_attribute	= array (
-					'type'		=> 'text',
-					'name'		=> 'nama',
-					'class'		=> 'form-control'
-				);
-				echo form_input($form_attribute);
-			?>
-			<label class="label-control"> Photo</label>
-			<?php 
-$form_attribute = array (
-    'name' => 'photo',
-    'class' => 'form-control'
-);
-echo form_upload($form_attribute);
+<?php if($this->session->flashdata('info')) { ?>
+	<script>alert("Berhasil Menghapus Data");</script>
+<?php } ?>
+<?php if($this->session->flashdata('failed')) { ?>
+	<script>alert("Gagal Menghapus Data");</script>
+<?php } ?>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Kandidat Ketua Osis</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Data Kandidat</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
-			?>
-			<br/>
-			<button type="submit" class="btn btn-primary"> Simpan Data</button>
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+<div class="card">
+	<div class="box-inner">
+		<div class="card-header">
+			<h2 class="card-title">Data Calon Ketua OSIS</h2>
 		</div>
-		<?php 
-			echo form_close();
-		?>
-	</div>
+		<div class="card-body">
+			<table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+				<thead>
+					<tr>
+						<th class="text-center">No</th>
+						<th class="text-center">Nama Calon</th>
+						<th class="text-center">Photo Calon</th>
+						<th class="text-center" width="200">Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php 
+					$no = 1;
+					foreach($datacalon as $loaddata) {
+				?>
+					<tr>
+						<td class="text-center"><?php echo $loaddata['no']; ?></td>
+						<td><?php echo $loaddata['nama']; ?></td>
+						<td class="text-center"><img width="50" height="60" src="<?php echo base_url(); ?>/asset/img/<?php echo $loaddata['photo']; ?>"></td>
+						<td>
+						
+							<a class="btn btn-info" href="<?php echo base_url(); ?>index.php/admin/editcalon/<?php echo $loaddata['nisn']; ?>">
+								<i class="glyphicon glyphicon-edit icon-white"></i>
+								Edit
+							</a>
+							<a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');" href="<?php echo base_url(); ?>index.php/admin/hapuscalon/<?php echo $loaddata['nisn']; ?>">
+								<i class="glyphicon glyphicon-trash icon-white"></i>
+								Hapus
+							</a>
+						</td>
+					</tr>
+				<?php 
+					} 
+				?> 
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
