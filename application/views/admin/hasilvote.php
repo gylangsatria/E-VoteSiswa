@@ -108,7 +108,7 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
                 <!-- Grafik -->
                 <div style="text-align: center; margin: 40px auto;">
                     <h3 style="margin-bottom: 20px;">Grafik Hasil Vote</h3>
-                    <div style="display: inline-block; max-width: 800px; width: 100%;">
+                    <div style="display: inline-block; max-width: 600px; width: 100%;">
                         <canvas id="voteChart"></canvas>
                     </div>
                 </div>
@@ -125,26 +125,21 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
 
     const ctx = document.getElementById('voteChart').getContext('2d');
     new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Jumlah Vote',
-                data: data,
-                backgroundColor: 'rgba(0, 123, 255, 0.6)',
-                borderColor: 'rgba(0, 123, 255, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8'],
+      }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+  }
+}
+});
+
 </script>
 
