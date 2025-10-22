@@ -1,6 +1,12 @@
 <?php 
 $pemilih   = !empty($jmlpemilih) ? $jmlpemilih[0]['jumlah'] : 0;
 $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
+
+// Siapkan data terpisah untuk OSIS dan MPK
+$labelsOsis = [];
+$dataOsis = [];
+$labelsMpk = [];
+$dataMpk = [];
 ?>
 
 <!-- Chart.js CDN -->
@@ -49,6 +55,22 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
             margin-bottom: 15px;
         }
     }
+    .chart-row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 40px;
+        margin: 40px auto;
+    }
+    .chart-box {
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
+    .chart-box canvas {
+        width: 100%;
+        height: auto;
+    }
 </style>
 
 <div class="box" id="data">
@@ -58,17 +80,19 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
         </div>
         <div class="box-content">
             <div class="row">
-                <?php 
-                $labels = [];
-                $jumlahVotes = [];
-                foreach($vote as $datavote): 
+                <?php foreach($vote as $datavote): 
                     $kategori = ($datavote['opsi_mpkosis'] == 0) ? 'OSIS' : 'MPK';
                     $jumlah   = (int) $datavote['jumlah'];
                     $persen   = ($voteMasuk > 0) ? round(($jumlah / $voteMasuk) * 100, 2) : 0;
 
-                    // Simpan data untuk grafik
-                    $labels[] = addslashes($datavote['nama']);
-                    $jumlahVotes[] = $jumlah;
+                    // Simpan data untuk grafik sesuai kategori
+                    if ($kategori === 'OSIS') {
+                        $labelsOsis[] = addslashes($datavote['nama']);
+                        $dataOsis[] = $jumlah;
+                    } else {
+                        $labelsMpk[] = addslashes($datavote['nama']);
+                        $dataMpk[] = $jumlah;
+                    }
                     ?>
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="vote-card">
@@ -105,11 +129,15 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
                     </tr>
                 </table>
 
-                <!-- Grafik -->
-                <div style="text-align: center; margin: 40px auto;">
-                    <h3 style="margin-bottom: 20px;">Grafik Hasil Vote</h3>
-                    <div style="display: inline-block; max-width: 600px; width: 100%;">
-                        <canvas id="voteChart"></canvas>
+                <!-- Grafik OSIS -->
+                <div class="chart-row">
+                    <div class="chart-box">
+                        <h3>Grafik Vote OSIS</h3>
+                        <canvas id="chartOsis"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h3>Grafik Vote MPK</h3>
+                        <canvas id="chartMpk"></canvas>
                     </div>
                 </div>
 
@@ -120,17 +148,18 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
 
 <!-- Script Grafik -->
 <script>
-    const labels = <?= json_encode($labels); ?>;
-    const data = <?= json_encode($jumlahVotes); ?>;
+    const labelsOsis = <?= json_encode($labelsOsis); ?>;
+    const dataOsis = <?= json_encode($dataOsis); ?>;
+    const labelsMpk = <?= json_encode($labelsMpk); ?>;
+    const dataMpk = <?= json_encode($dataMpk); ?>;
 
-    const ctx = document.getElementById('voteChart').getContext('2d');
-    new Chart(ctx, {
+    new Chart(document.getElementById('chartOsis'), {
       type: 'pie',
       data: {
-        labels: labels,
+        labels: labelsOsis,
         datasets: [{
-          data: data,
-          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8'],
+          data: dataOsis,
+          backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#6f42c1'],
       }]
   },
   options: {
@@ -141,5 +170,22 @@ $voteMasuk = !empty($jmlvote) ? $jmlvote[0]['jumlah'] : 0;
 }
 });
 
+    new Chart(document.getElementById('chartMpk'), {
+      type: 'pie',
+      data: {
+        labels: labelsMpk,
+        datasets: [{
+          data: dataMpk,
+          backgroundColor: ['#dc3545', '#20c997', '#fd7e14', '#6610f2', '#e83e8c'],
+      }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+  }
+}
+});
 </script>
+
 
