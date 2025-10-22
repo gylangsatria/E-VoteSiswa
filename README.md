@@ -44,7 +44,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 	<li>Import Database <b>db_pilketos.sql</b> <a href="https://www.domainesia.com/panduan/cara-import-database-mysql-di-phpmyadmin/" target="_blank">Tutorial Disini</a></li>
 </ol>
 <br/>
-<h2>Pilketos Konfiguration</h2>
+<h2>E-VoteSiswa Konfiguration</h2>
 <b>Konfigurasi Database</b>
 <ul>
 	<li>Edit File <b>database.php</b> yang ada pada Folder <b>application/config/</b></li>
