@@ -8,27 +8,39 @@
 </div><!--/fluid-row-->
 <?php if (!isset($no_visible_elements) || !$no_visible_elements) { ?>
 
-  <!-- /.control-sidebar -->
+    <hr>
 
-  <!-- Main Footer -->
-<footer style="padding-top: 20px; padding-bottom: 20px; background-color: #fff; padding-left: 10px; padding-right: 10px;">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-      Template By <a href="https://adminlte.io">AdminLTE.io</a>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h3>Settings</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Here settings can be configured...</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+                    <a href="#" class="btn btn-primary" data-dismiss="modal">Save changes</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; <?php echo DATE("Y");?> Muhammad Rompegading </strong>
-  </footer>
-</div>
-<?php } ?>
-<!-- Control Sidebar -->
 
-  <!-- /.control-sidebar -->
-<script src="<?php echo base_url(); ?>asset/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="<?php echo base_url(); ?>asset/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo base_url(); ?>asset/dist/js/adminlte.min.js"></script>
+    <footer class="row">
+        <p class="col-md-4 col-sm-6 col-xs-6 copyright">&copy; <?php echo date('Y') ?><a href="https://github.com/fpls-software/pilketo" target="_blank"> Original Epilketos</a> | <a href="https://www.gylang.my.id"> Recreate by Gylang Satria & Dasep Satriana </p>
+		<p class="col-md-4 col-sm-6 col-xs-6 copyright text-center"><b><a href="https://github.com/gylangsatria/E-VoteSiswa" target="_blank">E-VoteSiswa V.0.9 BETA</a></b></p>
+        <p class="col-md-4 col-sm-6 col-xs-6 powered-by">Powered by: 
+		<a href="#"><?php echo $load['nm_sekolah']; ?></a></p>
+    </footer>
+<?php } ?>
+<script src="<?php echo base_url(); ?>asset/vendor/jquery/jquery-3.4.1.js"></script>
+<script src="<?php echo base_url(); ?>asset/vendor/jquery/bootstrap-3.4.1.js"></script>
+<script src="<?php echo base_url(); ?>asset/vendor/datatables/datatables.min.js"></script>
+<script src="<?php echo base_url(); ?>asset/vendor/responsive-tables/responsive-tables.js"></script>
 <script>
 $(document).ready( function () {
     $('#myTable').DataTable();
@@ -41,3 +53,4 @@ $(document).ready( function () {
 
 </body>
 </html>
+
