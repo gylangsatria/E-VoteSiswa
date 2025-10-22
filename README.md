@@ -74,6 +74,8 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 	<li>Login dengan menggunakan <b>Username dan Password = NISN</b> DPT yang bersangkutan, yang telah di INPUT oleh Admin sebelumnya</li>
 </ul>
 
+# Bug Diketahui
+- Fitur Upload Massal DPT belum berfungsi. Untuk sementara import data dalam format .CSV secara langsung ke tb_siswa. 
 
 
 
