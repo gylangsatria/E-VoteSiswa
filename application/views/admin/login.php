@@ -1,69 +1,125 @@
-<body style="background-image:url('<?php echo base_url(); ?>asset/img/background.jpg'); background-size: 100%; width: 100%; background-repeat: no-repeat">
-<div class="ch-container">        
-    <div class="row">
-        <div class="col-md-12 center login-header">
-            <h2>Selamat Datang di E-VoteSiswa</h2>
-        </div>
-        <!--/span-->
-    </div><!--/row-->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login E-VoteSiswa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="<?php echo base_url(); ?>asset/css/bootstrap.min.css" rel="stylesheet">
 
-    <div class="row">
-        <div class="col-md-5 center login-box">
-            <div class="alert alert-info">
-                <b>Silahkan Login Menggunakan Username dan Passsword Anda!</b>
-            </div>
-			<?php if($this->session->flashdata('failed')) { ?>
-				<div class="alert alert-danger alert-dismissible">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					<?php echo $this->session->flashdata('failed'); ?>
-				</div>
-			<?php } ?>
-			<?php 
-				$form_attribute = array(
-					'method'	=> 'post',
-					'class'		=> 'form-horizontal' 
-				);
-				echo form_open('admin/loginvalidation', $form_attribute);
-			?>
-            <form class="form-horizontal" action="index.html" method="post">
-                <fieldset>
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
-						<?php
-							$form_attribute 	= array(
-								'type'			=> 'text',
-								'class'			=> 'form-control',
-								'name'			=> 'username',
-								'placeholder'	=>	'Username'
-							);
-							echo form_input($form_attribute);
-						?>
-                        
-                    </div>
-                    <div class="clearfix"></div><br>
+    <style>
+        body {
+            background-image: url('<?php echo base_url(); ?>asset/img/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            flex-direction: column;
+        }
 
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
-                        <?php
-							$form_attribute 	= array(
-								'type'			=> 'password',
-								'class'			=> 'form-control',
-								'name'			=> 'password',
-								'placeholder'	=> 'Password'
-							);
-							echo form_input($form_attribute);
-						?>
-                    </div>
-                    <div class="clearfix"></div>
+        /* Overlay gelap agar teks tetap terbaca */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
 
-                    
-                    <div class="clearfix"></div>
+        .login-header h2 {
+            color: #fff;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+        }
 
-                    <p class="center col-md-5">
-                        <button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-log-in"></span> Login</button>
-                    </p>
-                </fieldset>
-            </form>
-        </div>
-    </div>
+        .login-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn-lg {
+            width: 100%;
+        }
+
+        .alert b {
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .login-box {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-header text-center">
+    <h2>Selamat Datang di E-VoteSiswa</h2>
 </div>
+
+<div class="login-box">
+    <div class="alert alert-info text-center">
+        <b>Silakan login menggunakan username dan password Anda!</b>
+    </div>
+
+    <?php if($this->session->flashdata('failed')) { ?>
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <?php echo $this->session->flashdata('failed'); ?>
+        </div>
+    <?php } ?>
+
+    <?php 
+        $form_attribute = array('method' => 'post', 'class' => 'form-horizontal');
+        echo form_open('admin/loginvalidation', $form_attribute);
+    ?>
+
+    <fieldset>
+        <div class="input-group input-group-lg mb-3">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+            <?php
+                echo form_input([
+                    'type' => 'text',
+                    'class' => 'form-control',
+                    'name' => 'username',
+                    'placeholder' => 'Username'
+                ]);
+            ?>
+        </div>
+
+        <div class="input-group input-group-lg mb-4">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+            <?php
+                echo form_input([
+                    'type' => 'password',
+                    'class' => 'form-control',
+                    'name' => 'password',
+                    'placeholder' => 'Password'
+                ]);
+            ?>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">
+            <span class="glyphicon glyphicon-log-in"></span> Login
+        </button>
+    </fieldset>
+
+    <?php echo form_close(); ?>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="<?php echo base_url(); ?>asset/js/bootstrap.min.js"></script>
+</body>
+</html>
+

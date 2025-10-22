@@ -4,23 +4,25 @@
     <meta charset="UTF-8">
     <title>Login E-VoteSiswa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
     <link href="<?php echo base_url(); ?>asset/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            background-image: url('<?php echo base_url(); ?>asset/img/background.jpg');
+            background-image: url('<?php echo base_url(); ?>asset/img/backgroundmts.png');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            min-height: 100vh;
             margin: 0;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             position: relative;
+            flex-direction: column;
         }
 
+        /* Overlay gelap agar teks tetap terbaca */
         body::before {
             content: "";
             position: fixed;
@@ -53,10 +55,6 @@
             font-weight: 600;
         }
 
-        .input-group-addon i {
-            color: #d9534f;
-        }
-
         @media (max-width: 768px) {
             .login-box {
                 margin-top: 20px;
@@ -72,7 +70,7 @@
 
 <div class="login-box">
     <div class="alert alert-info text-center">
-        <b>Gunakan NISN Anda sebagai Username dan Password</b>
+        <b>Silakan login menggunakan username dan password Anda!</b>
     </div>
 
     <?php if($this->session->flashdata('failed')) { ?>
@@ -82,16 +80,9 @@
         </div>
     <?php } ?>
 
-    <?php if($this->session->flashdata('block')) { ?>
-        <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <?php echo $this->session->flashdata('block'); ?>
-        </div>
-    <?php } ?>
-
     <?php 
         $form_attribute = array('method' => 'post', 'class' => 'form-horizontal');
-        echo form_open('user/loginvalidation', $form_attribute);
+        echo form_open('admin/loginvalidation', $form_attribute);
     ?>
 
     <fieldset>
@@ -127,6 +118,7 @@
     <?php echo form_close(); ?>
 </div>
 
+<!-- Bootstrap JS -->
 <script src="<?php echo base_url(); ?>asset/js/bootstrap.min.js"></script>
 </body>
 </html>
