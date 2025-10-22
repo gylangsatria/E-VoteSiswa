@@ -64,29 +64,29 @@ Class Admin extends CI_Controller {
 			redirect('admin/login');
 		}
 	}
-public function regvalid(){
-        if (! $this->session->userdata('username')) {
-                redirect('admin/login');
-        }
+	public function regvalid(){
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
 
-        $data = $this->Admin_Model->regvalid();
+		$data = $this->Admin_Model->regvalid();
 
         // pastikan $data valid
-        if (empty($data) || !isset($data[0]['npsn'])) {
+		if (empty($data) || !isset($data[0]['npsn'])) {
                 // kalau tidak ada data sekolah sama sekali
-                redirect('admin/regsekolah');
-                return;
-        }
+			redirect('admin/regsekolah');
+			return;
+		}
 
         // ambil row pertama (yang biasanya dimaksudkan)
-        $valid = $data[0];
+		$valid = $data[0];
 
-        if (empty($valid['npsn'])) {
-                redirect('admin/regsekolah');
-        } else {
-                redirect('admin/index');
-        }
-}
+		if (empty($valid['npsn'])) {
+			redirect('admin/regsekolah');
+		} else {
+			redirect('admin/index');
+		}
+	}
 	public function regsekolah() {
 		$data = $this->Admin_Model->regvalid();
 		if($data == true) {
@@ -125,356 +125,356 @@ public function regvalid(){
 		$this->load->view('admin/index', $data);
 		$this->load->view('admin/footer', $data);
 	}
-public function updatedatapilketos(){
-    $tapel  = $this->input->post("tapel");
-    $tgl    = $this->input->post('tgl');
-    $update = $this->Admin_Model->updatedatapilketos($tapel, $tgl);
+	public function updatedatapilketos(){
+		$tapel  = $this->input->post("tapel");
+		$tgl    = $this->input->post('tgl');
+		$update = $this->Admin_Model->updatedatapilketos($tapel, $tgl);
 
     $username = $this->session->userdata('username'); // pastikan username diambil dari session
 
     if($update){  // perbandingan benar
-        $updateuser = $this->Admin_Model->updateuser($username);
-        $this->session->set_flashdata('update', 'Berhasil Menyimpan Data');
-        redirect('admin/index');
+    	$updateuser = $this->Admin_Model->updateuser($username);
+    	$this->session->set_flashdata('update', 'Berhasil Menyimpan Data');
+    	redirect('admin/index');
     }
     else {
-        $this->session->set_flashdata('updatefailed', 'Gagal Menyimpan User');
-        redirect('admin/index');
+    	$this->session->set_flashdata('updatefailed', 'Gagal Menyimpan User');
+    	redirect('admin/index');
     }
 }
 
-	public function resetuser() {
-		$username	= $this->input->post('username');
-		$reset		= $this->Admin_Model->resetuser($username);
-		if($reset = true) {
-			$updateuser	= $this->Admin_Model->updateuser($username);
-			$this->session->set_flashdata('info', 'Berhasil Mereset User');
-			redirect('admin/index');
-		}
-		else {
-			$this->session->set_flashdata('failed', 'Gagal Mereset User');
-			redirect('admin/index');
-		}
+public function resetuser() {
+	$username	= $this->input->post('username');
+	$reset		= $this->Admin_Model->resetuser($username);
+	if($reset = true) {
+		$updateuser	= $this->Admin_Model->updateuser($username);
+		$this->session->set_flashdata('info', 'Berhasil Mereset User');
+		redirect('admin/index');
 	}
-	public function resetdata() {
-		$reset = $this->Admin_Model->resetdata();
-		if($reset = true) {
-			$this->session->set_flashdata('reset', 'Berhasil Mereset Data');
-			redirect('admin/index');
-		}
-		else {
-			$this->session->set_flashdata('resetfailed', 'Gagal Mereset Data');
-			redirect('admin/index');
-		}
+	else {
+		$this->session->set_flashdata('failed', 'Gagal Mereset User');
+		redirect('admin/index');
 	}
-	public function idsekolah() {
-		if(! $this->session->userdata('username'))
-		{
-			redirect('admin/login');
-		}
-		$data['valid'] = $this->Admin_Model->regvalid();
-		if(! $data['valid'] == true) {
-			redirect('admin/regsekolah');
-		}
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/idsekolah', $data);
-		$this->load->view('admin/footer', $data);
+}
+public function resetdata() {
+	$reset = $this->Admin_Model->resetdata();
+	if($reset = true) {
+		$this->session->set_flashdata('reset', 'Berhasil Mereset Data');
+		redirect('admin/index');
 	}
-	public function updateidsekolah() {
-		$npsn			= $this->input->post('npsn');
-		$nm_sekolah		= $this->input->post('nm_sekolah');
-		$jln			= $this->input->post('jln');
-		$desa			= $this->input->post('desa');
-		$kec			= $this->input->post('kec');
-		$kab			= $this->input->post('kab');
-		$kpl_sekolah	= $this->input->post('kpl_sekolah');
-		$nip			= $this->input->post('nip');
-		$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
-		if($save = true) {
-			$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
-			redirect('admin/idsekolah');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
-			redirect('admin/idsekolah');
-		}
+	else {
+		$this->session->set_flashdata('resetfailed', 'Gagal Mereset Data');
+		redirect('admin/index');
 	}
-	public function datakelas() {
-		if(! $this->session->userdata('username'))
-		{
-			redirect('admin/login');
-		}
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$data['datakelas']	= $this->Admin_Model->datakelas();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/datakelas', $data);
-		$this->load->view('admin/footer', $data);
+}
+public function idsekolah() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
 	}
-	public function simpankelas() {
-		$nm_kelas	= $this->input->post('nm_kelas');
-		$save		= $this->Admin_Model->simpankelas($nm_kelas);
-		if($save = true) {
-			$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
-			redirect('admin/datakelas');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-			redirect('admin/datakelas');
-		}
+	$data['valid'] = $this->Admin_Model->regvalid();
+	if(! $data['valid'] == true) {
+		redirect('admin/regsekolah');
 	}
-	public function hapuskelas($kd_kelas) {
-		$hapus = $this->Admin_Model->hapuskelas($kd_kelas);
-		if($hapus = true) {
-			$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
-			redirect('admin/datakelas');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
-			redirect('admin/datakelas');
-		}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/idsekolah', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function updateidsekolah() {
+	$npsn			= $this->input->post('npsn');
+	$nm_sekolah		= $this->input->post('nm_sekolah');
+	$jln			= $this->input->post('jln');
+	$desa			= $this->input->post('desa');
+	$kec			= $this->input->post('kec');
+	$kab			= $this->input->post('kab');
+	$kpl_sekolah	= $this->input->post('kpl_sekolah');
+	$nip			= $this->input->post('nip');
+	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
+		redirect('admin/idsekolah');
 	}
-	public function hapussemuakelas() {
-		$hapus = $this->Admin_Model->hapussemuakelas();
-		if($hapus = true) {
-			echo "
-				<script>
-					alert('Semua Data Kelas Telah Dihapus');
-					location.href = '".base_url('index.php/admin/datakelas')."';
-				</script>
-			";
-		}
-		else
-		{
-			echo "
-				<script>
-					Alert('Tidak Dapat Menghapus Semua Data');
-					location.href = '".base_url('index.php/admin/datakelas')."';
-				</script>
-			";
-		}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		redirect('admin/idsekolah');
 	}
-	public function tambahcalon() {
-		if(! $this->session->userdata('username'))
-		{
-			redirect('admin/login');
-		}
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/tambahcalon');
-		$this->load->view('admin/footer', $data);
+}
+public function datakelas() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
 	}
-	public function hapuscalon($nisn) {
-		$hapus = $this->Admin_Model->hapuscalon($nisn);
-		if($hapus = true) {
-			$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
-			redirect('admin/datacalon/');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
-			redirect('admin/datacalon/');
-		}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/datakelas', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function simpankelas() {
+	$nm_kelas	= $this->input->post('nm_kelas');
+	$save		= $this->Admin_Model->simpankelas($nm_kelas);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
+		redirect('admin/datakelas');
 	}
-	public function tambahdpt() {
-		if(! $this->session->userdata('username'))
-		{
-			redirect('admin/login');
-		}
-		$cekelas			= $this->Admin_Model->cekelas();
-		if($cekelas == false) {
-			echo "
-				<script>
-					alert('Anda Belum Menambahan Data Kelas, Silahkan Ditambahkan Terlebih Dahulu.');
-					location.href = '".base_url('index.php/admin/datakelas')."';
-				</script>
-			";
-		}
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$data['datakelas']	= $this->Admin_Model->datakelas();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/tambahdpt', $data);
-		$this->load->view('admin/footer', $data);
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+		redirect('admin/datakelas');
 	}
-	public function datadpt() {
-		if(! $this->session->userdata('username'))
-		{
-			redirect('admin/login');
-		}
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$data['datadpt']	= $this->Admin_Model->datadpt();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/datadpt', $data);
-		$this->load->view('admin/footer', $data);
+}
+public function hapuskelas($kd_kelas) {
+	$hapus = $this->Admin_Model->hapuskelas($kd_kelas);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datakelas');
 	}
-	public function simpandpt() {
-		$username	= $this->input->post('nisn');
-		$password	= $this->input->post('nisn');
-		$nm_siswa	= $this->input->post('nm_siswa');
-		$jk 		= $this->input->post('jk');
-		$kd_kelas	= $this->input->post('kd_kelas');
-		$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
-		if($save = true) {
-			$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
-			redirect('admin/tambahdpt/');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
-			redirect('admin/tambahdpt/');
-		}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+		redirect('admin/datakelas');
 	}
+}
+public function hapussemuakelas() {
+	$hapus = $this->Admin_Model->hapussemuakelas();
+	if($hapus = true) {
+		echo "
+		<script>
+		alert('Semua Data Kelas Telah Dihapus');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+	else
+	{
+		echo "
+		<script>
+		Alert('Tidak Dapat Menghapus Semua Data');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+}
+public function tambahcalon() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/tambahcalon');
+	$this->load->view('admin/footer', $data);
+}
+public function hapuscalon($nisn) {
+	$hapus = $this->Admin_Model->hapuscalon($nisn);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datacalon/');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+		redirect('admin/datacalon/');
+	}
+}
+public function tambahdpt() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$cekelas			= $this->Admin_Model->cekelas();
+	if($cekelas == false) {
+		echo "
+		<script>
+		alert('Anda Belum Menambahan Data Kelas, Silahkan Ditambahkan Terlebih Dahulu.');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/tambahdpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function datadpt() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datadpt']	= $this->Admin_Model->datadpt();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/datadpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function simpandpt() {
+	$username	= $this->input->post('nisn');
+	$password	= $this->input->post('nisn');
+	$nm_siswa	= $this->input->post('nm_siswa');
+	$jk 		= $this->input->post('jk');
+	$kd_kelas	= $this->input->post('kd_kelas');
+	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
+		redirect('admin/tambahdpt/');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		redirect('admin/tambahdpt/');
+	}
+}
 
 
 //simpan masal edit
 public function simpanmassaldpt() {
-    if (!$this->session->userdata('username')) {
-        redirect('admin/login');
-    }
+	if (!$this->session->userdata('username')) {
+		redirect('admin/login');
+	}
 
-    $upload_dir = FCPATH . 'uploads/';
-    $filename = basename($_FILES['datadpt']['name']);
-    $target = $upload_dir . $filename;
-    $log = [];
+	$upload_dir = FCPATH . 'uploads/';
+	$filename = basename($_FILES['datadpt']['name']);
+	$target = $upload_dir . $filename;
+	$log = [];
 
     // Validasi file upload
-    if (!isset($_FILES['datadpt']) || $_FILES['datadpt']['error'] != 0) {
-        $log[] = '❌ File tidak valid atau gagal diupload.';
-        $this->session->set_flashdata('failed', 'File tidak valid atau gagal diupload.');
-        $this->session->set_flashdata('log', $log);
-        redirect('admin/tambahdpt/');
-        return;
-    }
+	if (!isset($_FILES['datadpt']) || $_FILES['datadpt']['error'] != 0) {
+		$log[] = '❌ File tidak valid atau gagal diupload.';
+		$this->session->set_flashdata('failed', 'File tidak valid atau gagal diupload.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
 
     // Pindahkan file ke folder uploads
-    if (!move_uploaded_file($_FILES['datadpt']['tmp_name'], $target)) {
-        $log[] = '❌ Gagal memindahkan file ke folder uploads.';
-        $this->session->set_flashdata('failed', 'Gagal upload file.');
-        $this->session->set_flashdata('log', $log);
-        redirect('admin/tambahdpt/');
-        return;
-    }
+	if (!move_uploaded_file($_FILES['datadpt']['tmp_name'], $target)) {
+		$log[] = '❌ Gagal memindahkan file ke folder uploads.';
+		$this->session->set_flashdata('failed', 'Gagal upload file.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
 
     // Opsional: beri permission agar bisa dibaca
-    chmod($target, 0777);
+	chmod($target, 0777);
 
     // Baca isi file
-    $data = new Spreadsheet_Excel_Reader($target, false);
-    $sheets = $data->sheets ?? null;
-    $log[] = '📄 Struktur sheets: ' . print_r($sheets, true);
+	$data = new Spreadsheet_Excel_Reader($target, false);
+	$sheets = $data->sheets ?? null;
+	$log[] = '📄 Struktur sheets: ' . print_r($sheets, true);
 
     // Validasi sheet
-    if (
-        !is_array($sheets) ||
-        !array_key_exists(0, $sheets) ||
-        !isset($sheets[0]['cells']) ||
-        !is_array($sheets[0]['cells'])
-    ) {
-        $log[] = '❌ Sheet pertama tidak ditemukan atau kosong.';
-        unlink($target);
-        $this->session->set_flashdata('failed', 'File Excel kosong atau tidak valid.');
-        $this->session->set_flashdata('log', $log);
-        redirect('admin/tambahdpt/');
-        return;
-    }
+	if (
+		!is_array($sheets) ||
+		!array_key_exists(0, $sheets) ||
+		!isset($sheets[0]['cells']) ||
+		!is_array($sheets[0]['cells'])
+	) {
+		$log[] = '❌ Sheet pertama tidak ditemukan atau kosong.';
+		unlink($target);
+		$this->session->set_flashdata('failed', 'File Excel kosong atau tidak valid.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
 
-    $jumlah_baris = $data->rowcount(0);
-    $log[] = "📊 Jumlah baris terbaca: $jumlah_baris";
+	$jumlah_baris = $data->rowcount(0);
+	$log[] = "📊 Jumlah baris terbaca: $jumlah_baris";
 
-    $berhasil = 0;
+	$berhasil = 0;
 
-    for ($i = 2; $i <= $jumlah_baris; $i++) {
-        $nisn  = trim($data->val($i, 2));
-        $nama  = trim($data->val($i, 3));
-        $jk    = trim($data->val($i, 4));
-        $kelas = trim($data->val($i, 5));
+	for ($i = 2; $i <= $jumlah_baris; $i++) {
+		$nisn  = trim($data->val($i, 2));
+		$nama  = trim($data->val($i, 3));
+		$jk    = trim($data->val($i, 4));
+		$kelas = trim($data->val($i, 5));
 
-        $log[] = "🔍 Baris $i: NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
+		$log[] = "🔍 Baris $i: NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
-        if ($nisn && $nama && $jk && $kelas) {
-            $simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
-            if ($simpan === true) {
-                $berhasil++;
-            } else {
-                $log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
-            }
-        } else {
-            $log[] = "⚠️ Data tidak lengkap di baris $i, dilewati.";
-        }
-    }
+		if ($nisn && $nama && $jk && $kelas) {
+			$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
+			if ($simpan === true) {
+				$berhasil++;
+			} else {
+				$log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
+			}
+		} else {
+			$log[] = "⚠️ Data tidak lengkap di baris $i, dilewati.";
+		}
+	}
 
-    unlink($target);
+	unlink($target);
 
-    $gagal = $jumlah_baris - 1 - $berhasil;
-    $log[] = "✅ Total berhasil: $berhasil | ❌ Total gagal: $gagal";
+	$gagal = $jumlah_baris - 1 - $berhasil;
+	$log[] = "✅ Total berhasil: $berhasil | ❌ Total gagal: $gagal";
 
-    if ($berhasil > 0) {
-        $this->session->set_flashdata('info', "Berhasil menambahkan $berhasil data. Gagal: $gagal");
-    } else {
-        $this->session->set_flashdata('failed', "Tidak ada data berhasil ditambahkan.");
-    }
+	if ($berhasil > 0) {
+		$this->session->set_flashdata('info', "Berhasil menambahkan $berhasil data. Gagal: $gagal");
+	} else {
+		$this->session->set_flashdata('failed', "Tidak ada data berhasil ditambahkan.");
+	}
 
-    $this->session->set_flashdata('log', $log);
-    redirect('admin/tambahdpt/');
+	$this->session->set_flashdata('log', $log);
+	redirect('admin/tambahdpt/');
 }
 
 
 // akhir simpan masal 
 
-	public function hapusdpt($username) {
-		$hapus	= $this->Admin_Model->hapusdpt($username);
-		if($hapus = true) {
-			$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
-			redirect('admin/datadpt/');
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Berhasil Menghapus Data');
-			redirect('admin/datadpt/');
-		}
+public function hapusdpt($username) {
+	$hapus	= $this->Admin_Model->hapusdpt($username);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datadpt/');
 	}
-	public function editdpt($username) {
-		$data['datakddpt']	= $this->Admin_Model->datakddpt($username);
-		$data['datakelas']	= $this->Admin_Model->datakelas();
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/editdpt', $data);
-		$this->load->view('admin/footer', $data);
+	else
+	{
+		$this->session->set_flashdata('failed', 'Berhasil Menghapus Data');
+		redirect('admin/datadpt/');
 	}
-	public function updatedpt($username){
-		$username	= $this->input->post('nisn');
-		$nm_siswa	= $this->input->post('nm_siswa');
-		$jk			= $this->input->post('jk');
-		$kd_kelas	= $this->input->post('kd_kelas');
-		$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
-		if($update = true) {
-			$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
-			redirect('admin/editdpt/'.$username);
-		}
-		else
-		{
-			$this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
-			redirect('admin/editdpt/'.$username);
-		}
+}
+public function editdpt($username) {
+	$data['datakddpt']	= $this->Admin_Model->datakddpt($username);
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/editdpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function updatedpt($username){
+	$username	= $this->input->post('nisn');
+	$nm_siswa	= $this->input->post('nm_siswa');
+	$jk			= $this->input->post('jk');
+	$kd_kelas	= $this->input->post('kd_kelas');
+	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
+	if($update = true) {
+		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
+		redirect('admin/editdpt/'.$username);
 	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
+		redirect('admin/editdpt/'.$username);
+	}
+}
 
-	public function editcalon($nisn) {
-		$data['datacalon']	= $this->Admin_Model->datacalonspesifik($nisn);
-		$data['idsekolah']	= $this->Admin_Model->idsekolah();
-		$this->load->view('admin/head');
-		$this->load->view('admin/admin-navbar');
-		$this->load->view('admin/editcalon', $data);
-		$this->load->view('admin/footer', $data);
-	}
+public function editcalon($nisn) {
+	$data['datacalon']	= $this->Admin_Model->datacalonspesifik($nisn);
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/editcalon', $data);
+	$this->load->view('admin/footer', $data);
+}
 
 	//menambahkan opsi osis atau mpk
 	/*
@@ -508,13 +508,13 @@ public function simpancalon() {
 } */
 
 public function simpancalon() {
-    if (! $this->session->userdata('username')) {
-        redirect('admin/login');
-    }
+	if (! $this->session->userdata('username')) {
+		redirect('admin/login');
+	}
 
-    $nisn          = $this->input->post('nisn');
-    $no            = $this->input->post('no');
-    $nama          = $this->input->post('nama');
+	$nisn          = $this->input->post('nisn');
+	$no            = $this->input->post('no');
+	$nama          = $this->input->post('nama');
     $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIS
 
     $config['upload_path']   = './asset/img/';
@@ -525,14 +525,14 @@ public function simpancalon() {
     $this->load->library('upload', $config);
 
     if ($this->upload->do_upload('photo')) {
-        $upload_data = $this->upload->data();
-        $photo       = $upload_data['file_name'];
+    	$upload_data = $this->upload->data();
+    	$photo       = $upload_data['file_name'];
 
         // Pastikan method tambahcalon di Admin_Model menerima parameter tambahan
-        $this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo, $opsi_mpkosis);
-        $this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
+    	$this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo, $opsi_mpkosis);
+    	$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
     } else {
-        $this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
+    	$this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
     }
 
     redirect('admin/tambahcalon');
@@ -556,25 +556,25 @@ public function simpancalon() {
 	} */
 
 	public function updatecalon() {
-    if (! $this->session->userdata('username')) {
-        redirect('admin/login');
-    }
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
 
-    $nisn          = $this->input->post('nisn');
-    $no            = $this->input->post('no');
-    $nama          = $this->input->post('nama');
-    $opsi_mpkosis  = $this->input->post('opsi_mpkosis');
+		$nisn          = $this->input->post('nisn');
+		$no            = $this->input->post('no');
+		$nama          = $this->input->post('nama');
+		$opsi_mpkosis  = $this->input->post('opsi_mpkosis');
 
-    $update = $this->Admin_Model->updatecalon($nisn, $no, $nama, $opsi_mpkosis);
+		$update = $this->Admin_Model->updatecalon($nisn, $no, $nama, $opsi_mpkosis);
 
-    if ($update) {
-        $this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
-    } else {
-        $this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
-    }
+		if ($update) {
+			$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
+		} else {
+			$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		}
 
-    redirect('admin/editcalon/' . $nisn);
-}
+		redirect('admin/editcalon/' . $nisn);
+	}
 
 	public function datacalon() {
 		if(! $this->session->userdata('username'))
@@ -639,7 +639,7 @@ public function simpancalon() {
 		$datasekolah	= $this->Admin_Model->idsekolah();
 		$data			=	$this->Admin_Model->daftarhadir();
 		foreach($datasekolah as $loaddata) {}
-		ob_start();
+			ob_start();
 		$pdf = new FPDF('p', 'mm', 'a4');
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','B',16);
@@ -675,29 +675,41 @@ public function simpancalon() {
 		$pdf->Cell(70,6, 'NIP: '.$loaddata['nip'],0,1, 'L');
 		$pdf->Output();
 		ob_end_flush();
-}
-	public function laporan(){
-		$datasekolah	= $this->Admin_Model->idsekolah();
-		$data			= $this->Admin_Model->daftarhadir();
-		$jmldptL		= $this->Admin_Model->jmldptL();
-		$jmldptP		= $this->Admin_Model->jmldptP();
-		$jmlvoteL		= $this->Admin_Model->jmlvoteL();
-		$jmlvoteP		= $this->Admin_Model->jmlvoteP();
-		$datavote		= $this->Admin_Model->hasilvote();
-		$datapilketos	= $this->Admin_Model->datapilketos();
-		foreach($datasekolah as $loaddata) {}
-		foreach($jmldptL as $dptL) {}
-		foreach($jmldptP as $dptP) {}
-		foreach($jmlvoteL as $voteL) {}
-		foreach($jmlvoteP as $voteP) {}
-		foreach($datapilketos as $data){}
+	}
+	public function laporan() {
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
+
+		$datasekolah   = $this->Admin_Model->idsekolah();
+		$data          = $this->Admin_Model->daftarhadir();
+		$jmldptL       = $this->Admin_Model->jmldptL();
+		$jmldptP       = $this->Admin_Model->jmldptP();
+		$jmlvoteL      = $this->Admin_Model->jmlvoteL();
+		$jmlvoteP      = $this->Admin_Model->jmlvoteP();
+		$datavote      = $this->Admin_Model->hasilvote();
+		$datapilketos  = $this->Admin_Model->datapilketos();
+
+		$loaddata = !empty($datasekolah) ? $datasekolah[0] : ['nm_sekolah'=>'-', 'kab'=>'-', 'desa'=>'-', 'kpl_sekolah'=>'-', 'nip'=>'-'];
+		$dptL     = !empty($jmldptL) ? $jmldptL[0] : ['L' => 0];
+		$dptP     = !empty($jmldptP) ? $jmldptP[0] : ['P' => 0];
+		$voteL    = !empty($jmlvoteL) ? $jmlvoteL[0] : ['L' => 0];
+		$voteP    = !empty($jmlvoteP) ? $jmlvoteP[0] : ['P' => 0];
+		$data     = !empty($datapilketos) ? $datapilketos[0] : ['tapel' => '-', 'tgl' => '-'];
+
+		$dptTotal       = $dptL['L'] + $dptP['P'];
+		$voteTotal      = $voteL['L'] + $voteP['P'];
+		$tidakMemilihL  = $dptL['L'] - $voteL['L'];
+		$tidakMemilihP  = $dptP['P'] - $voteP['P'];
+		$tidakMemilih   = $tidakMemilihL + $tidakMemilihP;
+		$partisipasi    = ($dptTotal > 0) ? round(($voteTotal / $dptTotal) * 100, 2) : 0;
+
 		ob_start();
-		$pdf = new FPDF('l', 'mm', 'legal');
+		$pdf = new FPDF('L', 'mm', 'Legal');
 		$pdf->AddPage();
 		$pdf->SetFont('Arial','B',16);
-		//HEADER LAPORAN
-		$pdf->Cell(290,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIS',0,1,'C');
-		$pdf->Cell(290,7, 'TAHUN PELAJARAN '.$data['tapel'],0,1,'C');
+		$pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIS DAN MPK',0,1,'C');
+		$pdf->Cell(330,7, 'TAHUN PELAJARAN '.$data['tapel'],0,1,'C');
 		$pdf->Cell(10,7,'',0,1);
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(60,7, 'Kabupaten', 0,0);
@@ -706,8 +718,9 @@ public function simpancalon() {
 		$pdf->Cell(60,7, 'Tanggal Pelaksanaan', 0,0);
 		$pdf->Cell(5,7, ':', 0,0);
 		$pdf->Cell(60,7, $data['tgl'], 0,1);
+
+    // Tabel DPT
 		$pdf->SetFont('Arial','B',12);
-		//TABLE HAEDER
 		$pdf->Cell(10,21, 'No',1,0, 'C');
 		$pdf->Cell(90,21, 'Nama Sekolah',1,0, 'C');
 		$pdf->Cell(60,7, 'Daftar Pemilih Tetap',1,0, 'C');
@@ -731,37 +744,59 @@ public function simpancalon() {
 		$pdf->Cell(20,7, 'L', 1,0, 'C');
 		$pdf->Cell(20,7, 'P', 1,0, 'C');
 		$pdf->Cell(40,7, 'Jumlah', 1,1, 'C');
-		//ISI TABLE
-		$dpttidaksahL = $dptL['L'] - $voteL['L'];
-		$dpttidaksahP = $dptP['P'] - $voteP['P'];
+
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(10,10, '1',1,0, 'C');
 		$pdf->Cell(90,10, $loaddata['nm_sekolah'],1,0, 'C');
 		$pdf->Cell(20,10, $dptL['L'], 1,0, 'C');
 		$pdf->Cell(20,10, $dptP['P'], 1,0, 'C');
-		$pdf->Cell(20,10, $dptL['L'] + $dptP['P'], 1,0, 'C');
+		$pdf->Cell(20,10, $dptTotal, 1,0, 'C');
 		$pdf->Cell(20,10, $voteL['L'], 1,0, 'C');
 		$pdf->Cell(20,10, $voteP['P'], 1,0, 'C');
-		$pdf->Cell(20,10, $voteL['L'] + $voteP['P'], 1,0, 'C');
-		$pdf->Cell(20,10, $dpttidaksahL , 1,0, 'C');
-		$pdf->Cell(20,10, $dpttidaksahP , 1,0, 'C');
-		$pdf->Cell(40,10, $dpttidaksahL + $dpttidaksahP, 1,1, 'C');
+		$pdf->Cell(20,10, $voteTotal, 1,0, 'C');
+		$pdf->Cell(20,10, $tidakMemilihL, 1,0, 'C');
+		$pdf->Cell(20,10, $tidakMemilihP, 1,0, 'C');
+		$pdf->Cell(40,10, $tidakMemilih, 1,1, 'C');
+
 		$pdf->Cell(10,7,'',0,1);
 		$pdf->SetFont('Arial','B',12);
-		$pdf->Cell(60,7, 'Hasil Pemilihan', 0,1);
+		$pdf->Cell(60,7, 'Persentase Partisipasi Pemilih: '.$partisipasi.'%', 0,1);
+
+    // Hasil OSIS
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIS', 0,1);
 		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
 		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
 		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
 		$pdf->SetFont('Arial','',12);
 		foreach($datavote as $hasil) {
-			$pdf->Cell(30,7, $hasil['no'],1,0, 'C');
-			$pdf->Cell(60,7, $hasil['nama'],1,0, 'L');
-			$pdf->Cell(80,7, $hasil['jumlah'],1,1, 'C');
+			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 0) {
+				$pdf->Cell(30,7, $hasil['no'],1,0, 'C');
+				$pdf->Cell(60,7, $hasil['nama'],1,0, 'L');
+				$pdf->Cell(80,7, $hasil['jumlah'],1,1, 'C');
+			}
 		}
-		//TANDA TANGAN
+
+    // Hasil MPK
 		$pdf->Cell(10,7,'',0,1);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua MPK', 0,1);
+		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
+		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
+		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
+		$pdf->SetFont('Arial','',12);
+		foreach($datavote as $hasil) {
+			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 1) {
+				$pdf->Cell(30,7, $hasil['no'], 1,0, 'C');
+				$pdf->Cell(60,7, $hasil['nama'], 1,0, 'L');
+				$pdf->Cell(80,7, $hasil['jumlah'], 1,1, 'C');
+			}
+		}
+
+    // Tanda tangan
+		$pdf->Cell(10,14,'',0,1);
 		$pdf->Cell(220,10, '',0,0, 'L');
-		$pdf->Cell(70,10, $loaddata['desa'].', '. $this->tgl_indo(date('Y-m-d')),0,1, 'L');
+		$pdf->Cell(70,10, $loaddata['desa'].', '.$this->tgl_indo(date('Y-m-d')),0,1, 'L');
 		$pdf->Cell(220,10, '',0,0, 'L');
 		$pdf->Cell(70,10, 'Kepala Sekolah',0,1, 'L');
 		$pdf->Cell(10,20,'',0,1);
@@ -771,6 +806,7 @@ public function simpancalon() {
 		$pdf->Cell(220,6, '',0,0, 'L');
 		$pdf->SetFont('Arial','',12);
 		$pdf->Cell(70,6, 'NIP: '.$loaddata['nip'],0,1, 'L');
+
 		$pdf->Output();
 		ob_end_flush();
 	}
