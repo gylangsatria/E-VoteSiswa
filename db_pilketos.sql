@@ -12,19 +12,15 @@ CREATE TABLE `tb_admin` (
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `tb_admin` (`username`, `password`) VALUES
-('admin',	'21232f297a57a5a743894a0e4a801fc3');
 
 DROP TABLE IF EXISTS `tb_datapilketos`;
 CREATE TABLE `tb_datapilketos` (
   `id` int NOT NULL DEFAULT '1',
-  `tapel` varchar(10) NOT NULL,
+  `tapel` varchar(30) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `tgl` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `tb_datapilketos` (`id`, `tapel`, `tgl`) VALUES
-(1,	'',	'0000-00-00');
 
 DROP TABLE IF EXISTS `tb_identitassekolah`;
 CREATE TABLE `tb_identitassekolah` (
@@ -35,12 +31,10 @@ CREATE TABLE `tb_identitassekolah` (
   `kec` varchar(32) DEFAULT NULL,
   `kab` varchar(32) DEFAULT NULL,
   `kpl_sekolah` varchar(32) DEFAULT NULL,
-  `nip` varchar(16) DEFAULT NULL,
+  `nip` varchar(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   PRIMARY KEY (`npsn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `tb_identitassekolah` (`npsn`, `nm_sekolah`, `jln`, `desa`, `kec`, `kab`, `kpl_sekolah`, `nip`) VALUES
-('20278807',	'MTs Negeri 11 Cirebon',	'Jln. Pangeran Panjunan 01',	'Desa Cisaat',	'Dukupuntang',	'Kabupaten Cirebon',	'Drs. H. Sarip, M.M.',	'1966090719940310');
 
 DROP TABLE IF EXISTS `tb_kelas`;
 CREATE TABLE `tb_kelas` (
@@ -50,31 +44,7 @@ CREATE TABLE `tb_kelas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `tb_kelas` (`kd_kelas`, `nm_kelas`) VALUES
-(12,	'VII-A'),
-(13,	'VII-B'),
-(14,	'VII-C'),
-(15,	'VII-D'),
-(16,	'VII-E'),
-(17,	'VII-F'),
-(18,	'VII-G'),
-(19,	'VII-H'),
-(21,	'VII-I'),
-(22,	'VIII-B'),
-(23,	'VIII-A'),
-(24,	'VIII-C'),
-(25,	'VIII-D'),
-(26,	'VIII-E'),
-(27,	'VIII-F'),
-(28,	'VIII-G'),
-(29,	'VIII-H'),
-(30,	'IX-A'),
-(31,	'IX-B'),
-(32,	'IX-C'),
-(34,	'IX-D'),
-(35,	'IX-E'),
-(36,	'IX-F'),
-(37,	'IX-G'),
-(38,	'IX-H');
+(12,	'VII-A');
 
 DROP TABLE IF EXISTS `tb_pilih`;
 CREATE TABLE `tb_pilih` (
@@ -125,4 +95,4 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `view_vote`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_vote` AS select `tb_pilihan`.`nisn` AS `nisn`,`tb_pilihan`.`nama` AS `nama`,`tb_pilihan`.`photo` AS `photo`,`tb_pilihan`.`no` AS `no`,`tb_siswa`.`username` AS `username` from ((`tb_pilih` join `tb_pilihan` on((`tb_pilihan`.`nisn` = `tb_pilih`.`nisn`))) join `tb_siswa` on((`tb_siswa`.`username` = `tb_pilih`.`username`)));
 
--- 2025-10-22 01:28:06 UTC
+-- 2025-10-22 09:53:05 UTC
