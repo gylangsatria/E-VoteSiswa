@@ -57,9 +57,10 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 </ul>
 <b>Konfigurasi Base URL</b>
 <ul>
-	<li>Edit File <b>config.php</b> yang ada pada Folder <b>application/config/</b></li>
-	<li>Kemudian pastikan <b>variable $config['base_url']</b> bernilai <b>'http://localhost/pilketos/</b></li>
-	<li>Simpan File</li>
+  <li>Edit file <b>config.php</b> yang ada pada folder <b>application/config/</b></li>
+  <li>Secara default, aplikasi sudah menggunakan konfigurasi <b>dinamis</b> untuk menentukan <code>$config['base_url']</code>, sehingga Anda tidak perlu mengubahnya secara manual.</li>
+  <li>Namun, jika aplikasi tidak berjalan dengan benar karena konfigurasi server tertentu (misalnya reverse proxy, subdomain, atau hosting publik), Anda dapat menetapkan nilai tetap seperti <code>'http://localhost/pilketos/'</code></li>
+  <li>Simpan file setelah melakukan penyesuaian.</li>
 </ul>
 <br/>
 <h2>Akses Aplikasi</h2>
