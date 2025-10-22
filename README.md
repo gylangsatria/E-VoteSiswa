@@ -1,6 +1,7 @@
 # DAFTAR PERUBAHAN
 <ol>
   <li>Perubahan template dari <b>Charisma</b> ke <b>AdminLTE</b></li>
+  <li>19 Oktober 2025: Fork dari <b><a href="https://github.com/fpls-software/pilketos">pilketos</a></b> </li>
   <li>21 Oktober 2025: Penambahan entitas <b>Calon MPK</b> dan <b>Calon OSIS</b></li>
   <li>22 Oktober 2025: Penyesuaian tampilan dan perbaikan beberapa fitur</li>
   <li>22 Oktober 2025: Penambahan validasi panjang karakter pada kolom <code>nm_siswa</code> saat impor CSV</li>
