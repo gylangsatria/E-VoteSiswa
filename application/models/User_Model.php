@@ -1,55 +1,44 @@
 <?php
-Class User_Model extends CI_Model {
+class User_Model extends CI_Model {
+
 	public function login($username, $password) {
-		$condition	= "username="."'".$username."'". " AND "."password="."'".$password."'";
-		$select		= array('username', 'password');
-		$this->db->select($select);
+		$this->db->select('username, password');
 		$this->db->from('tb_siswa');
-		$this->db->where($condition);
-		$login 		= $this->db->get();
-		
-		if($login->num_rows() > 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		$this->db->where(['username' => $username, 'password' => $password]);
+		$login = $this->db->get();
+
+		return $login->num_rows() > 0 ? ['username' => $username, 'nisn' => $username] : false;
 	}
+
 	public function valid($username) {
-		$condition	= "username="."'".$username."'";
-		$select		= array('username');
-		$this->db->select($select);
-		$this->db->from('view_vote');
-		$this->db->where($condition);
-		$login 		= $this->db->get();
-		
-		if($login->num_rows() > 0) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return $this->db->get_where('view_vote', ['username' => $username])->num_rows() > 0;
 	}
+
 	public function datamodel() {
-		$load	= $this->db->query("SELECT * FROM tb_pilihan ORDER BY no ASC");
-		return $load->result_Array();
+		return $this->db->order_by('no', 'ASC')->get('tb_pilihan')->result_array();
 	}
-	public function vote($nisn, $username) {
-		$data			= array(
-			'nisn'		=> $nisn,
-			'username'	=> $username
-		);
-		$this->db->insert('tb_pilih', $data);
+
+	public function vote($username, $nisn_pemilih, $calon_nisn, $opsi_mpkosis) {
+		$data = [
+			'username'     => $username,
+			'nisn'         => $nisn_pemilih,
+			'calon_nisn'   => $calon_nisn,
+			'opsi_mpkosis' => $opsi_mpkosis,
+			'waktu_vote'   => date('Y-m-d H:i:s')
+		];
+		return $this->db->insert('tb_pilih', $data);
 	}
+
 	public function hadir($username) {
-		$update = $this->db->query("UPDATE tb_siswa SET hadir='Hadir' WHERE username='$username'");
-		return $update;
+		return $this->db->query("UPDATE tb_siswa SET hadir='Hadir' WHERE username='$username'");
 	}
 
-	public function cek_status_vote($username) {
-    $query = $this->db->get_where('tb_pilih', ['username' => $username]);
-    return $query->num_rows() > 0;
-}
-
+	public function sudah_vote($username, $opsi_mpkosis) {
+		return $this->db->get_where('tb_pilih', [
+			'username' => $username,
+			'opsi_mpkosis' => $opsi_mpkosis
+		])->num_rows() > 0;
+	}
 }
 ?>
+
