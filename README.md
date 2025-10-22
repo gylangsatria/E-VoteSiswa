@@ -9,6 +9,7 @@
   <li>22 Oktober 2025: Perbaikan dokumentasi <code>README.md</code> untuk penyesuaian fitur dan instruksi instalasi</li>
   <li>Rilis E-VoteSiswa V.0.9 BETA</li>
   <li>V.0.9.1 : Penambahan fitur pencarian DPT dan Perbaikan Login</li>
+  <li>V.0.9.2 : Penambahan fitur grafik di hasil vote</li>
 </ol>
 
 
