@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>E-VoteSiswa | Admin</title>
+    <title>E-Pilketos | Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="bs-css" href="<?php echo base_url(); ?>asset/css/bootstrap-cerulean.min.css" rel="stylesheet">
     <link href='<?php echo base_url(); ?>asset/vendor/responsive-tables/responsive-tables.css' rel='stylesheet'>
