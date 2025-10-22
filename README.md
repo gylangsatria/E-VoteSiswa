@@ -7,6 +7,7 @@
   <li>22 Oktober 2025: Penambahan validasi panjang karakter pada kolom <code>nm_siswa</code> saat impor CSV</li>
   <li>22 Oktober 2025: Penyesuaian struktur database agar kolom <code>hadir</code> memiliki nilai default <code>"Tidak Hadir"</code></li>
   <li>22 Oktober 2025: Perbaikan dokumentasi <code>README.md</code> untuk penyesuaian fitur dan instruksi instalasi</li>
+  <li>Rilis E-VoteSiswa V.0.9 BETA</li>
 </ol>
 
 
