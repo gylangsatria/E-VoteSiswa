@@ -199,7 +199,8 @@ Class Admin_Model extends CI_Model {
 		$count	= $this->db->query("SELECT COUNT(username) AS jumlah FROM view_vote");
 		return $count->result_array();
 	}
-	public function hasilvote() {
+	//ubah hasil vote 
+	/*public function hasilvote() {
 		$query = $this->db->query("
 			SELECT 
 			tb_pilihan.no,
@@ -212,7 +213,19 @@ Class Admin_Model extends CI_Model {
 			ORDER BY tb_pilihan.no ASC
 			");
 		return $query->result_array();
+	} */
+
+	public function hasilvote() {
+		return $this->db
+		->select('p.no, p.nama, p.photo, p.opsi_mpkosis, COUNT(v.id_pilih) AS jumlah')
+		->from('tb_pilihan p')
+		->join('tb_pilih v', 'p.nisn = v.calon_nisn', 'left')
+		->group_by('p.nisn')
+		->order_by('p.opsi_mpkosis ASC, jumlah DESC')
+		->get()
+		->result_array();
 	}
+
 
 	public function jmldptL() {
 		$data = $this->db->query("SELECT COUNT(jk) as L FROM tb_siswa WHERE jk='L'");
