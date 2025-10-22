@@ -1,271 +1,815 @@
-<?php 
-Class Admin_Model extends CI_Model {
-	public function login($username, $password_hash) {
-		$condition	= "username="."'".$username."'". " AND "."password="."'".$password_hash."'";
-		$select		= array('username', 'password');
-		$this->db->select($select);
-		$this->db->from('tb_admin');
-		$this->db->where($condition);
-		$login 		= $this->db->get();
-		
-		if($login->num_rows() > 0) {
-			return true;
+<?php
+Class Admin extends CI_Controller {
+	public function __construct() 
+	{
+		parent::__construct();
+		$this->load->database();
+		$this->load->helper(array('form','url'));
+		$this->load->library(array('session', 'pdflibrary', 'Excelreaders'));
+		$this->load->model(array('Admin_Model'));
+	}
+	public function login() {
+		if($this->session->userdata('username'))
+		{
+			redirect('admin/index');
+		}
+		$this->load->view('admin/head');
+		$this->load->view('admin/login');
+	}
+	public function gantipassword() {
+		if(! $this->session->userdata('username'))
+		{
+			redirect('admin/login');
+		}
+		$data['idsekolah']	= $this->Admin_Model->idsekolah();
+		$data['dataadmin']	= $this->Admin_Model->dataadmin();
+		$this->load->view('admin/head');
+		$this->load->view('admin/admin-navbar');
+		$this->load->view('admin/gantipassword', $data);
+		$this->load->view('admin/footer', $data);
+	}
+	public function updatepassword() {
+		$username		= $this->input->post('username');
+		$password		= $this->input->post('password');
+		$password_hash	= md5($password);
+		$update			= $this->Admin_Model->gantipassword($username, $password_hash);
+		if($update = true) {
+			$updateuser	= $this->Admin_Model->updateuser($username);
+			$this->session->set_flashdata('update', 'Berhasil Memperbarui Password');
+			redirect('admin/gantipassword');
 		}
 		else {
-			return false;
+			$this->session->set_flashdata('updatefailed', 'Gagal Memperbarui Password');
+			redirect('admin/gantipassword');
 		}
 	}
-	public function cekelas() {
-		$cek = $this->db->query("SELECT * FROM tb_kelas");
-		if($cek->num_rows() > 0) {
-			return true;
+	public function logout() {
+		$this->session->unset_userdata('username');
+		redirect('admin/login');
+	}
+	public function loginvalidation() {
+		$username				= $this->input->post('username', TRUE);
+		$password				= $this->input->post('password', TRUE);
+		$password_hash			= md5($password);
+		$result					= $this->Admin_Model->login($username, $password_hash);
+		if($result == true) {
+			$this->session->set_userdata(array(
+				'username'	=> $username
+			));
+			redirect('admin/regvalid');
+		}
+		else
+		{
+			$this->session->set_flashdata('failed', 'Username atau Password Salah');
+			redirect('admin/login');
+		}
+	}
+	public function regvalid(){
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
+
+		$data = $this->Admin_Model->regvalid();
+
+        // pastikan $data valid
+		if (empty($data) || !isset($data[0]['npsn'])) {
+                // kalau tidak ada data sekolah sama sekali
+			redirect('admin/regsekolah');
+			return;
+		}
+
+        // ambil row pertama (yang biasanya dimaksudkan)
+		$valid = $data[0];
+
+		if (empty($valid['npsn'])) {
+			redirect('admin/regsekolah');
+		} else {
+			redirect('admin/index');
+		}
+	}
+	public function regsekolah() {
+		$data = $this->Admin_Model->regvalid();
+		if($data == true) {
+			redirect('admin/index');
+		}
+		$this->load->view('admin/head');
+		$this->load->view('admin/regsekolah');
+	}
+	public function simpansekolah() {
+		$npsn		= $this->input->post('npsn');
+		$nm_sekolah	= $this->input->post('nm_sekolah');
+		$reg		= $this->Admin_Model->regsekolah($npsn,$nm_sekolah);
+		if($reg = true) {
+			redirect('admin/index');
 		}
 		else {
-			return false;
+			$this->session->set_flashdata('regfailed', 'Registrasi Gagal');
+			redirect('admin/regsekolah');
 		}
 	}
-	public function regvalid() {
-		$load = $this->db->query("SELECT * FROM tb_identitassekolah");
-		if($load->num_rows() > 0) {
-			return true;
+	public function index() {
+		if(! $this->session->userdata('username'))
+		{
+			redirect('admin/login');
 		}
-		else {
-			return false;
+		$data['valid'] = $this->Admin_Model->regvalid();
+		if(! $data['valid'] == true) {
+			redirect('admin/regsekolah');
 		}
+		$data['jmlcalon']	= $this->Admin_Model->countcalon();
+		$data['jmlpemilih']	= $this->Admin_Model->countpemilih();
+		$data['idsekolah']	= $this->Admin_Model->idsekolah();
+		$data['datapilketos'] = $this->Admin_Model->datapilketos();
+		$this->load->view('admin/head');
+		$this->load->view('admin/admin-navbar');
+		$this->load->view('admin/index', $data);
+		$this->load->view('admin/footer', $data);
 	}
-	public function regsekolah($npsn,$nm_sekolah) {
-		$data				= array(
-			'npsn'			=> $npsn,
-			'nm_sekolah'	=> $nm_sekolah
-		);
-		$this->db->insert('tb_identitassekolah', $data);
+	public function updatedatapilketos(){
+		$tapel  = $this->input->post("tapel");
+		$tgl    = $this->input->post('tgl');
+		$update = $this->Admin_Model->updatedatapilketos($tapel, $tgl);
+
+    $username = $this->session->userdata('username'); // pastikan username diambil dari session
+
+    if($update){  // perbandingan benar
+    	$updateuser = $this->Admin_Model->updateuser($username);
+    	$this->session->set_flashdata('update', 'Berhasil Menyimpan Data');
+    	redirect('admin/index');
+    }
+    else {
+    	$this->session->set_flashdata('updatefailed', 'Gagal Menyimpan User');
+    	redirect('admin/index');
+    }
+}
+
+public function resetuser() {
+	$username	= $this->input->post('username');
+	$reset		= $this->Admin_Model->resetuser($username);
+	if($reset = true) {
+		$updateuser	= $this->Admin_Model->updateuser($username);
+		$this->session->set_flashdata('info', 'Berhasil Mereset User');
+		redirect('admin/index');
 	}
-	public function dataadmin() {
-		$load = $this->db->query('SELECT * FROM tb_admin');
-		return $load->result_array();
+	else {
+		$this->session->set_flashdata('failed', 'Gagal Mereset User');
+		redirect('admin/index');
 	}
-	public function gantipassword($username, $password_hash) {
-		$update = $this->db->query("UPDATE tb_admin SET password='$password_hash' WHERE username='$username'");
-		return $update;
+}
+public function resetdata() {
+	$reset = $this->Admin_Model->resetdata();
+	if($reset = true) {
+		$this->session->set_flashdata('reset', 'Berhasil Mereset Data');
+		redirect('admin/index');
 	}
-	public function datapilketos() {
-		$load = $this->db->query("SELECT * FROM tb_datapilketos WHERE id='1'");
-		return $load->result_array();
+	else {
+		$this->session->set_flashdata('resetfailed', 'Gagal Mereset Data');
+		redirect('admin/index');
 	}
-	public function updatedatapilketos($tapel, $tgl){
-		$update = $this->db->query("UPDATE tb_datapilketos SET tapel='$tapel', tgl='$tgl' WHERE id='1'");
-		return $update;
+}
+public function idsekolah() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
 	}
-	public function resetuser($username) {
-		$reset = $this->db->query("DELETE FROM tb_pilih WHERE username='$username'");
-		return $reset;
+	$data['valid'] = $this->Admin_Model->regvalid();
+	if(! $data['valid'] == true) {
+		redirect('admin/regsekolah');
 	}
-	public function updateuser($username) {
-		$reset = $this->db->query("UPDATE tb_siswa SET hadir='Tidak Hadir' WHERE username='$username'");
-		return $reset;
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/idsekolah', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function updateidsekolah() {
+	$npsn			= $this->input->post('npsn');
+	$nm_sekolah		= $this->input->post('nm_sekolah');
+	$jln			= $this->input->post('jln');
+	$desa			= $this->input->post('desa');
+	$kec			= $this->input->post('kec');
+	$kab			= $this->input->post('kab');
+	$kpl_sekolah	= $this->input->post('kpl_sekolah');
+	$nip			= $this->input->post('nip');
+	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
+		redirect('admin/idsekolah');
 	}
-	public function resetdata(){
-		$reset 	= $this->db->query("DELETE FROM tb_pilih");
-		$reset1	= $this->db->query("DELETE FROM tb_siswa");
-		$reset2	= $this->db->query("DELETE FROM tb_pilihan");
-		$reset3	= $this->db->query("DELETE FROM tb_siswa");
-		$reset4	= $this->db->query("UPDATE tb_datapilketos SET tapel='', tgl='' WHERE id='1'");
-		return true;
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		redirect('admin/idsekolah');
 	}
-	public function idsekolah() {
-		$load = $this->db->query("SELECT * FROM tb_identitassekolah");
-		return $load->result_array();
+}
+public function datakelas() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
 	}
-	public function updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip){
-		$save = $this->db->query("UPDATE tb_identitassekolah SET npsn='$npsn', nm_sekolah='$nm_sekolah', jln='$jln', desa='$desa', kec='$kec', kab='$kab', kpl_sekolah='$kpl_sekolah', nip='$nip'");
-		return $save;
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/datakelas', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function simpankelas() {
+	$nm_kelas	= $this->input->post('nm_kelas');
+	$save		= $this->Admin_Model->simpankelas($nm_kelas);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
+		redirect('admin/datakelas');
 	}
-	public function datakelas() {
-		$load = $this->db->query("SELECT * FROM tb_kelas");
-		return $load->result_array();
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+		redirect('admin/datakelas');
 	}
-	public function simpankelas($nm_kelas) {
-		$data = array(
-			'nm_kelas'	=> $nm_kelas
-		);
-		$this->db->insert('tb_kelas', $data);
+}
+public function hapuskelas($kd_kelas) {
+	$hapus = $this->Admin_Model->hapuskelas($kd_kelas);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datakelas');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+		redirect('admin/datakelas');
+	}
+}
+public function hapussemuakelas() {
+	$hapus = $this->Admin_Model->hapussemuakelas();
+	if($hapus = true) {
+		echo "
+		<script>
+		alert('Semua Data Kelas Telah Dihapus');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+	else
+	{
+		echo "
+		<script>
+		Alert('Tidak Dapat Menghapus Semua Data');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+}
+public function tambahcalon() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/tambahcalon');
+	$this->load->view('admin/footer', $data);
+}
+public function hapuscalon($nisn) {
+	$hapus = $this->Admin_Model->hapuscalon($nisn);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datacalon/');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+		redirect('admin/datacalon/');
+	}
+}
+public function tambahdpt() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$cekelas			= $this->Admin_Model->cekelas();
+	if($cekelas == false) {
+		echo "
+		<script>
+		alert('Anda Belum Menambahan Data Kelas, Silahkan Ditambahkan Terlebih Dahulu.');
+		location.href = '".base_url('index.php/admin/datakelas')."';
+		</script>
+		";
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/tambahdpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function datadpt() {
+	if(! $this->session->userdata('username'))
+	{
+		redirect('admin/login');
+	}
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$data['datadpt']	= $this->Admin_Model->datadpt();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/datadpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function simpandpt() {
+	$username	= $this->input->post('nisn');
+	$password	= $this->input->post('nisn');
+	$nm_siswa	= $this->input->post('nm_siswa');
+	$jk 		= $this->input->post('jk');
+	$kd_kelas	= $this->input->post('kd_kelas');
+	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
+	if($save = true) {
+		$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
+		redirect('admin/tambahdpt/');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		redirect('admin/tambahdpt/');
+	}
+}
+
+
+//simpan masal edit
+public function simpanmassaldpt() {
+	if (!$this->session->userdata('username')) {
+		redirect('admin/login');
 	}
 
+	$upload_dir = FCPATH . 'uploads/';
+	$filename = basename($_FILES['datadpt']['name']);
+	$target = $upload_dir . $filename;
+	$log = [];
+
+    // Validasi file upload
+	if (!isset($_FILES['datadpt']) || $_FILES['datadpt']['error'] != 0) {
+		$log[] = '❌ File tidak valid atau gagal diupload.';
+		$this->session->set_flashdata('failed', 'File tidak valid atau gagal diupload.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+    // Pindahkan file ke folder uploads
+	if (!move_uploaded_file($_FILES['datadpt']['tmp_name'], $target)) {
+		$log[] = '❌ Gagal memindahkan file ke folder uploads.';
+		$this->session->set_flashdata('failed', 'Gagal upload file.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+    // Opsional: beri permission agar bisa dibaca
+	chmod($target, 0777);
+
+    // Baca isi file
+	$data = new Spreadsheet_Excel_Reader($target, false);
+	$sheets = $data->sheets ?? null;
+	$log[] = '📄 Struktur sheets: ' . print_r($sheets, true);
+
+    // Validasi sheet
+	if (
+		!is_array($sheets) ||
+		!array_key_exists(0, $sheets) ||
+		!isset($sheets[0]['cells']) ||
+		!is_array($sheets[0]['cells'])
+	) {
+		$log[] = '❌ Sheet pertama tidak ditemukan atau kosong.';
+		unlink($target);
+		$this->session->set_flashdata('failed', 'File Excel kosong atau tidak valid.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	$jumlah_baris = $data->rowcount(0);
+	$log[] = "📊 Jumlah baris terbaca: $jumlah_baris";
+
+	$berhasil = 0;
+
+	for ($i = 2; $i <= $jumlah_baris; $i++) {
+		$nisn  = trim($data->val($i, 2));
+		$nama  = trim($data->val($i, 3));
+		$jk    = trim($data->val($i, 4));
+		$kelas = trim($data->val($i, 5));
+
+		$log[] = "🔍 Baris $i: NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
+
+		if ($nisn && $nama && $jk && $kelas) {
+			$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
+			if ($simpan === true) {
+				$berhasil++;
+			} else {
+				$log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
+			}
+		} else {
+			$log[] = "⚠️ Data tidak lengkap di baris $i, dilewati.";
+		}
+	}
+
+	unlink($target);
+
+	$gagal = $jumlah_baris - 1 - $berhasil;
+	$log[] = "✅ Total berhasil: $berhasil | ❌ Total gagal: $gagal";
+
+	if ($berhasil > 0) {
+		$this->session->set_flashdata('info', "Berhasil menambahkan $berhasil data. Gagal: $gagal");
+	} else {
+		$this->session->set_flashdata('failed', "Tidak ada data berhasil ditambahkan.");
+	}
+
+	$this->session->set_flashdata('log', $log);
+	redirect('admin/tambahdpt/');
+}
+
+
+// akhir simpan masal 
+
+public function hapusdpt($username) {
+	$hapus	= $this->Admin_Model->hapusdpt($username);
+	if($hapus = true) {
+		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
+		redirect('admin/datadpt/');
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Berhasil Menghapus Data');
+		redirect('admin/datadpt/');
+	}
+}
+public function editdpt($username) {
+	$data['datakddpt']	= $this->Admin_Model->datakddpt($username);
+	$data['datakelas']	= $this->Admin_Model->datakelas();
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/editdpt', $data);
+	$this->load->view('admin/footer', $data);
+}
+public function updatedpt($username){
+	$username	= $this->input->post('nisn');
+	$nm_siswa	= $this->input->post('nm_siswa');
+	$jk			= $this->input->post('jk');
+	$kd_kelas	= $this->input->post('kd_kelas');
+	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
+	if($update = true) {
+		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
+		redirect('admin/editdpt/'.$username);
+	}
+	else
+	{
+		$this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
+		redirect('admin/editdpt/'.$username);
+	}
+}
+
+public function editcalon($nisn) {
+	$data['datacalon']	= $this->Admin_Model->datacalonspesifik($nisn);
+	$data['idsekolah']	= $this->Admin_Model->idsekolah();
+	$this->load->view('admin/head');
+	$this->load->view('admin/admin-navbar');
+	$this->load->view('admin/editcalon', $data);
+	$this->load->view('admin/footer', $data);
+}
+
+	//menambahkan opsi osis atau mpk
 	/*
-	public function tambahcalon($nisn, $no , $nama, $photo) {
-		$data		= array (
-			'nisn'	=> $nisn,
-			'no'	=> $no,
-			'nama'	=> $nama,
-			'photo' => $photo
-		);
-		$this->db->insert('tb_pilihan', $data);
+public function simpancalon() {
+    if (! $this->session->userdata('username')) {
+        redirect('admin/login');
+    }
+
+    $nisn = $this->input->post('nisn');
+    $no   = $this->input->post('no');
+    $nama = $this->input->post('nama');
+
+    $config['upload_path']   = './asset/img/';
+    $config['allowed_types'] = 'gif|jpg|jpeg|png';
+    $config['max_size']      = 1024;
+    $config['file_name']     = $nisn;
+
+    $this->load->library('upload', $config);
+
+    if ($this->upload->do_upload('photo')) {
+        $upload_data = $this->upload->data();
+        $photo       = $upload_data['file_name'];
+
+        $this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo);
+        $this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
+    } else {
+        $this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
+    }
+
+    redirect('admin/tambahcalon');
+} */
+
+public function simpancalon() {
+	if (! $this->session->userdata('username')) {
+		redirect('admin/login');
+	}
+
+	$nisn          = $this->input->post('nisn');
+	$no            = $this->input->post('no');
+	$nama          = $this->input->post('nama');
+    $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIS
+
+    $config['upload_path']   = './asset/img/';
+    $config['allowed_types'] = 'gif|jpg|jpeg|png';
+    $config['max_size']      = 1024;
+    $config['file_name']     = $nisn;
+
+    $this->load->library('upload', $config);
+
+    if ($this->upload->do_upload('photo')) {
+    	$upload_data = $this->upload->data();
+    	$photo       = $upload_data['file_name'];
+
+        // Pastikan method tambahcalon di Admin_Model menerima parameter tambahan
+    	$this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo, $opsi_mpkosis);
+    	$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
+    } else {
+    	$this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
+    }
+
+    redirect('admin/tambahcalon');
+}
+
+/*
+	public function updatecalon() {
+		$nisn		= $this->input->post('nisn');
+		$no			= $this->input->post('no');
+		$nama		= $this->input->post('nama');
+		$upade		= $this->Admin_Model->updatecalon($nisn, $no ,$nama);
+		if($update = true) {
+			$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
+			redirect('admin/editcalon/'.$nisn);
+		}
+		else
+		{
+			$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+			redirect('admin/editcalon/'.$nisn);
+		}
 	} */
 
-	public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
-		$data = array(
-			'nisn'          => $nisn,
-			'no'            => $no,
-			'nama'          => $nama,
-			'photo'         => $photo,
-        'opsi_mpkosis'  => $opsi_mpkosis // 0 = MPK, 1 = OSIS
-    );
-		$this->db->insert('tb_pilihan', $data);
+	public function updatecalon() {
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
+
+		$nisn          = $this->input->post('nisn');
+		$no            = $this->input->post('no');
+		$nama          = $this->input->post('nama');
+		$opsi_mpkosis  = $this->input->post('opsi_mpkosis');
+
+		$update = $this->Admin_Model->updatecalon($nisn, $no, $nama, $opsi_mpkosis);
+
+		if ($update) {
+			$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
+		} else {
+			$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		}
+
+		redirect('admin/editcalon/' . $nisn);
 	}
 
-	public function hapuskelas($kd_kelas) {
-		$hapus = $this->db->query("DELETE FROM tb_kelas WHERE kd_kelas='$kd_kelas'");
-		return $hapus;
-	}
-	public function hapussemuakelas() {
-		$hapus = $this->db->query("DELETE FROM tb_kelas");
-		return $hapus;
-	}
-
-	/*
-	public function updatecalon($nisn, $no , $nama) {
-		$save		= $this->db->query("UPDATE tb_pilihan SET no='$no', nama='$nama' WHERE nisn='$nisn'");
-		return $save;
-	} */
-
-	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis) {
-		$save = $this->db->query("
-			UPDATE tb_pilihan 
-				SET no = '$no', 
-				nama = '$nama', 
-				opsi_mpkosis = '$opsi_mpkosis' 
-				WHERE nisn = '$nisn'
-				");
-		return $save;
-	}
-
-	public function hapuscalon($nisn) {
-		$hapus		= $this->db->query("DELETE FROM tb_pilihan WHERE nisn='$nisn'");
-		return $hapus;
-	}
 	public function datacalon() {
-		$load	= $this->db->query("SELECT * FROM tb_pilihan ORDER BY no asc");
-		return $load->result_array();
+		if(! $this->session->userdata('username'))
+		{
+			redirect('admin/login');
+		}
+		$data['datacalon']	= $this->Admin_Model->datacalon();
+		$data['idsekolah']	= $this->Admin_Model->idsekolah();
+		$this->load->view('admin/head');
+		$this->load->view('admin/admin-navbar');
+		$this->load->view('admin/datacalon', $data);
+		$this->load->view('admin/footer', $data);
 	}
-	public function datadpt() {
-		$load = $this->db->query("SELECT * FROM tb_siswa INNER JOIN tb_kelas ON tb_kelas.kd_kelas = tb_siswa.kd_kelas ORDER BY tb_siswa.kd_kelas asc");
-		return $load->result_array();
-	}
-	public function datakddpt($username) {
-		$load = $this->db->query("SELECT * FROM tb_siswa INNER JOIN tb_kelas ON tb_kelas.kd_kelas = tb_siswa.kd_kelas WHERE tb_siswa.username='$username'");
-		return $load->result_array();
-	}
-	public function simpandpt($username, $password, $nm_siswa, $jk,$kd_kelas) {
-		$data 			= array(
-			'username'	=> $username,
-			'password'	=> $password,
-			'nm_siswa'	=> $nm_siswa,
-			'jk'		=> $jk,
-			'kd_kelas'	=> $kd_kelas
-		);
-		$this->db->insert('tb_siswa', $data);
-	}
-	public function simpanmassaldpt($nisn, $nama, $jk, $kelas) {
-		$data			= array(
-			'username'	=> $nisn,
-			'password'	=> $nisn,
-			'nm_siswa'	=> $nama,
-			'jk'		=> $jk,
-			'kd_kelas'	=> $kelas
-		);
-		$this->db->insert('tb_siswa', $data);
-	}
-	public function hapusdpt($username) {
-		$hapus	= $this->db->query("DELETE FROM tb_siswa WHERE username='$username'");
-		return $hapus;
-	}
-	public function updatedpt($username, $nm_siswa, $jk,$kd_kelas) {
-		$update = $this->db->query("UPDATE tb_siswa SET nm_siswa='$nm_siswa', jk='$jk', kd_kelas='$kd_kelas' WHERE username='$username'");
-		return $update;
-	}
-	public function datacalonspesifik($nisn) {
-		$load	= $this->db->query("SELECT * FROM tb_pilihan WHERE nisn='$nisn'");
-		return $load->result_array();
-	}
-	public function countcalon() {
-		$count	= $this->db->query("SELECT COUNT(no) AS jumlah FROM tb_pilihan");
-		return $count->result_array();
-	}
-	public function countpemilih() {
-		$count	= $this->db->query("SELECT COUNT(username) AS jumlah FROM tb_siswa");
-		return $count->result_array();
-	}
-	public function countvote() {
-		$count	= $this->db->query("SELECT COUNT(username) AS jumlah FROM view_vote");
-		return $count->result_array();
-	}
-	//ubah hasil vote 
-	/*public function hasilvote() {
-		$query = $this->db->query("
-			SELECT 
-			tb_pilihan.no,
-			tb_pilihan.nama,
-			tb_pilihan.photo,
-			COUNT(tb_pilih.id_pilih) AS jumlah
-			FROM tb_pilihan
-			LEFT JOIN tb_pilih ON tb_pilihan.nisn = tb_pilih.nisn
-			GROUP BY tb_pilihan.no, tb_pilihan.nama, tb_pilihan.photo
-			ORDER BY tb_pilihan.no ASC
-			");
-		return $query->result_array();
-	} */
-
 	public function hasilvote() {
-		return $this->db
-		->select('p.no, p.nama, p.photo, p.opsi_mpkosis, COUNT(v.id_pilih) AS jumlah')
-		->from('tb_pilihan p')
-		->join('tb_pilih v', 'p.nisn = v.calon_nisn', 'left')
-		->group_by('p.nisn')
-		->order_by('p.opsi_mpkosis ASC, jumlah DESC')
-		->get()
-		->result_array();
-	}
-
-
-	public function jmldptL() {
-		$data = $this->db->query("SELECT COUNT(jk) as L FROM tb_siswa WHERE jk='L'");
-		return $data->result_array();
-	}
-	public function jmldptP() {
-		$data = $this->db->query("SELECT COUNT(jk) as P FROM tb_siswa WHERE jk='P'");
-		return $data->result_array();
-	}
-	public function jmlvoteL() {
-		$data = $this->db->query("
-			SELECT COUNT(tb_siswa.jk) as L 
-			FROM 
-			tb_siswa 
-			INNER JOIN 
-			tb_pilih
-			ON 
-			tb_siswa.username = tb_pilih.username
-			WHERE jk='L'");
-		return $data->result_array();
-	}
-	public function jmlvoteP() {
-		$data = $this->db->query("
-			SELECT COUNT(tb_siswa.jk) as P 
-			FROM 
-			tb_siswa 
-			INNER JOIN 
-			tb_pilih
-			ON 
-			tb_siswa.username = tb_pilih.username
-			WHERE jk='P'");
-		return $data->result_array();
-	}
-	public function kuncivote() {
-		$data	= $this->db->query("SELECT * FROM tb_pilih");
-		return $data->result_array();
+		if(! $this->session->userdata('username'))
+		{
+			redirect('admin/login');
+		}
+		$data['vote']		= $this->Admin_Model->hasilvote();
+		$data['jmlpemilih']	= $this->Admin_Model->countpemilih();
+		$data['jmlvote']	= $this->Admin_Model->countvote();
+		$data['idsekolah']	= $this->Admin_Model->idsekolah();
+		$this->load->view('admin/head');
+		$this->load->view('admin/admin-navbar');
+		$this->load->view('admin/hasilvote', $data);
+		$this->load->view('admin/footer', $data);
 	}
 	public function daftarhadir() {
-		$data	= $this->db->query("SELECT * FROM tb_siswa INNER JOIN tb_kelas ON tb_kelas.kd_kelas = tb_siswa.kd_kelas ORDER BY tb_kelas.kd_kelas ASC");
-		return $data->result_array();
+		if(! $this->session->userdata('username'))
+		{
+			redirect('admin/login');
+		}
+		$data['vote']			= $this->Admin_Model->hasilvote();
+		$data['jmlpemilih']		= $this->Admin_Model->countpemilih();
+		$data['jmlvote']		= $this->Admin_Model->countvote();
+		$data['idsekolah']		= $this->Admin_Model->idsekolah();
+		$data['daftarhadir']	= $this->Admin_Model->daftarhadir();
+		$this->load->view('admin/head');
+		$this->load->view('admin/admin-navbar');
+		$this->load->view('admin/daftarhadir', $data);
+		$this->load->view('admin/footer', $data);
+	}
+	public function tgl_indo($tanggal){
+		$bulan = array (
+			1 =>   'Januari',
+			'Februari',
+			'Maret',
+			'April',
+			'Mei',
+			'Juni',
+			'Juli',
+			'Agustus',
+			'September',
+			'Oktober',
+			'November',
+			'Desember'
+		);
+		$pecahkan = explode('-', $tanggal);
+		return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+	}
+	public function cetakdaftarhadir(){
+		$datasekolah	= $this->Admin_Model->idsekolah();
+		$data			=	$this->Admin_Model->daftarhadir();
+		foreach($datasekolah as $loaddata) {}
+			ob_start();
+		$pdf = new FPDF('p', 'mm', 'a4');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(190,7, $loaddata['nm_sekolah'],0,1,'C');
+		$pdf->Cell(190,7, 'Daftar Hadir Pemilihan Ketua Osis',0,1,'C');
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(10,10, 'No',1,0, 'C');
+		$pdf->Cell(35,10, 'Nisn',1,0, 'C');
+		$pdf->Cell(70,10, 'Nama',1,0, 'C');
+		$pdf->Cell(35,10, 'Kelas',1,0, 'C');
+		$pdf->Cell(35,10, 'Keterangan',1,1, 'C');
+		$no = 1;
+		$pdf->SetFont('Arial','',12);
+		foreach($data as $load) {
+			$pdf->cell(10,10, $no++ , 1,0, 'C' );
+			$pdf->cell(35,10, $load['username'] , 1,0, 'C' );
+			$pdf->cell(70,10, $load['nm_siswa'] , 1,0, 'L' );
+			$pdf->cell(35,10, $load['nm_kelas'] , 1,0, 'C' );
+			$pdf->cell(35,10, $load['hadir'] , 1,1, 'L' );
+		}
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->Cell(115,10, '',0,0, 'L');
+		$pdf->Cell(70,10, $loaddata['desa'].', '. $this->tgl_indo(date('Y-m-d')),0,1, 'L');
+		$pdf->Cell(115,10, '',0,0, 'L');
+		$pdf->Cell(70,10, 'Kepala Sekolah',0,1, 'L');
+		$pdf->Cell(10,20,'',0,1);
+		$pdf->Cell(115,6, '',0,0, 'L');
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(70,6, $loaddata['kpl_sekolah'],0,1, 'L');
+		$pdf->Cell(115,6, '',0,0, 'L');
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(70,6, 'NIP: '.$loaddata['nip'],0,1, 'L');
+		$pdf->Output();
+		ob_end_flush();
+	}
+	public function laporan() {
+		if (! $this->session->userdata('username')) {
+			redirect('admin/login');
+		}
+
+		$datasekolah   = $this->Admin_Model->idsekolah();
+		$data          = $this->Admin_Model->daftarhadir();
+		$jmldptL       = $this->Admin_Model->jmldptL();
+		$jmldptP       = $this->Admin_Model->jmldptP();
+		$jmlvoteL      = $this->Admin_Model->jmlvoteL();
+		$jmlvoteP      = $this->Admin_Model->jmlvoteP();
+		$datavote      = $this->Admin_Model->hasilvote();
+		$datapilketos  = $this->Admin_Model->datapilketos();
+
+		$loaddata = !empty($datasekolah) ? $datasekolah[0] : ['nm_sekolah'=>'-', 'kab'=>'-', 'desa'=>'-', 'kpl_sekolah'=>'-', 'nip'=>'-'];
+		$dptL     = !empty($jmldptL) ? $jmldptL[0] : ['L' => 0];
+		$dptP     = !empty($jmldptP) ? $jmldptP[0] : ['P' => 0];
+		$voteL    = !empty($jmlvoteL) ? $jmlvoteL[0] : ['L' => 0];
+		$voteP    = !empty($jmlvoteP) ? $jmlvoteP[0] : ['P' => 0];
+		$data     = !empty($datapilketos) ? $datapilketos[0] : ['tapel' => '-', 'tgl' => '-'];
+
+		$dptTotal       = $dptL['L'] + $dptP['P'];
+		$voteTotal      = $voteL['L'] + $voteP['P'];
+		$tidakMemilihL  = $dptL['L'] - $voteL['L'];
+		$tidakMemilihP  = $dptP['P'] - $voteP['P'];
+		$tidakMemilih   = $tidakMemilihL + $tidakMemilihP;
+		$partisipasi    = ($dptTotal > 0) ? round(($voteTotal / $dptTotal) * 100, 2) : 0;
+
+		ob_start();
+		$pdf = new FPDF('L', 'mm', 'Legal');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIS DAN MPK',0,1,'C');
+		$pdf->Cell(330,7, 'TAHUN PELAJARAN '.$data['tapel'],0,1,'C');
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(60,7, 'Kabupaten', 0,0);
+		$pdf->Cell(5,7, ':', 0,0);
+		$pdf->Cell(60,7, $loaddata['kab'], 0,1);
+		$pdf->Cell(60,7, 'Tanggal Pelaksanaan', 0,0);
+		$pdf->Cell(5,7, ':', 0,0);
+		$pdf->Cell(60,7, $data['tgl'], 0,1);
+
+    // Tabel DPT
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(10,21, 'No',1,0, 'C');
+		$pdf->Cell(90,21, 'Nama Sekolah',1,0, 'C');
+		$pdf->Cell(60,7, 'Daftar Pemilih Tetap',1,0, 'C');
+		$pdf->Cell(60,7, 'Jumlah Yang Menggunakan',1,0, 'C');
+		$pdf->Cell(80,7, 'Jumlah Yang Tidak Menggunakan',1,0, 'C');
+		$pdf->Cell(1,7, '', 0,1);
+		$pdf->Cell(10,7, '', 0,0);
+		$pdf->Cell(90,7, '', 0,0);
+		$pdf->Cell(60,7, '(DPT)',1,0, 'C');
+		$pdf->Cell(60,7, 'Hak Suara',1,0, 'C');
+		$pdf->Cell(80,7, 'Hak Suara',1,0, 'C');
+		$pdf->Cell(1,7, '', 0,1);
+		$pdf->Cell(10,7, '', 0,0);
+		$pdf->Cell(90,7, '', 0,0);
+		$pdf->Cell(20,7, 'L', 1,0, 'C');
+		$pdf->Cell(20,7, 'P', 1,0, 'C');
+		$pdf->Cell(20,7, 'Jumlah', 1,0, 'C');
+		$pdf->Cell(20,7, 'L', 1,0, 'C');
+		$pdf->Cell(20,7, 'P', 1,0, 'C');
+		$pdf->Cell(20,7, 'Jumlah', 1,0, 'C');
+		$pdf->Cell(20,7, 'L', 1,0, 'C');
+		$pdf->Cell(20,7, 'P', 1,0, 'C');
+		$pdf->Cell(40,7, 'Jumlah', 1,1, 'C');
+
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(10,10, '1',1,0, 'C');
+		$pdf->Cell(90,10, $loaddata['nm_sekolah'],1,0, 'C');
+		$pdf->Cell(20,10, $dptL['L'], 1,0, 'C');
+		$pdf->Cell(20,10, $dptP['P'], 1,0, 'C');
+		$pdf->Cell(20,10, $dptTotal, 1,0, 'C');
+		$pdf->Cell(20,10, $voteL['L'], 1,0, 'C');
+		$pdf->Cell(20,10, $voteP['P'], 1,0, 'C');
+		$pdf->Cell(20,10, $voteTotal, 1,0, 'C');
+		$pdf->Cell(20,10, $tidakMemilihL, 1,0, 'C');
+		$pdf->Cell(20,10, $tidakMemilihP, 1,0, 'C');
+		$pdf->Cell(40,10, $tidakMemilih, 1,1, 'C');
+
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(60,7, 'Persentase Partisipasi Pemilih: '.$partisipasi.'%', 0,1);
+
+    // Hasil OSIS
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIS', 0,1);
+		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
+		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
+		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
+		$pdf->SetFont('Arial','',12);
+		foreach($datavote as $hasil) {
+			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 0) {
+				$pdf->Cell(30,7, $hasil['no'],1,0, 'C');
+				$pdf->Cell(60,7, $hasil['nama'],1,0, 'L');
+				$pdf->Cell(80,7, $hasil['jumlah'],1,1, 'C');
+			}
+		}
+
+    // Hasil MPK
+		$pdf->Cell(10,7,'',0,1);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua MPK', 0,1);
+		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
+		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
+		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
+		$pdf->SetFont('Arial','',12);
+		foreach($datavote as $hasil) {
+			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 1) {
+				$pdf->Cell(30,7, $hasil['no'], 1,0, 'C');
+				$pdf->Cell(60,7, $hasil['nama'], 1,0, 'L');
+				$pdf->Cell(80,7, $hasil['jumlah'], 1,1, 'C');
+			}
+		}
+
+    // Tanda tangan
+		$pdf->Cell(10,14,'',0,1);
+		$pdf->Cell(220,10, '',0,0, 'L');
+		$pdf->Cell(70,10, $loaddata['desa'].', '.$this->tgl_indo(date('Y-m-d')),0,1, 'L');
+		$pdf->Cell(220,10, '',0,0, 'L');
+		$pdf->Cell(70,10, 'Kepala Sekolah',0,1, 'L');
+		$pdf->Cell(10,20,'',0,1);
+		$pdf->Cell(220,6, '',0,0, 'L');
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(70,6, $loaddata['kpl_sekolah'],0,1, 'L');
+		$pdf->Cell(220,6, '',0,0, 'L');
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(70,6, 'NIP: '.$loaddata['nip'],0,1, 'L');
+
+		$pdf->Output();
+		ob_end_flush();
 	}
 }
 ?>
+
