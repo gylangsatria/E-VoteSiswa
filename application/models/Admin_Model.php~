@@ -101,12 +101,6 @@ Class Admin_Model extends CI_Model {
 		);
 		$this->db->insert('tb_pilihan', $data);
 	} */
-	
-	// reset hasil vote
-	
-	public function delete_all_votes() {
-		return $this->db->truncate('tb_pilih');
-	}
 
 	public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
 		$data = array(
@@ -124,6 +118,11 @@ Class Admin_Model extends CI_Model {
 		return $hapus;
 	}
 	public function hapussemuakelas() {
+		$hapus = $this->db->query("DELETE FROM tb_kelas");
+		return $hapus;
+	}
+	
+		public function hapussemuakelas() {
 		$hapus = $this->db->query("DELETE FROM tb_kelas");
 		return $hapus;
 	}

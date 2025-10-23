@@ -48,9 +48,3 @@ $(document).ready( function () {
 </script>
 </body>
 </html>
-
-
-
-</body>
-</html>
-
