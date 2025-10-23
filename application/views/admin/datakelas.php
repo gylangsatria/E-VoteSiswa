@@ -1,3 +1,14 @@
+<?php if ($this->session->flashdata('success')): ?>
+	<div class="alert alert-success">
+		<?= $this->session->flashdata('success'); ?>
+	</div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('warning')): ?>
+	<div class="alert alert-warning">
+		<?= $this->session->flashdata('warning'); ?>
+	</div>
+<?php endif; ?>
 
 <div class="box">
 	<div class="box-inner">

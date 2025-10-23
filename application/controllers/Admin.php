@@ -240,25 +240,40 @@ public function hapuskelas($kd_kelas) {
 	}
 }
 public function hapussemuakelas() {
-	$hapus = $this->Admin_Model->hapussemuakelas();
-	if($hapus = true) {
-		echo "
-		<script>
-		alert('Semua Data Kelas Telah Dihapus');
-		location.href = '".base_url('index.php/admin/datakelas')."';
-		</script>
-		";
+	if (! $this->session->userdata('username')) {
+		redirect('admin/login');
 	}
-	else
-	{
-		echo "
-		<script>
-		Alert('Tidak Dapat Menghapus Semua Data');
-		location.href = '".base_url('index.php/admin/datakelas')."';
-		</script>
-		";
+
+	$jumlah = $this->db->count_all('tb_kelas');
+
+	if ($jumlah > 0) {
+		$this->Admin_Model->hapussemuadpt();
+		$this->session->set_flashdata('success', 'Semua data Kelas berhasil dihapus.');
+	} else {
+		$this->session->set_flashdata('warning', 'Data Kelas sudah kosong.');
 	}
+
+    redirect('admin/datakelas'); // atau ke halaman DPT
 }
+
+public function hapussemuadpt() {
+	if (! $this->session->userdata('username')) {
+		redirect('admin/login');
+	}
+
+	$jumlah = $this->db->count_all('tb_siswa');
+
+	if ($jumlah > 0) {
+		$this->Admin_Model->hapussemuadpt();
+		$this->session->set_flashdata('success', 'Semua data DPT berhasil dihapus.');
+	} else {
+		$this->session->set_flashdata('warning', 'Data DPT sudah kosong.');
+	}
+
+    redirect('admin/datadpt'); // atau ke halaman DPT
+}
+
+
 public function tambahcalon() {
 	if(! $this->session->userdata('username'))
 	{

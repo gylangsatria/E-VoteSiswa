@@ -101,32 +101,36 @@ Class Admin_Model extends CI_Model {
 		);
 		$this->db->insert('tb_pilihan', $data);
 	} */
-	
-	// reset hasil vote
-	
+
+
+	// reset hasil vote 
+
 	public function delete_all_votes() {
 		return $this->db->truncate('tb_pilih');
 	}
 
-	public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
-		$data = array(
-			'nisn'          => $nisn,
-			'no'            => $no,
-			'nama'          => $nama,
-			'photo'         => $photo,
+	public function hapussemuadpt() {
+		return $this->db->truncate('tb_siswa');}
+
+
+		public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
+			$data = array(
+				'nisn'          => $nisn,
+				'no'            => $no,
+				'nama'          => $nama,
+				'photo'         => $photo,
         'opsi_mpkosis'  => $opsi_mpkosis // 0 = MPK, 1 = OSIS
     );
-		$this->db->insert('tb_pilihan', $data);
-	}
+			$this->db->insert('tb_pilihan', $data);
+		}
 
-	public function hapuskelas($kd_kelas) {
-		$hapus = $this->db->query("DELETE FROM tb_kelas WHERE kd_kelas='$kd_kelas'");
-		return $hapus;
-	}
-	public function hapussemuakelas() {
-		$hapus = $this->db->query("DELETE FROM tb_kelas");
-		return $hapus;
-	}
+		public function hapuskelas($kd_kelas) {
+			$hapus = $this->db->query("DELETE FROM tb_kelas WHERE kd_kelas='$kd_kelas'");
+			return $hapus;
+		}
+		
+		public function hapussemuakelas() {
+			return $this->db->truncate('tb_kelas');}
 
 	/*
 	public function updatecalon($nisn, $no , $nama) {

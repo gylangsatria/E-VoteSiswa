@@ -1,9 +1,14 @@
-<?php if($this->session->flashdata('info')) { ?>
-    <script>alert("Berhasil Menghapus Data");</script>
-<?php } ?>
-<?php if($this->session->flashdata('failed')) { ?>
-    <script>alert("Gagal Menghapus Data");</script>
-<?php } ?>
+<?php if ($this->session->flashdata('success')): ?>
+    <div class="alert alert-success">
+        <?= $this->session->flashdata('success'); ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('warning')): ?>
+    <div class="alert alert-warning">
+        <?= $this->session->flashdata('warning'); ?>
+    </div>
+<?php endif; ?>
 
 <div class="box">
     <div class="box-inner">
