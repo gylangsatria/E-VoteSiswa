@@ -11,6 +11,7 @@
   <li>V.0.9.1 : Penambahan fitur pencarian DPT dan Perbaikan Login</li>
   <li>V.0.9.2 : Penambahan fitur grafik di hasil vote</li>
   <li>V.0.9.3 : Perbaikan opsi Osis dan MPK yang terbalik</li>
+  <li>V.0.9.4 : Perbaikan opsi Hapus semua data dan penambahan tombol Reset Vote</li>
 </ol>
 
 
