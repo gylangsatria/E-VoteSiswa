@@ -51,7 +51,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url('index.php/admin/hasilvote'); ?>"><i class="glyphicon glyphicon-check"></i> Hasil Pemilihan</a></li>
                         <li><a href="<?php echo base_url('index.php/admin/daftarhadir'); ?>"><i class="glyphicon glyphicon-list"></i> Daftar Hadir</a></li>
-                        <li><a href="<?php echo base_url('index.php/admin/laporan'); ?>"><i class="glyphicon glyphicon-print"></i> Laporan E-VoteSiswa</a></li>
+                        <li><a href="<?php echo base_url('index.php/admin/laporan'); ?>"><i class="glyphicon glyphicon-print"></i> Laporan Laporan E-VoteSiswa</a></li>
                     </ul>
                 </li>
             </ul>

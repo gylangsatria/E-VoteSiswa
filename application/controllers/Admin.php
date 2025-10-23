@@ -828,13 +828,13 @@ public function updatecalon() {
 		$pdf->Cell(10,7,'',0,1);
 		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIS', 0,1);
 		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
-		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
+		$pdf->Cell(100,12, 'Nama Kandidat',1,0, 'C');
 		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
 		$pdf->SetFont('Arial','',12);
 		foreach($datavote as $hasil) {
 			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 0) {
 				$pdf->Cell(30,7, $hasil['no'],1,0, 'C');
-				$pdf->Cell(60,7, $hasil['nama'],1,0, 'L');
+				$pdf->Cell(100,7, $hasil['nama'],1,0, 'L');
 				$pdf->Cell(80,7, $hasil['jumlah'],1,1, 'C');
 			}
 		}
@@ -844,13 +844,13 @@ public function updatecalon() {
 		$pdf->SetFont('Arial','B',12);
 		$pdf->Cell(60,7, 'Hasil Pemilihan Ketua MPK', 0,1);
 		$pdf->Cell(30,12, 'No Urut',1,0, 'C');
-		$pdf->Cell(60,12, 'Nama Kandidat',1,0, 'C');
+		$pdf->Cell(100,12, 'Nama Kandidat',1,0, 'C');
 		$pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
 		$pdf->SetFont('Arial','',12);
 		foreach($datavote as $hasil) {
 			if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 1) {
 				$pdf->Cell(30,7, $hasil['no'], 1,0, 'C');
-				$pdf->Cell(60,7, $hasil['nama'], 1,0, 'L');
+				$pdf->Cell(100,7, $hasil['nama'], 1,0, 'L');
 				$pdf->Cell(80,7, $hasil['jumlah'], 1,1, 'C');
 			}
 		}
