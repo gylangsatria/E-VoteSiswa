@@ -24,7 +24,7 @@
                 <h3 class="text-center">Calon Ketua OSIS</h3>
                 <div class="row">
                     <?php foreach($datacalon as $loaddata): ?>
-                        <?php if ($loaddata['opsi_mpkosis'] == 0): ?>
+                        <?php if ($loaddata['opsi_mpkosis'] == 1): ?>
                             <div class="col-lg-4 col-md-6 col-sm-12">
                                 <div class="box">
                                     <div class="box-inner">
@@ -57,7 +57,7 @@
                 <h3 class="text-center">Calon Ketua MPK</h3>
                 <div class="row">
                     <?php foreach($datacalon as $loaddata): ?>
-                        <?php if ($loaddata['opsi_mpkosis'] == 1): ?>
+                        <?php if ($loaddata['opsi_mpkosis'] == 0): ?>
                             <div class="col-lg-4 col-md-6 col-sm-12">
                                 <div class="box">
                                     <div class="box-inner">

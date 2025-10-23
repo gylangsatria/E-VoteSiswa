@@ -138,12 +138,13 @@ Class Admin_Model extends CI_Model {
 		return $save;
 	} */
 
-	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis) {
+	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis, $photo) {
 		$save = $this->db->query("
 			UPDATE tb_pilihan 
 				SET no = '$no', 
 				nama = '$nama', 
-				opsi_mpkosis = '$opsi_mpkosis' 
+				opsi_mpkosis = '$opsi_mpkosis',
+				photo = '$photo'
 				WHERE nisn = '$nisn'
 				");
 		return $save;

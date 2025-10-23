@@ -23,7 +23,7 @@
                 <tbody>
                 <?php 
                     foreach($datacalon as $loaddata) {
-                        $jenis = ($loaddata['opsi_mpkosis'] == 0) ? 'OSIS' : 'MPK';
+                        $jenis = ($loaddata['opsi_mpkosis'] == 1) ? 'OSIS' : 'MPK';
                 ?>
                     <tr>
                         <td class="text-center"><?php echo $loaddata['no']; ?></td>

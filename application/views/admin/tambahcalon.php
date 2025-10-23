@@ -57,8 +57,8 @@
 				<label class="label-control">Kandidat</label>
 				<?php
 				$options_kandidat = array(
-					'0' => 'OSIS',
-					'1' => 'MPK'
+					'0' => 'MPK',
+					'1' => 'OSIS'
 				);
 				$form_attribute = array(
 					'class'    => 'form-control',
