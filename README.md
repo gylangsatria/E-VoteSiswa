@@ -13,7 +13,7 @@
   <li>V.0.9.3 : Perbaikan opsi Osis dan MPK yang terbalik</li>
   <li>V.0.9.4 : Perbaikan opsi Hapus semua data dan penambahan tombol Reset Vote</li>
   <li>V.0.9.5 : Perbaikan laporan E-VoteSiswa</li>
-  <li>V.0.9.5 : Penambahan Logo di Login screen</li>
+  <li>V.0.9.6 : Penambahan Logo di Login screen</li>
 </ol>
 
 
