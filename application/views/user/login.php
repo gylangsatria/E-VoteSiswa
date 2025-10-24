@@ -42,7 +42,7 @@
         }
 
         .login-box img {
-            max-width: 120px;
+            max-width: 160px;
             margin-bottom: 10px;
         }
 
