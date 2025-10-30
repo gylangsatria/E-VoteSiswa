@@ -99,7 +99,7 @@ $dataMpk = [];
 <div class="box-content">
     <div class="row">
         <?php foreach($vote as $datavote): 
-            $kategori = ($datavote['opsi_mpkosis'] == 0) ? 'MPK' : 'OSIS';
+            $kategori = ($datavote['opsi_mpkosis'] == 0) ? 'MOK' : 'MPK';
             $jumlah   = (int) $datavote['jumlah'];
             $persen   = ($voteMasuk > 0) ? round(($jumlah / $voteMasuk) * 100, 2) : 0;
 
