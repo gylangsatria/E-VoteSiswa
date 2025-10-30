@@ -43,15 +43,13 @@ CREATE TABLE `tb_kelas` (
   PRIMARY KEY (`kd_kelas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO `tb_kelas` (`kd_kelas`, `nm_kelas`) VALUES
-(12,	'VII-A');
 
 DROP TABLE IF EXISTS `tb_pilih`;
 CREATE TABLE `tb_pilih` (
   `id_pilih` int NOT NULL AUTO_INCREMENT,
   `nisn` varchar(32) NOT NULL,
   `username` varchar(32) NOT NULL,
-  `opsi_mpkosis` tinyint(1) NOT NULL COMMENT '0 = OSIS, 1 = MPK',
+  `opsi_mpkosis` tinyint(1) DEFAULT NULL COMMENT '0 = MPK, 1 = OSIS',
   `calon_nisn` varchar(32) NOT NULL,
   `waktu_vote` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pilih`)
@@ -61,7 +59,7 @@ CREATE TABLE `tb_pilih` (
 DROP TABLE IF EXISTS `tb_pilihan`;
 CREATE TABLE `tb_pilihan` (
   `nisn` varchar(32) NOT NULL,
-  `nama` varchar(32) NOT NULL,
+  `nama` varchar(56) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `photo` varchar(32) NOT NULL,
   `no` int NOT NULL,
   `opsi_mpkosis` tinyint(1) NOT NULL DEFAULT '0',
@@ -73,7 +71,7 @@ DROP TABLE IF EXISTS `tb_siswa`;
 CREATE TABLE `tb_siswa` (
   `username` varchar(32) NOT NULL,
   `password` varchar(32) NOT NULL,
-  `nm_siswa` varchar(32) DEFAULT NULL,
+  `nm_siswa` varchar(56) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `jk` char(1) NOT NULL,
   `kd_kelas` int DEFAULT NULL,
   `hadir` varchar(12) NOT NULL DEFAULT 'Tidak Hadir',
@@ -82,11 +80,11 @@ CREATE TABLE `tb_siswa` (
 
 
 DROP VIEW IF EXISTS `view_daftarhadir`;
-CREATE TABLE `view_daftarhadir` (`NISN` varchar(32), `nm_siswa` varchar(32), `nm_kelas` varchar(32));
+CREATE TABLE `view_daftarhadir` (`NISN` varchar(32), `nm_siswa` varchar(56), `nm_kelas` varchar(32));
 
 
 DROP VIEW IF EXISTS `view_vote`;
-CREATE TABLE `view_vote` (`nisn` varchar(32), `nama` varchar(32), `photo` varchar(32), `no` int, `username` varchar(32));
+CREATE TABLE `view_vote` (`nisn` varchar(32), `nama` varchar(56), `photo` varchar(32), `no` int, `username` varchar(32));
 
 
 DROP TABLE IF EXISTS `view_daftarhadir`;
@@ -95,4 +93,4 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `view_vote`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `view_vote` AS select `tb_pilihan`.`nisn` AS `nisn`,`tb_pilihan`.`nama` AS `nama`,`tb_pilihan`.`photo` AS `photo`,`tb_pilihan`.`no` AS `no`,`tb_siswa`.`username` AS `username` from ((`tb_pilih` join `tb_pilihan` on((`tb_pilihan`.`nisn` = `tb_pilih`.`nisn`))) join `tb_siswa` on((`tb_siswa`.`username` = `tb_pilih`.`username`)));
 
--- 2025-10-22 09:53:05 UTC
+-- 2025-10-30 10:41:33 UTC
