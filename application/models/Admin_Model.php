@@ -91,20 +91,6 @@ Class Admin_Model extends CI_Model {
 		$this->db->insert('tb_kelas', $data);
 	}
 
-	/*
-	public function tambahcalon($nisn, $no , $nama, $photo) {
-		$data		= array (
-			'nisn'	=> $nisn,
-			'no'	=> $no,
-			'nama'	=> $nama,
-			'photo' => $photo
-		);
-		$this->db->insert('tb_pilihan', $data);
-	} */
-
-
-	// reset hasil vote 
-
 	public function delete_all_votes() {
 		return $this->db->truncate('tb_pilih');
 	}
@@ -132,12 +118,6 @@ Class Admin_Model extends CI_Model {
 		public function hapussemuakelas() {
 			return $this->db->truncate('tb_kelas');}
 
-	/*
-	public function updatecalon($nisn, $no , $nama) {
-		$save		= $this->db->query("UPDATE tb_pilihan SET no='$no', nama='$nama' WHERE nisn='$nisn'");
-		return $save;
-	} */
-
 	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis, $photo) {
 		$save = $this->db->query("
 			UPDATE tb_pilihan 
@@ -149,6 +129,7 @@ Class Admin_Model extends CI_Model {
 				");
 		return $save;
 	}
+
 
 	public function hapuscalon($nisn) {
 		$hapus		= $this->db->query("DELETE FROM tb_pilihan WHERE nisn='$nisn'");
@@ -199,32 +180,17 @@ Class Admin_Model extends CI_Model {
 		return $load->result_array();
 	}
 	public function countcalon() {
-		$count	= $this->db->query("SELECT COUNT(no) AS jumlah FROM tb_pilihan");
-		return $count->result_array();
+		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_pilihan")->row_array();
 	}
+
 	public function countpemilih() {
-		$count	= $this->db->query("SELECT COUNT(username) AS jumlah FROM tb_siswa");
-		return $count->result_array();
+		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_siswa")->row_array();
 	}
+
+
 	public function countvote() {
-		$count	= $this->db->query("SELECT COUNT(username) AS jumlah FROM view_vote");
-		return $count->result_array();
+		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_siswa WHERE hadir = 'Hadir'")->row_array();
 	}
-	//ubah hasil vote 
-	/*public function hasilvote() {
-		$query = $this->db->query("
-			SELECT 
-			tb_pilihan.no,
-			tb_pilihan.nama,
-			tb_pilihan.photo,
-			COUNT(tb_pilih.id_pilih) AS jumlah
-			FROM tb_pilihan
-			LEFT JOIN tb_pilih ON tb_pilihan.nisn = tb_pilih.nisn
-			GROUP BY tb_pilihan.no, tb_pilihan.nama, tb_pilihan.photo
-			ORDER BY tb_pilihan.no ASC
-			");
-		return $query->result_array();
-	} */
 
 	public function hasilvote() {
 		return $this->db
@@ -238,38 +204,24 @@ Class Admin_Model extends CI_Model {
 	}
 
 
-	public function jmldptL() {
-		$data = $this->db->query("SELECT COUNT(jk) as L FROM tb_siswa WHERE jk='L'");
-		return $data->result_array();
-	}
-	public function jmldptP() {
-		$data = $this->db->query("SELECT COUNT(jk) as P FROM tb_siswa WHERE jk='P'");
-		return $data->result_array();
-	}
-	public function jmlvoteL() {
-		$data = $this->db->query("
-			SELECT COUNT(tb_siswa.jk) as L 
-			FROM 
-			tb_siswa 
-			INNER JOIN 
-			tb_pilih
-			ON 
-			tb_siswa.username = tb_pilih.username
-			WHERE jk='L'");
-		return $data->result_array();
-	}
-	public function jmlvoteP() {
-		$data = $this->db->query("
-			SELECT COUNT(tb_siswa.jk) as P 
-			FROM 
-			tb_siswa 
-			INNER JOIN 
-			tb_pilih
-			ON 
-			tb_siswa.username = tb_pilih.username
-			WHERE jk='P'");
-		return $data->result_array();
-	}
+public function jmldptL() {
+    return $this->db->query("SELECT COUNT(*) AS L FROM tb_siswa WHERE jk = 'L'")->row_array();
+}
+
+public function jmldptP() {
+    return $this->db->query("SELECT COUNT(*) AS P FROM tb_siswa WHERE jk = 'P'")->row_array();
+}
+
+public function jmlvoteL() {
+    return $this->db->query("SELECT COUNT(*) AS L FROM tb_siswa WHERE jk = 'L' AND hadir = 'Hadir'")->row_array();
+}
+
+public function jmlvoteP() {
+    return $this->db->query("SELECT COUNT(*) AS P FROM tb_siswa WHERE jk = 'P' AND hadir = 'Hadir'")->row_array();
+}
+
+
+	
 	public function kuncivote() {
 		$data	= $this->db->query("SELECT * FROM tb_pilih");
 		return $data->result_array();
