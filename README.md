@@ -1,3 +1,7 @@
+# ⚠️ **DEPRECATED**  
+<p>Proyek ini sudah tidak dikembangkan lagi karena menggunakan Codeigniter 3 dan PHP yang sudah usang. </p>
+
+
 # DAFTAR PERUBAHAN
 <ol>
   <li>Perubahan template dari <b>Charisma</b> ke <b>AdminLTE</b></li>
