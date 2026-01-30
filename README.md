@@ -1,5 +1,6 @@
 # ⚠️ **DEPRECATED**  
 <p>Proyek ini sudah tidak dikembangkan lagi karena menggunakan Codeigniter 3 dan PHP yang sudah usang. </p>
+<p>Gunakan hanya untuk Local saja / Only use for Local Only</p>
 
 
 # DAFTAR PERUBAHAN
