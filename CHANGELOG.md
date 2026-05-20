@@ -134,6 +134,16 @@ Method yang diperbaiki:
 **Lokasi:** `controllers/Admin.php`, `controllers/User.php`
 **Perbaikan:** Maksimal 5 percobaan login dalam 5 menit. Setelah melebihi batas, akun diblokir sementara. Counter di-reset setelah login berhasil.
 
+### 20. Database Schema Fix untuk bcrypt
+
+**Lokasi:** `db_evotesiswa.sql` (update), `db_migrate_from_md5.sql` (file baru)
+**Perbaikan:**
+- Kolom `password` di `tb_admin` dan `tb_siswa`: VARCHAR(32) -> VARCHAR(255) untuk menampung bcrypt hash (60 karakter)
+- Semua tabel diubah charset dari `latin1` ke `utf8_general_ci` (konsisten dengan konfigurasi aplikasi)
+- Kolom `nama`, `nm_sekolah`, `photo`, dll diperbesar (varchar(32/56) -> varchar(100))
+- Ditambahkan default admin user dengan bcrypt hash password
+- File `db_migrate_from_md5.sql` disediakan untuk migrasi database eksisting
+
 ---
 
 ## Bug Yang Belum Diperbaiki

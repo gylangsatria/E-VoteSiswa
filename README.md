@@ -60,15 +60,12 @@ Edit `application/config/database.php`:
 > **Catatan:** Secara default `base_url` di `config.php` sudah menggunakan deteksi dinamis, tidak perlu diubah.
 
 ### 4. Admin Default
-Setelah import database, hash password admin perlu diupdate dengan bcrypt. Jalankan query berikut di phpMyAdmin:
+Setelah import database, admin sudah langsung bisa login dengan:
 
-```sql
-UPDATE tb_admin SET password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi' WHERE username = 'admin';
-```
+- **Username:** `admin`
+- **Password:** `admin`
 
-Password default: **admin**
-
-> **PENTING:** Aplikasi sekarang menggunakan bcrypt (`password_hash()`), bukan MD5. Password yang sudah tersimpan dengan MD5 harus di-update dengan cara login sebagai admin, lalu ganti password melalui menu **Ganti Password**.
+> **Catatan:** Database baru (`db_evotesiswa.sql`) sudah menyertakan admin dengan bcrypt hash. Jika Anda migrasi dari database lama yang menggunakan MD5, jalankan `db_migrate_from_md5.sql` untuk update struktur dan password.
 
 ### 5. Akses
 
