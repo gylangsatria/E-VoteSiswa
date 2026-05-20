@@ -5,35 +5,41 @@
 
 ---
 
-## [1.1.2] - 21 Mei 2026
+## [1.2] - 21 Mei 2026
 
-### Temuan Frontend
+### UI/UX Modernization
+- **CSS Global** — `asset/css/main.css`: rewrite dengan CSS custom properties, modern card shadows, smooth transitions, improved typography, responsive utilities, better form/button/table styling.
+- **CSS Variables** — Warna tema dijadikan CSS variable (`--primary`, `--navbar-bg`, dll) untuk kemudahan kostumisasi tema.
+- **Navbar** — Gradient background, smooth hover, dropdown modern dengan shadow dan rounded.
+- **Box/Card Component** — Border dihapus, diganti shadow lembut; hover efek translateY; padding lebih lega.
+- **Stat Cards (Dashboard)** — Hover efek angkat, icon lebih besar, typography lebih modern.
+- **Tables** — Header uppercase + letter-spacing, row hover highlight.
+- **Buttons** — Border-radius 6px, hover translateY + shadow.
+- **Form Controls** — Border 1.5px, focus ring teal, height auto.
 
-#### HIGH (FIXED)
-- **AJAX error & timeout** — `asset/js/charisma.js`: ditambahkan `error` callback, `timeout: 15000`, dan `complete` handler pada History statechange AJAX.
-- **Validasi Form & Upload client-side** — `application/views/admin/tambahcalon.php`, `application/views/admin/tambahdpt.php`: ditambahkan `required`, `pattern`, `accept`, `id`, dan `title` pada input fields.
-- **CSRF token** — `application/views/admin/gantipassword.php`: sudah menggunakan `form_open()` yang otomatis menyertakan CSRF token. Ditambahkan aksesibilitas & validasi.
+### Halaman Voting User
+- **Card Kandidat** — Redesain total: card putih dengan border-radius 12px, shadow, hover translateY(-4px) + shadow-lg.
+- **Image** — `object-fit: cover; height: 280px` untuk rasio konsisten.
+- **Typography** — Nomor urut teal uppercase, nama bold 18px.
+- **Tombol Vote** — Custom styling (merah untuk OSIS, teal untuk MPK), hover efek angkat.
+- **Section Title** — Underline gradient dekoratif.
 
-#### MEDIUM (FIXED)
-- **Accessibility (a11y)** — `application/views/admin/login.php` dan form lainnya: ditambahkan `id`, `label for`, `aria-label`, `autocomplete`, dan `sr-only` labels.
-- **Responsive layout** — `asset/css/charisma-app.css`: `.form-container` diubah dari `width: 400px` → `width: 100%; max-width: 400px`.
-- **Chart tooltip memory leak** — `asset/js/init-chart.js`: tooltip dibuat sekali (direuse), tidak di-create/destroy setiap hover.
-- **Double-submit / race condition** — `asset/js/charisma.js`: ditambahkan flag `_ajaxLoading` dan event `submit` handler untuk disable tombol.
+### Halaman Login (Admin & User)
+- **Card** — Padding lebih lega (40px/32px), border-radius 16px, shadow lebih dalam (0 20px 60px).
+- **Animasi** — `fadeUp` keyframe saat load.
+- **Input** — Tinggi 48px, icon teal, border-radius 8px.
+- **Button** — Full-width 48px, teal solid, hover shadow.
+- **Overlay** — Gradient (dark → transparan) bukan solid.
+- **Aksesibilitas** — Ditambahkan `id`, `label for`, `sr-only`, `aria-label`, `autocomplete` di user login.
 
-#### LOW (FIXED)
-- **Hardcoded theme values** — `asset/css/main.css`: warna navbar `#3EA99F` diganti dengan CSS variable `--navbar-bg`.
-
-### Files yang Diperbaiki
+### Files yang Diperbarui
 | File | Perbaikan |
 |------|-----------|
-| `asset/js/charisma.js` | AJAX error/timeout/complete, double-submit prevention |
-| `asset/js/init-chart.js` | Tooltip reuse, prevent memory leak |
-| `application/views/admin/tambahcalon.php` | Validasi HTML5 (required, pattern, accept, id) |
-| `application/views/admin/tambahdpt.php` | Validasi HTML5 (required, pattern, id) |
-| `application/views/admin/login.php` | Aksesibilitas (id, label, aria-label, autocomplete) |
-| `application/views/admin/gantipassword.php` | Aksesibilitas & validasi password |
-| `asset/css/charisma-app.css` | .form-container responsive |
-| `asset/css/main.css` | CSS variable untuk navbar color |
+| `asset/css/main.css` | Rewrite CSS modern (variables, card, stat, table, form, button) |
+| `asset/css/charisma-app.css` | Form container margin auto |
+| `application/views/user/index.php` | Redesain card kandidat modern |
+| `application/views/admin/login.php` | Redesain card login modern |
+| `application/views/user/login.php` | Redesain card login + aksesibilitas |
 
 ---
 

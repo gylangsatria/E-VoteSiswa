@@ -8,67 +8,111 @@
     <link href="<?php echo base_url(); ?>asset/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             background-image: url('<?php echo base_url(); ?>asset/img/backgroundmts.png');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            flex-direction: column;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* Overlay gelap agar teks tetap terbaca */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
             z-index: -1;
         }
 
         .login-box {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            background: #fff;
+            padding: 40px 32px 32px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            animation: fadeUp 0.5s ease;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .login-box img {
-            max-width: 160px;
-            margin-bottom: 10px;
+            max-width: 120px;
+            margin-bottom: 16px;
         }
 
         .login-box h2 {
-            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
             margin-bottom: 20px;
+        }
+
+        .login-box .input-group {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: stretch;
+        }
+        .login-box .input-group .input-group-addon {
+            background: #f8f9fa;
+            border: 1.5px solid #e8eaed;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+        }
+        .login-box .input-group .input-group-addon i { color: #3EA99F; font-size: 18px; }
+        .login-box .input-group .form-control {
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+            height: 48px;
+            font-size: 15px;
         }
 
         .btn-lg {
             width: 100%;
-        }
-
-        .alert b {
+            padding: 12px;
+            font-size: 16px;
             font-weight: 600;
+            border-radius: 8px;
+            background: #3EA99F;
+            border: none;
+            color: #fff;
+            transition: all 0.2s ease;
+        }
+        .btn-lg:hover {
+            background: #2d8a82;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(62, 169, 159, 0.3);
         }
 
-        .input-group-addon i {
-            color: #d9534f;
+        .alert {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            font-size: 14px;
         }
+        .alert-info { background: #e3f2fd; color: #1565c0; }
+        .alert-danger { background: #fde8e8; color: #c0392b; }
 
-        @media (max-width: 768px) {
-            .login-box {
-                margin-top: 20px;
-            }
+        .input-group-addon i { color: #3EA99F !important; }
+
+        @media (max-width: 480px) {
+            .login-box { padding: 28px 20px 24px; }
+            .login-box h2 { font-size: 19px; }
         }
     </style>
 </head>
