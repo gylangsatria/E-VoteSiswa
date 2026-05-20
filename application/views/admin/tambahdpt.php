@@ -39,33 +39,37 @@
 		<div class="col-lg-5">
 			<h4>Tambah Data Satu/Satu</h4>
 			<hr/>
-			<label class="label-control">NISN</label>
+			<label class="label-control" for="nisn">NISN</label>
 			<?php
 				$form_attribute = array(
 					'type'		=> 'text',
 					'class'		=> 'form-control',
 					'name'		=> 'nisn',
-					'required'	=> 'required'
+					'id'		=> 'nisn',
+					'required'	=> 'required',
+					'pattern'	=> '[0-9]{8,20}',
+					'title'		=> 'Masukkan NISN yang valid (8-20 digit angka)'
 				);
 				echo form_input($form_attribute);
 			?>
-			<label class="label-control">Nama</label>
+			<label class="label-control" for="nm_siswa">Nama</label>
 			<?php
 				$form_attribute = array(
 					'type'		=> 'text',
 					'class'		=> 'form-control',
 					'name'		=> 'nm_siswa',
+					'id'		=> 'nm_siswa',
 					'required'	=> 'required'
 				);
 				echo form_input($form_attribute);
 			?>
-			<label class="label-control">Jenis Kelamin</label>
-			<select class="form-control" name="jk">
+			<label class="label-control" for="jk">Jenis Kelamin</label>
+			<select class="form-control" name="jk" id="jk">
 				<option selected value="L">L</option>
 				<option value="P">P</option>
 			</select>
-			<label class="label-control">Kelas</label>
-			<select class="form-control" name="kd_kelas" required>
+			<label class="label-control" for="kd_kelas">Kelas</label>
+			<select class="form-control" name="kd_kelas" id="kd_kelas" required>
 				<?php foreach($datakelas as $load) { ?>
 					<option value="<?php echo $load['kd_kelas']; ?>"> (<?php echo $load['kd_kelas']; ?>) <?php echo $load['nm_kelas']; ?> </option>
 				<?php 

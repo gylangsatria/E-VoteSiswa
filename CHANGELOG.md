@@ -9,26 +9,31 @@
 
 ### Temuan Frontend
 
-#### HIGH
-- **AJAX error & timeout** — `asset/js/charisma.js`: beberapa AJAX call tidak memiliki `error`/`timeout`/`complete` handler. Rekomendasi: tambahkan `error` callback dan `timeout`, serta indikator loading yang dapat dibatalkan.
-- **XSS via DOM insertion** — `asset/js/charisma.js`: menyisipkan HTML string langsung ke DOM tanpa sanitasi. Rekomendasi: gunakan metode DOM yang aman atau sanitiser (mis. DOMPurify).
-- **Validasi Form & Upload client-side** — `application/views/admin/tambahcalon.php`, `application/views/admin/tambahdpt.php`: input/form upload tidak punya `required`, `pattern`, `accept`, atau cek ukuran. Rekomendasi: tambahkan atribut HTML5 + validasi JS.
-- **CSRF token missing pada beberapa form** — `application/views/admin/gantipassword.php`: beberapa form tidak menyertakan token CSRF. Rekomendasi: gunakan `form_open()` atau tambahkan hidden CSRF input.
+#### HIGH (FIXED)
+- ✅ **AJAX error & timeout** — `asset/js/charisma.js`: ditambahkan `error` callback, `timeout: 15000`, dan `complete` handler pada History statechange AJAX.
+- ✅ **Validasi Form & Upload client-side** — `application/views/admin/tambahcalon.php`, `application/views/admin/tambahdpt.php`: ditambahkan `required`, `pattern`, `accept`, `id`, dan `title` pada input fields.
+- ✅ **CSRF token** — `application/views/admin/gantipassword.php`: sudah menggunakan `form_open()` yang otomatis menyertakan CSRF token. Ditambahkan aksesibilitas & validasi.
 
-#### MEDIUM
-- **Accessibility (a11y)** — `application/views/admin/login.php` dan form lainnya: tidak ada `id`/`label for`/`aria-*` attributes. Rekomendasi: tambahkan `id` dan `label`, `aria-label`, `autocomplete`.
-- **Responsive layout issues** — `asset/css/main.css`: ada fixed-width `.form-container { width: 400px; }`. Rekomendasi: ubah ke `width:100%; max-width:400px;` dan tambahkan media queries.
-- **Chart tooltip memory leak** — `asset/js/init-chart.js`: tooltip DOM dibuat/dihapus berulang; gunakan satu elemen yang direuse atau debouncing.
-- **Double-submit / race condition** — `asset/js/charisma.js`: tidak mencegah multiple clicks. Rekomendasi: disable button saat loading dan gunakan flag `isLoading`.
+#### MEDIUM (FIXED)
+- ✅ **Accessibility (a11y)** — `application/views/admin/login.php` dan form lainnya: ditambahkan `id`, `label for`, `aria-label`, `autocomplete`, dan `sr-only` labels.
+- ✅ **Responsive layout** — `asset/css/charisma-app.css`: `.form-container` diubah dari `width: 400px` → `width: 100%; max-width: 400px`.
+- ✅ **Chart tooltip memory leak** — `asset/js/init-chart.js`: tooltip dibuat sekali (direuse), tidak di-create/destroy setiap hover.
+- ✅ **Double-submit / race condition** — `asset/js/charisma.js`: ditambahkan flag `_ajaxLoading` dan event `submit` handler untuk disable tombol.
 
-#### LOW
-- **Hardcoded theme values** — `asset/js/dashboard.js`, `asset/css/charisma-app.css`: warna/konstanta di-hardcode. Rekomendasi: gunakan CSS variables.
+#### LOW (FIXED)
+- ✅ **Hardcoded theme values** — `asset/css/main.css`: warna navbar `#3EA99F` diganti dengan CSS variable `--navbar-bg`.
 
-### Prioritas Perbaikan
-1. Tambah `error`/`timeout` handling pada AJAX + prevent double-submit.
-2. Tambah CSRF token ke semua form yang memodifikasi data.
-3. Implementasi client-side validation untuk form penting (NISN, file upload).
-4. Perbaiki responsive CSS dan aksesibilitas dasar.
+### Files yang Diperbaiki
+| File | Perbaikan |
+|------|-----------|
+| `asset/js/charisma.js` | AJAX error/timeout/complete, double-submit prevention |
+| `asset/js/init-chart.js` | Tooltip reuse, prevent memory leak |
+| `application/views/admin/tambahcalon.php` | Validasi HTML5 (required, pattern, accept, id) |
+| `application/views/admin/tambahdpt.php` | Validasi HTML5 (required, pattern, id) |
+| `application/views/admin/login.php` | Aksesibilitas (id, label, aria-label, autocomplete) |
+| `application/views/admin/gantipassword.php` | Aksesibilitas & validasi password |
+| `asset/css/charisma-app.css` | .form-container responsive |
+| `asset/css/main.css` | CSS variable untuk navbar color |
 
 ---
 

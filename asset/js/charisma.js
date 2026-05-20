@@ -85,6 +85,7 @@ $(document).ready(function () {
         var State = History.getState(); // Note: We are using History.getState() instead of event.state
         $.ajax({
             url: State.url,
+            timeout: 15000,
             success: function (msg) {
                 $('#content').html($(msg).find('#content').html());
                 $('#loading').remove();
@@ -92,15 +93,27 @@ $(document).ready(function () {
                 var newTitle = $(msg).filter('title').text();
                 $('title').text(newTitle);
                 docReady();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#loading').remove();
+                $('#content').html('<div class="alert alert-danger">Gagal memuat halaman: ' + textStatus + '</div>').fadeIn();
+            },
+            complete: function () {
+                $('#loading').remove();
+                _ajaxLoading = false;
             }
         });
     });
 
     //ajaxify menus
+    var _ajaxLoading = false;
+
     $('a.ajax-link').click(function (e) {
+        if (_ajaxLoading) return;
         if (msie) e.which = 1;
         if (e.which != 1 || !$('#is-ajax').prop('checked') || $(this).parent().hasClass('active')) return;
         e.preventDefault();
+        _ajaxLoading = true;
         $('.sidebar-nav').removeClass('active');
         $('.navbar-toggle').removeClass('active');
         $('#loading').remove();
@@ -109,6 +122,13 @@ $(document).ready(function () {
         History.pushState(null, null, $clink.attr('href'));
         $('ul.main-menu li.active').removeClass('active');
         $clink.parent('li').addClass('active');
+    });
+
+    // Prevent double-submit on form buttons
+    $(document).on('submit', 'form', function () {
+        var $btn = $(this).find('button[type="submit"]');
+        if ($btn.data('submitted')) return false;
+        $btn.data('submitted', true).prop('disabled', true);
     });
 
     $('.accordion > a').click(function (e) {

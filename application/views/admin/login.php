@@ -97,24 +97,32 @@
     <fieldset>
         <div class="input-group input-group-lg mb-3">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+            <label for="login-username" class="sr-only">Username</label>
             <?php
                 echo form_input([
                     'type' => 'text',
+                    'id' => 'login-username',
                     'class' => 'form-control',
                     'name' => 'username',
-                    'placeholder' => 'Username'
+                    'placeholder' => 'Username',
+                    'aria-label' => 'Username',
+                    'autocomplete' => 'username'
                 ]);
             ?>
         </div>
 
         <div class="input-group input-group-lg mb-4">
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+            <label for="login-password" class="sr-only">Password</label>
             <?php
                 echo form_input([
                     'type' => 'password',
+                    'id' => 'login-password',
                     'class' => 'form-control',
                     'name' => 'password',
-                    'placeholder' => 'Password'
+                    'placeholder' => 'Password',
+                    'aria-label' => 'Password',
+                    'autocomplete' => 'current-password'
                 ]);
             ?>
         </div>

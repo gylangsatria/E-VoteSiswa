@@ -1,9 +1,14 @@
+:root {
+	--navbar-bg: #3EA99F;
+}
+
 .navbar {
-	background-color: #3EA99F !important;
+	background-color: var(--navbar-bg) !important;
 }
 .login-container {
 	margin-top: 50px;
-	width: 400px;
+	width: 100%;
+	max-width: 400px;
 	margin-left: auto;
 	margin-right: auto;
 }

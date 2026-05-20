@@ -24,23 +24,27 @@
                 );
                 echo form_open('admin/updatepassword', $form_attribute)
             ?>
-                <label class="label-control">Username</label>
+                <label class="label-control" for="ganti-username">Username</label>
                 <?php
                     $form_attribute = array(
                         'type'      => 'text',
                         'name'      => 'username',
+                        'id'        => 'ganti-username',
                         'class'     => 'form-control',
                         'value'     => $data['username'],
                         'readonly'  => ''
                     );
                     echo form_input($form_attribute);
                 ?>
-                <label class="label-control">Password Baru</label>
+                <label class="label-control" for="ganti-password">Password Baru</label>
                 <?php
                     $form_attribute = array(
                         'type'      => 'password',
                         'name'      => 'password',
+                        'id'        => 'ganti-password',
                         'class'     => 'form-control',
+                        'required'  => 'required',
+                        'minlength' => 6
                     );
                     echo form_input($form_attribute);
                 ?><br/>

@@ -21,18 +21,15 @@ if ($("#sincos").length) {
             colors: ["#539F2E", "#3C67A5"]
         });
 
-    function showTooltip(x, y, contents) {
-        $('<div id="tooltip">' + contents + '</div>').css({
-            position: 'absolute',
-            display: 'none',
-            top: y + 5,
-            left: x + 5,
-            border: '1px solid #fdd',
-            padding: '2px',
-            'background-color': '#dfeffc',
-            opacity: 0.80
-        }).appendTo("body").fadeIn(200);
-    }
+    // Single reused tooltip element
+    var $chartTooltip = $('<div id="tooltip"></div>').css({
+        position: 'absolute',
+        display: 'none',
+        border: '1px solid #fdd',
+        padding: '2px',
+        'background-color': '#dfeffc',
+        opacity: 0.80
+    }).appendTo("body");
 
     var previousPoint = null;
     $("#sincos").bind("plothover", function (event, pos, item) {
@@ -43,16 +40,18 @@ if ($("#sincos").length) {
             if (previousPoint != item.dataIndex) {
                 previousPoint = item.dataIndex;
 
-                $("#tooltip").remove();
+                $chartTooltip.hide();
                 var x = item.datapoint[0].toFixed(2),
                     y = item.datapoint[1].toFixed(2);
 
-                showTooltip(item.pageX, item.pageY,
-                    item.series.label + " of " + x + " = " + y);
+                $chartTooltip
+                    .css({ top: y + 5, left: x + 5 })
+                    .html(item.series.label + " of " + x + " = " + y)
+                    .fadeIn(200);
             }
         }
         else {
-            $("#tooltip").remove();
+            $chartTooltip.hide();
             previousPoint = null;
         }
     });
