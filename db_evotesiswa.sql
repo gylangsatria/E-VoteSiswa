@@ -15,7 +15,7 @@ CREATE TABLE `tb_admin` (
 
 -- Default admin password: admin (bcrypt hash)
 INSERT INTO `tb_admin` (`username`, `password`) VALUES
-('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('admin', '$2y$10$YoJfJYqVHmMewUk43m3wPe3hRWZ8.0yXvKOHzSYUqFFVxRPuw58mu');
 
 DROP TABLE IF EXISTS `tb_datapilketos`;
 CREATE TABLE `tb_datapilketos` (
