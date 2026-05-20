@@ -426,6 +426,21 @@ public function simpanmassaldpt() {
 		return;
 	}
 
+	// Validasi MIME type untuk Excel/CSV files
+	$allowed_mime = array('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+	$file_mime = $_FILES['datadpt']['type'];
+	if (!in_array($file_mime, $allowed_mime)) {
+		$log[] = '❌ Tipe file tidak didukung. Gunakan file Excel (.xls, .xlsx) atau CSV.';
+		$this->session->set_flashdata('failed', 'Tipe file tidak didukung.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	// Whitelist karakter nama file
+	$filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
+	$target = $upload_dir . $filename;
+
     // Pindahkan file ke folder uploads
 	if (!move_uploaded_file($_FILES['datadpt']['tmp_name'], $target)) {
 		$log[] = '❌ Gagal memindahkan file ke folder uploads.';
@@ -435,8 +450,8 @@ public function simpanmassaldpt() {
 		return;
 	}
 
-    // Opsional: beri permission agar bisa dibaca
-	chmod($target, 0777);
+    // Set permission aman (readable only)
+	@chmod($target, 0644);
 
     // Baca isi file
 	$data = new Spreadsheet_Excel_Reader($target, false);
@@ -548,36 +563,7 @@ public function editcalon($nisn) {
 	$this->load->view('admin/footer', $data);
 }
 
-	//menambahkan opsi osis atau mpk
-	/*
-public function simpancalon() {
-    if (! $this->session->userdata('username')) {
-        redirect('admin/login');
-    }
 
-    $nisn = $this->input->post('nisn');
-    $no   = $this->input->post('no');
-    $nama = $this->input->post('nama');
-
-    $config['upload_path']   = './asset/img/';
-    $config['allowed_types'] = 'gif|jpg|jpeg|png';
-    $config['max_size']      = 1024;
-    $config['file_name']     = $nisn;
-
-    $this->load->library('upload', $config);
-
-    if ($this->upload->do_upload('photo')) {
-        $upload_data = $this->upload->data();
-        $photo       = $upload_data['file_name'];
-
-        $this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo);
-        $this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
-    } else {
-        $this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
-    }
-
-    redirect('admin/tambahcalon');
-} */
 
 public function simpancalon() {
 	if (! $this->session->userdata('username')) {

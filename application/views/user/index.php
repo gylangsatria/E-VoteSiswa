@@ -23,15 +23,15 @@
                                 <div class="box">
                                     <div class="box-inner">
                                         <div class="box-header well">
-                                            <h2 class="text-center">NO <?= $loaddata['no']; ?> || <?= $loaddata['nama']; ?></h2>
+                                            <h2 class="text-center">NO <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?> || <?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h2>
                                         </div>
                                         <div class="box-content">
-                                            <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto OSIS"/><br/><br/>
+                                            <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto OSIS"/><br/><br/>
                                             <?php if (!$sudah_memilih_osis): ?>
     <?php echo form_open('user/vote', array('class' => 'form-horizontal')); ?>
-        <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
+        <input type="hidden" name="nisn" value="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="opsi_mpkosis" value="0">
-        <button type="submit" class="btn btn-danger" style="width: 100%;">Pilih NO <?= $loaddata['no']; ?> (OSIS)</button>
+        <button type="submit" class="btn btn-danger" style="width: 100%;">Pilih NO <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?> (OSIS)</button>
     <?php echo form_close(); ?>
 <?php else: ?>
     <button class="btn btn-secondary" style="width: 100%;" disabled>Sudah Memilih OSIS</button>
@@ -56,15 +56,15 @@
                                 <div class="box">
                                     <div class="box-inner">
                                         <div class="box-header well">
-                                            <h2 class="text-center">NO <?= $loaddata['no']; ?> || <?= $loaddata['nama']; ?></h2>
+                                            <h2 class="text-center">NO <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?> || <?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h2>
                                         </div>
                                         <div class="box-content">
-                                            <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto MPK"/><br/><br/>
+                                            <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto MPK"/><br/><br/>
                                            <?php if (!$sudah_memilih_mpk): ?>
     <?php echo form_open('user/vote', array('class' => 'form-horizontal')); ?>
-        <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
+        <input type="hidden" name="nisn" value="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>">
         <input type="hidden" name="opsi_mpkosis" value="1">
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Pilih NO <?= $loaddata['no']; ?> (MPK)</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Pilih NO <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?> (MPK)</button>
     <?php echo form_close(); ?>
 <?php else: ?>
     <button class="btn btn-secondary" style="width: 100%;" disabled>Sudah Memilih MPK</button>

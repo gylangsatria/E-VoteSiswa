@@ -5,6 +5,21 @@
 
 ---
 
+## [1.1.1] - 21 Mei 2026
+
+### Perbaikan Keamanan Lanjutan
+- **XSS Protection** — Semua output di view di-escape dengan `htmlspecialchars()` untuk mencegah XSS injection
+- **File Upload Security** — Validasi MIME type untuk file Excel/CSV, whitelist karakter filename
+- **File Permissions** — Ubah `chmod(0777)` menjadi `chmod(0644)` untuk file upload agar lebih aman
+- **Code Cleanup** — Hapus duplikasi kode fungsi `simpancalon()` yang di-comment
+
+**Files yang diperbaiki:**
+- `application/views/admin/datacalon.php` — XSS escaping pada nama dan foto kandidat
+- `application/views/user/index.php` — XSS escaping pada data display voting
+- `application/controllers/Admin.php` — MIME validation, file permissions, cleanup duplikasi
+
+---
+
 ## [1.1] - 20 Mei 2026
 
 ### Tambahan
@@ -18,6 +33,85 @@
 
 ### Dokumentasi
 - README.md dan CHANGELOG.md diperbarui
+
+---
+
+## Detail Perbaikan v1.1.1
+
+### 1. XSS (Cross-Site Scripting) Prevention
+
+**Lokasi:** 
+- `application/views/admin/datacalon.php` (6 field)
+- `application/views/user/index.php` (12 field)
+
+**Perbaikan:** Semua output variable database di-escape dengan `htmlspecialchars($var, ENT_QUOTES, 'UTF-8')` untuk mencegah XSS injection.
+
+**Contoh Sebelum:**
+```php
+<td><?php echo $loaddata['nama']; ?></td>
+<img src="<?php echo base_url(); ?>/asset/img/<?php echo $loaddata['photo']; ?>">
+```
+
+**Contoh Sesudah:**
+```php
+<td><?php echo htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></td>
+<img src="<?php echo base_url(); ?>/asset/img/<?php echo htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
+```
+
+**Dampak:** User tidak bisa inject JavaScript melalui field nama atau nama file foto.
+
+### 2. File Upload - MIME Type Validation
+
+**Lokasi:** `application/controllers/Admin.php` - fungsi `simpanmassaldpt()` (line 415-445)
+
+**Perbaikan:** 
+- Tambah whitelist MIME type (Excel dan CSV only)
+- Validasi dengan `$_FILES['datadpt']['type']`
+- Whitelist karakter filename dengan `preg_replace()`
+
+**Kode Baru:**
+```php
+// Validasi MIME type
+$allowed_mime = array(
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/csv',
+    'text/plain'
+);
+$file_mime = $_FILES['datadpt']['type'];
+if (!in_array($file_mime, $allowed_mime)) {
+    // reject file
+}
+
+// Whitelist filename
+$filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
+```
+
+**Dampak:** Tidak bisa upload file malicious dengan extension palsu atau path traversal.
+
+### 3. File Permissions - Secure chmod
+
+**Lokasi:** `application/controllers/Admin.php` - fungsi `simpanmassaldpt()` (line 444)
+
+**Perbaikan Sebelum:**
+```php
+chmod($target, 0777);  // ❌ Semua user bisa read/write/execute
+```
+
+**Perbaikan Sesudah:**
+```php
+@chmod($target, 0644);  // ✅ Owner bisa read/write, others hanya read
+```
+
+**Dampak:** Mencegah file upload dieksekusi oleh user lain atau dihapus/dimodif tanpa izin.
+
+### 4. Code Cleanup - Hapus Duplikasi
+
+**Lokasi:** `application/controllers/Admin.php` - simpancalon() function (line 551-580)
+
+**Perbaikan:** Dihapus 30 baris kode yang di-comment (old version simpancalon tanpa opsi MPK/OSIS).
+
+**Dampak:** Kode lebih clean dan tidak membingungkan.
 
 ---
 
