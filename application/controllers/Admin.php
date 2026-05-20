@@ -916,5 +916,4 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf->Output();
 }
 }
-?>
 

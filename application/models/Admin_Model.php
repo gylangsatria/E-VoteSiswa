@@ -245,4 +245,3 @@ public function jmlvoteP() {
 		return $data->result_array();
 	}
 }
-?>

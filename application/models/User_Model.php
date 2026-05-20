@@ -47,5 +47,4 @@ class User_Model extends CI_Model {
 		])->num_rows() > 0;
 	}
 }
-?>
 

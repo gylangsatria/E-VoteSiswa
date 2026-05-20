@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'db_pilketos',
+	'hostname' => getenv('DB_HOST') ?: 'localhost',
+	'username' => getenv('DB_USERNAME') ?: 'root',
+	'password' => getenv('DB_PASSWORD') ?: '',
+	'database' => getenv('DB_NAME') ?: 'db_pilketos',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
