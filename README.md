@@ -57,7 +57,8 @@ Edit `application/config/database.php`:
 - `password` => `""` (kosong)
 - `database` => `db_pilketos`
 
-> **Catatan:** Secara default `base_url` di `config.php` sudah menggunakan deteksi dinamis, tidak perlu diubah.
+> **Catatan 1:** Secara default `base_url` di `config.php` sudah menggunakan deteksi dinamis, tidak perlu diubah.
+> **Catatan 2:** CSRF Protection sudah diaktifkan. Semua form POST otomatis menyertakan token CSRF via `form_open()`. Jika menambahkan form baru, gunakan `form_open()` atau sertakan manual token CSRF.
 
 ### 4. Admin Default
 Setelah import database, admin sudah langsung bisa login dengan:

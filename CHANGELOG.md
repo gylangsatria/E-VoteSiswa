@@ -144,6 +144,11 @@ Method yang diperbaiki:
 - Ditambahkan default admin user dengan bcrypt hash password
 - File `db_migrate_from_md5.sql` disediakan untuk migrasi database eksisting
 
+### 21. Fix CSRF Token di Form Vote User
+
+**Lokasi:** `views/user/index.php`
+**Perbaikan:** Dua form voting (OSIS dan MPK) menggunakan tag `<form>` HTML murni tanpa `form_open()`. Setelah CSRF protection diaktifkan, form ini tidak akan berfungsi karena tidak menyertakan CSRF token. Diperbaiki dengan mengganti ke `form_open()` yang otomatis menambahkan hidden input CSRF.
+
 ---
 
 ## Bug Yang Belum Diperbaiki

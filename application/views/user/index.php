@@ -28,11 +28,11 @@
                                         <div class="box-content">
                                             <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto OSIS"/><br/><br/>
                                             <?php if (!$sudah_memilih_osis): ?>
-    <form action="<?= site_url('user/vote'); ?>" method="post" class="form-horizontal">
+    <?php echo form_open('user/vote', array('class' => 'form-horizontal')); ?>
         <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
         <input type="hidden" name="opsi_mpkosis" value="0">
         <button type="submit" class="btn btn-danger" style="width: 100%;">Pilih NO <?= $loaddata['no']; ?> (OSIS)</button>
-    </form>
+    <?php echo form_close(); ?>
 <?php else: ?>
     <button class="btn btn-secondary" style="width: 100%;" disabled>Sudah Memilih OSIS</button>
 <?php endif; ?>
@@ -61,11 +61,11 @@
                                         <div class="box-content">
                                             <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto MPK"/><br/><br/>
                                            <?php if (!$sudah_memilih_mpk): ?>
-    <form action="<?= site_url('user/vote'); ?>" method="post" class="form-horizontal">
+    <?php echo form_open('user/vote', array('class' => 'form-horizontal')); ?>
         <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
         <input type="hidden" name="opsi_mpkosis" value="1">
         <button type="submit" class="btn btn-primary" style="width: 100%;">Pilih NO <?= $loaddata['no']; ?> (MPK)</button>
-    </form>
+    <?php echo form_close(); ?>
 <?php else: ?>
     <button class="btn btn-secondary" style="width: 100%;" disabled>Sudah Memilih MPK</button>
 <?php endif; ?>
