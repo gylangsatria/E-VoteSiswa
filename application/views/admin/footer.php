@@ -31,8 +31,8 @@
     </div>
 
     <footer class="row">
-        <p class="col-md-4 col-sm-6 col-xs-6 copyright">&copy; <?php echo date('Y') ?><a href="https://github.com/fpls-software/pilketo" target="_blank"> Original Epilketos</a> | <a href="https://gylang.my.id"> Recreate by Gylang Satria & Dasep Satriana </p>
-		<p class="col-md-4 col-sm-6 col-xs-6 copyright text-center"><b><a href="https://github.com/gylangsatria/E-VoteSiswa" target="_blank">E-VoteSiswa V.1.0</a></b></p>
+        <p class="col-md-4 col-sm-6 col-xs-6 copyright">&copy; <?php echo date('Y') ?><a href="https://github.com/fpls-software/pilketo" target="_blank"> Original Epilketos</a> | <a href="https://gylang.my.id"> Recreate by Gylang Satria</a></p>
+		<p class="col-md-4 col-sm-6 col-xs-6 copyright text-center"><b><a href="https://github.com/gylangsatria/E-VoteSiswa" target="_blank">E-VoteSiswa V.1.1</a></b></p>
         <p class="col-md-4 col-sm-6 col-xs-6 powered-by">Powered by: 
 		<a href="#"><?php echo $load['nm_sekolah']; ?></a></p>
     </footer>
