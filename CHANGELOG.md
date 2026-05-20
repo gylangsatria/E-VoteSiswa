@@ -5,23 +5,23 @@
 
 ---
 
-## [1.1.2] - 21 Mei 2026
+## [1.2] - 21 Mei 2026
 
 ### Temuan Frontend
 
 #### HIGH (FIXED)
-- ✅ **AJAX error & timeout** — `asset/js/charisma.js`: ditambahkan `error` callback, `timeout: 15000`, dan `complete` handler pada History statechange AJAX.
-- ✅ **Validasi Form & Upload client-side** — `application/views/admin/tambahcalon.php`, `application/views/admin/tambahdpt.php`: ditambahkan `required`, `pattern`, `accept`, `id`, dan `title` pada input fields.
-- ✅ **CSRF token** — `application/views/admin/gantipassword.php`: sudah menggunakan `form_open()` yang otomatis menyertakan CSRF token. Ditambahkan aksesibilitas & validasi.
+- **AJAX error & timeout** — `asset/js/charisma.js`: ditambahkan `error` callback, `timeout: 15000`, dan `complete` handler pada History statechange AJAX.
+- **Validasi Form & Upload client-side** — `application/views/admin/tambahcalon.php`, `application/views/admin/tambahdpt.php`: ditambahkan `required`, `pattern`, `accept`, `id`, dan `title` pada input fields.
+- **CSRF token** — `application/views/admin/gantipassword.php`: sudah menggunakan `form_open()` yang otomatis menyertakan CSRF token. Ditambahkan aksesibilitas & validasi.
 
 #### MEDIUM (FIXED)
-- ✅ **Accessibility (a11y)** — `application/views/admin/login.php` dan form lainnya: ditambahkan `id`, `label for`, `aria-label`, `autocomplete`, dan `sr-only` labels.
-- ✅ **Responsive layout** — `asset/css/charisma-app.css`: `.form-container` diubah dari `width: 400px` → `width: 100%; max-width: 400px`.
-- ✅ **Chart tooltip memory leak** — `asset/js/init-chart.js`: tooltip dibuat sekali (direuse), tidak di-create/destroy setiap hover.
-- ✅ **Double-submit / race condition** — `asset/js/charisma.js`: ditambahkan flag `_ajaxLoading` dan event `submit` handler untuk disable tombol.
+- **Accessibility (a11y)** — `application/views/admin/login.php` dan form lainnya: ditambahkan `id`, `label for`, `aria-label`, `autocomplete`, dan `sr-only` labels.
+- **Responsive layout** — `asset/css/charisma-app.css`: `.form-container` diubah dari `width: 400px` → `width: 100%; max-width: 400px`.
+- **Chart tooltip memory leak** — `asset/js/init-chart.js`: tooltip dibuat sekali (direuse), tidak di-create/destroy setiap hover.
+- **Double-submit / race condition** — `asset/js/charisma.js`: ditambahkan flag `_ajaxLoading` dan event `submit` handler untuk disable tombol.
 
 #### LOW (FIXED)
-- ✅ **Hardcoded theme values** — `asset/css/main.css`: warna navbar `#3EA99F` diganti dengan CSS variable `--navbar-bg`.
+- **Hardcoded theme values** — `asset/css/main.css`: warna navbar `#3EA99F` diganti dengan CSS variable `--navbar-bg`.
 
 ### Files yang Diperbaiki
 | File | Perbaikan |
