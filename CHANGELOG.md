@@ -1,12 +1,27 @@
 # Changelog Analisis Aplikasi E-VoteSiswa
 
-**Tanggal:** 20 Mei 2026
 **Framework:** CodeIgniter 3
 **Branch:** fix/bugs
 
 ---
 
-## Ringkasan Perbaikan (Commit d0042b8)
+## [1.1] - 20 Mei 2026
+
+### Tambahan
+- **Rate Limiter Login** — Maksimal 5 percobaan login dalam 5 menit (brute force protection)
+
+### Perbaikan
+- **Kompatibilitas PHP 8.1** — Ditambahkan `#[\\ReturnTypeWillChange]` pada `Session_files_driver.php` (6 method)
+- **Error reporting** — `index.php` di mode development tidak lagi menampilkan E_DEPRECATED
+- **Closing tag `?>`** — Dihapus dari 5 file PHP murni (model, controller, library) untuk mencegah "headers already sent"
+- **Hash password admin** — Diperbaiki bcrypt hash di `db_evotesiswa.sql` agar sesuai dengan password `admin`
+
+### Dokumentasi
+- README.md dan CHANGELOG.md diperbarui
+
+---
+
+## Ringkasan Perbaikan Keamanan (Commit d0042b8)
 
 6 file diubah, 106 insertions, 92 deletions.
 

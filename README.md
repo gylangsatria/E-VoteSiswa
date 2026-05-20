@@ -10,7 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
-| 20 Mei 2026 | 1.1 | Perbaikan keamanan dan bug: SQL injection, MD5 ke bcrypt, CSRF/XSS enable, dan lainnya (lihat [CHANGELOG.md](CHANGELOG.md)) |
+| 20 Mei 2026 | 1.1 | Kompatibilitas PHP 8.1, perbaikan keamanan & bug (lihat [CHANGELOG.md](CHANGELOG.md)) |
 | - | 1.0 | Uji coba masal dan penyempurnaan fitur |
 | - | 0.9.6 | Penambahan Logo di Login screen |
 | - | 0.9.5 | Perbaikan laporan E-VoteSiswa |
@@ -77,11 +77,12 @@ Setelah import database, admin sudah langsung bisa login dengan:
 
 ---
 
-## Perbaikan Keamanan (Branch: `fix/bugs`)
+## Perbaikan & Perubahan (Branch: `fix/bugs`)
 
-Branch `fix/bugs` berisi perbaikan untuk 16 issue yang ditemukan saat audit kode. Detail lengkap ada di [CHANGELOG.md](CHANGELOG.md).
+Branch `fix/bugs` berisi perbaikan keamanan, kompatibilitas, dan tambahan fitur. Detail lengkap ada di [CHANGELOG.md](CHANGELOG.md).
 
 Ringkasan perbaikan utama:
+- **Kompatibilitas PHP 8.1** — Session driver dan error reporting disesuaikan
 - **Operator `=` diganti `===`** — Feedback error sekarang berfungsi dengan benar
 - **SQL Injection dihapus** — Semua query menggunakan Query Builder dengan parameter binding
 - **MD5 diganti bcrypt** — Password di-hash dengan `password_hash()`
