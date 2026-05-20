@@ -48,10 +48,30 @@ Class Admin extends CI_Controller {
 		redirect('admin/login');
 	}
 	public function loginvalidation() {
+		// Rate limiting: max 5 percobaan dalam 5 menit
+		$attempts = $this->session->userdata('login_attempts') ?: 0;
+		$blocked_until = $this->session->userdata('login_blocked_until');
+
+		if ($blocked_until && time() < $blocked_until) {
+			$wait = ceil(($blocked_until - time()) / 60);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
+			redirect('admin/login');
+			return;
+		}
+
+		if ($attempts >= 5) {
+			$this->session->set_userdata('login_blocked_until', time() + 300); // 5 menit
+			$this->session->set_userdata('login_attempts', 0);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
+			redirect('admin/login');
+			return;
+		}
+
 		$username				= $this->input->post('username', TRUE);
 		$password				= $this->input->post('password', TRUE);
 		$result					= $this->Admin_Model->login($username, $password);
 		if($result == true) {
+			$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
 			$this->session->set_userdata(array(
 				'username'	=> $username
 			));
@@ -59,6 +79,7 @@ Class Admin extends CI_Controller {
 		}
 		else
 		{
+			$this->session->set_userdata('login_attempts', $attempts + 1);
 			$this->session->set_flashdata('failed', 'Username atau Password Salah');
 			redirect('admin/login');
 		}

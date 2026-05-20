@@ -97,9 +97,8 @@ Ringkasan perbaikan utama:
 
 ## Bug Diketahui
 
-- Fitur Upload Massal DPT (via Excel) masih dalam pengembangan. Untuk sementara import data CSV langsung ke `tb_siswa`.
-- Tidak ada .htaccess di root folder (disarankan menambahkan sendiri untuk production)
-- Tidak ada rate limiting pada halaman login
+- Validasi MIME type upload foto masih bisa ditingkatkan (hanya ekstensi file yang dicek)
+- Belum ada reCAPTCHA di halaman login
 
 ---
 

@@ -117,24 +117,39 @@ Method yang diperbaiki:
 
 ---
 
-## Bug Yang Belum Diperbaiki
+## Perbaikan Tambahan
 
-Berikut issue yang tercatat di analisis awal namun belum diperbaiki di batch ini:
+### 17. Upload Massal DPT (Excel) Diaktifkan
+
+**Lokasi:** `views/admin/tambahdpt.php`, `models/Admin_Model.php`
+**Perbaikan:** Form upload massal yang sebelumnya dinonaktifkan (disabled, opacity 0.6, pointer-events: none) kini diaktifkan. Model methods `simpandpt()`, `simpanmassaldpt()`, `simpankelas()`, `regsekolah()`, `tambahcalon()` diperbaiki mengembalikan nilai boolean hasil operasi.
+
+### 18. .htaccess Root Folder
+
+**Lokasi:** `.htaccess` (file baru)
+**Isi:** Proteksi akses ke file `.md`, `.sql`, `.log`, direktori `application/`, `system/`, `user_guide/`, folder `.git`, disable directory listing, dan konfigurasi URL rewriting (opsional).
+
+### 19. Rate Limiter Login (Brute Force Protection)
+
+**Lokasi:** `controllers/Admin.php`, `controllers/User.php`
+**Perbaikan:** Maksimal 5 percobaan login dalam 5 menit. Setelah melebihi batas, akun diblokir sementara. Counter di-reset setelah login berhasil.
+
+---
+
+## Bug Yang Belum Diperbaiki
 
 | # | Issue | Prioritas | Keterangan |
 |---|-------|-----------|------------|
 | 1 | Upgrade ke CodeIgniter 4 | Rendah | Perubahan besar, perlu migrasi menyeluruh |
-| 2 | Rate limiter login | Sedang | Mencegah brute force |
-| 3 | reCAPTCHA di form login | Rendah | Proteksi tambahan |
-| 4 | Validasi input lebih ketat | Sedang | Format NISN, no urut, dll |
-| 5 | Migrations untuk versioning DB | Rendah | Manajemen skema database |
-| 6 | Unit test | Rendah | Jamin kualitas kode |
-| 7 | Upload file tanpa validasi MIME | Sedang | Keamanan upload foto |
-| 8 | Tidak ada .htaccess di root | Sedang | Proteksi direktori |
+| 2 | reCAPTCHA di form login | Rendah | Proteksi tambahan |
+| 3 | Validasi input lebih ketat | Sedang | Format NISN, no urut, dll |
+| 4 | Migrations untuk versioning DB | Rendah | Manajemen skema database |
+| 5 | Unit test | Rendah | Jamin kualitas kode |
+| 6 | Upload file tanpa validasi MIME | Sedang | Keamanan upload foto |
 
 ---
 
 ## Skor Kesehatan
 
 **Sebelum perbaikan:** 3/10
-**Sesudah perbaikan:** 7/10
+**Sesudah perbaikan:** 8/10

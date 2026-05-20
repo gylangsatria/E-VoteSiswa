@@ -37,7 +37,7 @@ Class Admin_Model extends CI_Model {
 			'npsn'			=> $npsn,
 			'nm_sekolah'	=> $nm_sekolah
 		);
-		$this->db->insert('tb_identitassekolah', $data);
+		return $this->db->insert('tb_identitassekolah', $data);
 	}
 	public function dataadmin() {
 		$load = $this->db->query('SELECT * FROM tb_admin');
@@ -95,7 +95,7 @@ Class Admin_Model extends CI_Model {
 		$data = array(
 			'nm_kelas'	=> $nm_kelas
 		);
-		$this->db->insert('tb_kelas', $data);
+		return $this->db->insert('tb_kelas', $data);
 	}
 
 	public function delete_all_votes() {
@@ -112,9 +112,9 @@ Class Admin_Model extends CI_Model {
 				'no'            => $no,
 				'nama'          => $nama,
 				'photo'         => $photo,
-        'opsi_mpkosis'  => $opsi_mpkosis // 0 = MPK, 1 = OSIS
+        'opsi_mpkosis'  => $opsi_mpkosis
     );
-			$this->db->insert('tb_pilihan', $data);
+			return $this->db->insert('tb_pilihan', $data);
 		}
 
 		public function hapuskelas($kd_kelas) {
@@ -167,7 +167,7 @@ Class Admin_Model extends CI_Model {
 			'jk'		=> $jk,
 			'kd_kelas'	=> $kd_kelas
 		);
-		$this->db->insert('tb_siswa', $data);
+		return $this->db->insert('tb_siswa', $data);
 	}
 	public function simpanmassaldpt($nisn, $nama, $jk, $kelas) {
 		$data			= array(
@@ -177,7 +177,7 @@ Class Admin_Model extends CI_Model {
 			'jk'		=> $jk,
 			'kd_kelas'	=> $kelas
 		);
-		$this->db->insert('tb_siswa', $data);
+		return $this->db->insert('tb_siswa', $data);
 	}
 	public function hapusdpt($username) {
 		return $this->db->delete('tb_siswa', array('username' => $username));
