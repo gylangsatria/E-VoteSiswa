@@ -14,12 +14,6 @@
                 <p>Silakan pilih Calon Ketua OSIS dan Ketua MPK di bawah ini.</p>
                 <hr/>
 
-                <?php
-                $username = $this->session->userdata('username');
-                $cek_osis = $this->db->get_where('tb_pilih', ['username' => $username, 'opsi_mpkosis' => 0])->num_rows();
-                $cek_mpk  = $this->db->get_where('tb_pilih', ['username' => $username, 'opsi_mpkosis' => 1])->num_rows();
-                ?>
-
                 <!-- Calon Ketua OSIS -->
                 <h3 class="text-center">Calon Ketua OSIS</h3>
                 <div class="row">
@@ -33,7 +27,7 @@
                                         </div>
                                         <div class="box-content">
                                             <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto OSIS"/><br/><br/>
-                                            <?php if ($cek_osis == 0): ?>
+                                            <?php if (!$sudah_memilih_osis): ?>
     <form action="<?= site_url('user/vote'); ?>" method="post" class="form-horizontal">
         <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
         <input type="hidden" name="opsi_mpkosis" value="0">
@@ -66,7 +60,7 @@
                                         </div>
                                         <div class="box-content">
                                             <img width="100%" height="400" src="<?= base_url(); ?>asset/img/<?= $loaddata['photo']; ?>" alt="Foto MPK"/><br/><br/>
-                                           <?php if ($cek_mpk == 0): ?>
+                                           <?php if (!$sudah_memilih_mpk): ?>
     <form action="<?= site_url('user/vote'); ?>" method="post" class="form-horizontal">
         <input type="hidden" name="nisn" value="<?= $loaddata['nisn']; ?>">
         <input type="hidden" name="opsi_mpkosis" value="1">

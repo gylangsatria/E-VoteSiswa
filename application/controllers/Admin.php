@@ -31,9 +31,9 @@ Class Admin extends CI_Controller {
 	public function updatepassword() {
 		$username		= $this->input->post('username');
 		$password		= $this->input->post('password');
-		$password_hash	= md5($password);
+		$password_hash	= password_hash($password, PASSWORD_DEFAULT);
 		$update			= $this->Admin_Model->gantipassword($username, $password_hash);
-		if($update = true) {
+		if($update === true) {
 			$updateuser	= $this->Admin_Model->updateuser($username);
 			$this->session->set_flashdata('update', 'Berhasil Memperbarui Password');
 			redirect('admin/gantipassword');
@@ -50,8 +50,7 @@ Class Admin extends CI_Controller {
 	public function loginvalidation() {
 		$username				= $this->input->post('username', TRUE);
 		$password				= $this->input->post('password', TRUE);
-		$password_hash			= md5($password);
-		$result					= $this->Admin_Model->login($username, $password_hash);
+		$result					= $this->Admin_Model->login($username, $password);
 		if($result == true) {
 			$this->session->set_userdata(array(
 				'username'	=> $username
@@ -89,7 +88,7 @@ Class Admin extends CI_Controller {
 	}
 	public function regsekolah() {
 		$data = $this->Admin_Model->regvalid();
-		if($data == true) {
+		if(!empty($data)) {
 			redirect('admin/index');
 		}
 		$this->load->view('admin/head');
@@ -99,7 +98,7 @@ Class Admin extends CI_Controller {
 		$npsn		= $this->input->post('npsn');
 		$nm_sekolah	= $this->input->post('nm_sekolah');
 		$reg		= $this->Admin_Model->regsekolah($npsn,$nm_sekolah);
-		if($reg = true) {
+		if($reg === true) {
 			redirect('admin/index');
 		}
 		else {
@@ -113,7 +112,7 @@ Class Admin extends CI_Controller {
 			redirect('admin/login');
 		}
 		$data['valid'] = $this->Admin_Model->regvalid();
-		if(! $data['valid'] == true) {
+		if(empty($data['valid'])) {
 			redirect('admin/regsekolah');
 		}
 		$data['jmlcalon']	= $this->Admin_Model->countcalon();
@@ -146,7 +145,7 @@ Class Admin extends CI_Controller {
 public function resetuser() {
 	$username	= $this->input->post('username');
 	$reset		= $this->Admin_Model->resetuser($username);
-	if($reset = true) {
+	if($reset === true) {
 		$updateuser	= $this->Admin_Model->updateuser($username);
 		$this->session->set_flashdata('info', 'Berhasil Mereset User');
 		redirect('admin/index');
@@ -158,7 +157,7 @@ public function resetuser() {
 }
 public function resetdata() {
 	$reset = $this->Admin_Model->resetdata();
-	if($reset = true) {
+	if($reset === true) {
 		$this->session->set_flashdata('reset', 'Berhasil Mereset Data');
 		redirect('admin/index');
 	}
@@ -173,7 +172,7 @@ public function idsekolah() {
 		redirect('admin/login');
 	}
 	$data['valid'] = $this->Admin_Model->regvalid();
-	if(! $data['valid'] == true) {
+	if(empty($data['valid'])) {
 		redirect('admin/regsekolah');
 	}
 	$data['idsekolah']	= $this->Admin_Model->idsekolah();
@@ -192,7 +191,7 @@ public function updateidsekolah() {
 	$kpl_sekolah	= $this->input->post('kpl_sekolah');
 	$nip			= $this->input->post('nip');
 	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
 		redirect('admin/idsekolah');
 	}
@@ -217,7 +216,7 @@ public function datakelas() {
 public function simpankelas() {
 	$nm_kelas	= $this->input->post('nm_kelas');
 	$save		= $this->Admin_Model->simpankelas($nm_kelas);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
 		redirect('admin/datakelas');
 	}
@@ -229,7 +228,7 @@ public function simpankelas() {
 }
 public function hapuskelas($kd_kelas) {
 	$hapus = $this->Admin_Model->hapuskelas($kd_kelas);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datakelas');
 	}
@@ -288,7 +287,7 @@ public function tambahcalon() {
 }
 public function hapuscalon($nisn) {
 	$hapus = $this->Admin_Model->hapuscalon($nisn);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datacalon/');
 	}
@@ -354,7 +353,7 @@ public function simpandpt() {
 	$jk 		= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
 		redirect('admin/tambahdpt/');
 	}
@@ -483,7 +482,7 @@ public function simpanmassaldpt() {
 
 public function hapusdpt($username) {
 	$hapus	= $this->Admin_Model->hapusdpt($username);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datadpt/');
 	}
@@ -508,7 +507,7 @@ public function updatedpt($username){
 	$jk			= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
-	if($update = true) {
+	if($update === true) {
 		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
 		redirect('admin/editdpt/'.$username);
 	}
@@ -596,7 +595,7 @@ public function simpancalon() {
 		$no			= $this->input->post('no');
 		$nama		= $this->input->post('nama');
 		$upade		= $this->Admin_Model->updatecalon($nisn, $no ,$nama);
-		if($update = true) {
+		if($update === true) {
 			$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
 			redirect('admin/editcalon/'.$nisn);
 		}
