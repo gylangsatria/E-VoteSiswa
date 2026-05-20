@@ -36,3 +36,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /docker-compose.yml
 /.dockerignore
 /docker/
+
+# Sampling / Local Testing
+#-------------------------
+/db_sampling.sql
