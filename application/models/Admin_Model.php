@@ -1,19 +1,18 @@
 <?php 
 Class Admin_Model extends CI_Model {
-	public function login($username, $password_hash) {
-		$condition	= "username="."'".$username."'". " AND "."password="."'".$password_hash."'";
-		$select		= array('username', 'password');
-		$this->db->select($select);
+	public function login($username, $password) {
+		$this->db->select('username, password');
 		$this->db->from('tb_admin');
-		$this->db->where($condition);
-		$login 		= $this->db->get();
+		$this->db->where('username', $username);
+		$login = $this->db->get();
 		
 		if($login->num_rows() > 0) {
-			return true;
+			$row = $login->row_array();
+			if (password_verify($password, $row['password'])) {
+				return true;
+			}
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 	public function cekelas() {
 		$cek = $this->db->query("SELECT * FROM tb_kelas");
@@ -25,12 +24,12 @@ Class Admin_Model extends CI_Model {
 		}
 	}
 	public function regvalid() {
-		$load = $this->db->query("SELECT * FROM tb_identitassekolah");
+		$load = $this->db->get('tb_identitassekolah');
 		if($load->num_rows() > 0) {
-			return true;
+			return $load->result_array();
 		}
 		else {
-			return false;
+			return array();
 		}
 	}
 	public function regsekolah($npsn,$nm_sekolah) {
@@ -38,38 +37,38 @@ Class Admin_Model extends CI_Model {
 			'npsn'			=> $npsn,
 			'nm_sekolah'	=> $nm_sekolah
 		);
-		$this->db->insert('tb_identitassekolah', $data);
+		return $this->db->insert('tb_identitassekolah', $data);
 	}
 	public function dataadmin() {
 		$load = $this->db->query('SELECT * FROM tb_admin');
 		return $load->result_array();
 	}
 	public function gantipassword($username, $password_hash) {
-		$update = $this->db->query("UPDATE tb_admin SET password='$password_hash' WHERE username='$username'");
-		return $update;
+		$this->db->where('username', $username);
+		return $this->db->update('tb_admin', array('password' => $password_hash));
 	}
 	public function datapilketos() {
-		$load = $this->db->query("SELECT * FROM tb_datapilketos WHERE id='1'");
-		return $load->result_array();
+		return $this->db->get_where('tb_datapilketos', array('id' => 1))->result_array();
 	}
 	public function updatedatapilketos($tapel, $tgl){
-		$update = $this->db->query("UPDATE tb_datapilketos SET tapel='$tapel', tgl='$tgl' WHERE id='1'");
-		return $update;
+		$this->db->where('id', 1);
+		return $this->db->update('tb_datapilketos', array(
+			'tapel' => $tapel,
+			'tgl'   => $tgl
+		));
 	}
 	public function resetuser($username) {
-		$reset = $this->db->query("DELETE FROM tb_pilih WHERE username='$username'");
-		return $reset;
+		return $this->db->delete('tb_pilih', array('username' => $username));
 	}
 	public function updateuser($username) {
-		$reset = $this->db->query("UPDATE tb_siswa SET hadir='Tidak Hadir' WHERE username='$username'");
-		return $reset;
+		$this->db->where('username', $username);
+		return $this->db->update('tb_siswa', array('hadir' => 'Tidak Hadir'));
 	}
 	public function resetdata(){
-		$reset 	= $this->db->query("DELETE FROM tb_pilih");
-		$reset1	= $this->db->query("DELETE FROM tb_siswa");
-		$reset2	= $this->db->query("DELETE FROM tb_pilihan");
-		$reset3	= $this->db->query("DELETE FROM tb_siswa");
-		$reset4	= $this->db->query("UPDATE tb_datapilketos SET tapel='', tgl='' WHERE id='1'");
+		$this->db->query("DELETE FROM tb_pilih");
+		$this->db->query("DELETE FROM tb_siswa");
+		$this->db->query("DELETE FROM tb_pilihan");
+		$this->db->query("UPDATE tb_datapilketos SET tapel='', tgl='' WHERE id='1'");
 		return true;
 	}
 	public function idsekolah() {
@@ -77,8 +76,16 @@ Class Admin_Model extends CI_Model {
 		return $load->result_array();
 	}
 	public function updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip){
-		$save = $this->db->query("UPDATE tb_identitassekolah SET npsn='$npsn', nm_sekolah='$nm_sekolah', jln='$jln', desa='$desa', kec='$kec', kab='$kab', kpl_sekolah='$kpl_sekolah', nip='$nip'");
-		return $save;
+		return $this->db->update('tb_identitassekolah', array(
+			'npsn'			=> $npsn,
+			'nm_sekolah'	=> $nm_sekolah,
+			'jln'			=> $jln,
+			'desa'			=> $desa,
+			'kec'			=> $kec,
+			'kab'			=> $kab,
+			'kpl_sekolah'	=> $kpl_sekolah,
+			'nip'			=> $nip
+		));
 	}
 	public function datakelas() {
 		$load = $this->db->query("SELECT * FROM tb_kelas");
@@ -88,7 +95,7 @@ Class Admin_Model extends CI_Model {
 		$data = array(
 			'nm_kelas'	=> $nm_kelas
 		);
-		$this->db->insert('tb_kelas', $data);
+		return $this->db->insert('tb_kelas', $data);
 	}
 
 	public function delete_all_votes() {
@@ -105,35 +112,37 @@ Class Admin_Model extends CI_Model {
 				'no'            => $no,
 				'nama'          => $nama,
 				'photo'         => $photo,
-        'opsi_mpkosis'  => $opsi_mpkosis // 0 = MPK, 1 = OSIS
+        'opsi_mpkosis'  => $opsi_mpkosis
     );
-			$this->db->insert('tb_pilihan', $data);
+			return $this->db->insert('tb_pilihan', $data);
 		}
 
 		public function hapuskelas($kd_kelas) {
-			$hapus = $this->db->query("DELETE FROM tb_kelas WHERE kd_kelas='$kd_kelas'");
-			return $hapus;
+			return $this->db->delete('tb_kelas', array('kd_kelas' => $kd_kelas));
 		}
 		
 		public function hapussemuakelas() {
 			return $this->db->truncate('tb_kelas');}
 
 	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis, $photo) {
-		$save = $this->db->query("
-			UPDATE tb_pilihan 
-				SET no = '$no', 
-				nama = '$nama', 
-				opsi_mpkosis = '$opsi_mpkosis',
-				photo = '$photo'
-				WHERE nisn = '$nisn'
-				");
-		return $save;
+		$data = array(
+			'no'           => $no,
+			'nama'         => $nama,
+			'opsi_mpkosis' => $opsi_mpkosis
+		);
+
+		// Only update photo if a new one was uploaded
+		if (!empty($photo)) {
+			$data['photo'] = $photo;
+		}
+
+		$this->db->where('nisn', $nisn);
+		return $this->db->update('tb_pilihan', $data);
 	}
 
 
 	public function hapuscalon($nisn) {
-		$hapus		= $this->db->query("DELETE FROM tb_pilihan WHERE nisn='$nisn'");
-		return $hapus;
+		return $this->db->delete('tb_pilihan', array('nisn' => $nisn));
 	}
 	public function datacalon() {
 		$load	= $this->db->query("SELECT * FROM tb_pilihan ORDER BY no asc");
@@ -144,40 +153,45 @@ Class Admin_Model extends CI_Model {
 		return $load->result_array();
 	}
 	public function datakddpt($username) {
-		$load = $this->db->query("SELECT * FROM tb_siswa INNER JOIN tb_kelas ON tb_kelas.kd_kelas = tb_siswa.kd_kelas WHERE tb_siswa.username='$username'");
-		return $load->result_array();
+		$this->db->select('tb_siswa.*, tb_kelas.nm_kelas');
+		$this->db->from('tb_siswa');
+		$this->db->join('tb_kelas', 'tb_kelas.kd_kelas = tb_siswa.kd_kelas');
+		$this->db->where('tb_siswa.username', $username);
+		return $this->db->get()->result_array();
 	}
 	public function simpandpt($username, $password, $nm_siswa, $jk,$kd_kelas) {
 		$data 			= array(
 			'username'	=> $username,
-			'password'	=> $password,
+			'password'	=> password_hash($password, PASSWORD_DEFAULT),
 			'nm_siswa'	=> $nm_siswa,
 			'jk'		=> $jk,
 			'kd_kelas'	=> $kd_kelas
 		);
-		$this->db->insert('tb_siswa', $data);
+		return $this->db->insert('tb_siswa', $data);
 	}
 	public function simpanmassaldpt($nisn, $nama, $jk, $kelas) {
 		$data			= array(
 			'username'	=> $nisn,
-			'password'	=> $nisn,
+			'password'	=> password_hash($nisn, PASSWORD_DEFAULT),
 			'nm_siswa'	=> $nama,
 			'jk'		=> $jk,
 			'kd_kelas'	=> $kelas
 		);
-		$this->db->insert('tb_siswa', $data);
+		return $this->db->insert('tb_siswa', $data);
 	}
 	public function hapusdpt($username) {
-		$hapus	= $this->db->query("DELETE FROM tb_siswa WHERE username='$username'");
-		return $hapus;
+		return $this->db->delete('tb_siswa', array('username' => $username));
 	}
 	public function updatedpt($username, $nm_siswa, $jk,$kd_kelas) {
-		$update = $this->db->query("UPDATE tb_siswa SET nm_siswa='$nm_siswa', jk='$jk', kd_kelas='$kd_kelas' WHERE username='$username'");
-		return $update;
+		$this->db->where('username', $username);
+		return $this->db->update('tb_siswa', array(
+			'nm_siswa'	=> $nm_siswa,
+			'jk'		=> $jk,
+			'kd_kelas'	=> $kd_kelas
+		));
 	}
 	public function datacalonspesifik($nisn) {
-		$load	= $this->db->query("SELECT * FROM tb_pilihan WHERE nisn='$nisn'");
-		return $load->result_array();
+		return $this->db->get_where('tb_pilihan', array('nisn' => $nisn))->result_array();
 	}
 	public function countcalon() {
 		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_pilihan")->row_array();
@@ -231,4 +245,3 @@ public function jmlvoteP() {
 		return $data->result_array();
 	}
 }
-?>

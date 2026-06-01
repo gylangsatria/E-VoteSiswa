@@ -8,7 +8,9 @@ select {
     padding: 0 15px;
 }
 .form-container {
-	width: 400px;
+	width: 100%;
+	max-width: 480px;
+	margin: 0 auto;
 }
 .top-block {
     border-radius: 20px;

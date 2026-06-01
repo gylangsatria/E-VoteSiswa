@@ -29,3 +29,14 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
+
+# Docker
+#-------------------------
+/Dockerfile
+/docker-compose.yml
+/.dockerignore
+/docker/
+
+# Sampling / Local Testing
+#-------------------------
+/db_sampling.sql

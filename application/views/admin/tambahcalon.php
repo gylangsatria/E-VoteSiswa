@@ -23,38 +23,48 @@
 			);
 			echo form_open_multipart('admin/simpancalon', $form_attribute);
 			?>
-			<div class="form-container" style="width: 400px;">
-				<label class="label-control"> NISN</label>
+			<div class="form-container">
+				<label class="label-control" for="nisn"> NISN</label>
 				<?php 
 				$form_attribute	= array (
 					'type'		=> 'text',
 					'name'		=> 'nisn',
-					'class'		=> 'form-control'
+					'id'		=> 'nisn',
+					'class'		=> 'form-control',
+					'required'	=> 'required',
+					'pattern'	=> '[0-9]{8,20}',
+					'title'		=> 'Masukkan NISN yang valid (8-20 digit angka)'
 				);
 				echo form_input($form_attribute);
 				?>
-				<label class="label-control"> No Kandidat</label>
+				<label class="label-control" for="no"> No Kandidat</label>
 				<?php 
 				$form_attribute	= array (
 					'type'		=> 'text',
 					'name'		=> 'no',
-					'class'		=> 'form-control'
+					'id'		=> 'no',
+					'class'		=> 'form-control',
+					'required'	=> 'required',
+					'pattern'	=> '[0-9]{1,3}',
+					'title'		=> 'Masukkan nomor urut kandidat (1-3 digit angka)'
 				);
 				echo form_input($form_attribute);
 				?>
-				<label class="label-control"> Nama Kandidat</label>
+				<label class="label-control" for="nama"> Nama Kandidat</label>
 				<?php 
 				$form_attribute	= array (
 					'type'		=> 'text',
 					'name'		=> 'nama',
-					'class'		=> 'form-control'
+					'id'		=> 'nama',
+					'class'		=> 'form-control',
+					'required'	=> 'required'
 				);
 				echo form_input($form_attribute);
 				?>
 
 				<!-- menambahkan opsi calon MPK atau OSIS -->
 
-				<label class="label-control">Kandidat</label>
+				<label class="label-control" for="opsi_mpkosis">Kandidat</label>
 				<?php
 				$options_kandidat = array(
 					'0' => 'MPK',
@@ -63,16 +73,19 @@
 				$form_attribute = array(
 					'class'    => 'form-control',
 					'name'     => 'opsi_mpkosis',
+					'id'       => 'opsi_mpkosis',
 					'required' => 'required'
 				);
 				echo form_dropdown($form_attribute['name'], $options_kandidat, '0', $form_attribute);
 				?>
 
-				<label class="label-control"> Photo</label>
+				<label class="label-control" for="photo"> Photo</label>
 				<?php 
 				$form_attribute = array (
 					'name' => 'photo',
-					'class' => 'form-control'
+					'id' => 'photo',
+					'class' => 'form-control',
+					'accept' => '.jpg,.jpeg,.png,.gif'
 				);
 				echo form_upload($form_attribute);
 

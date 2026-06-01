@@ -21,25 +21,47 @@ class User extends CI_Controller {
 	}
 
 	public function loginvalidation() {
+		// Rate limiting: max 5 percobaan dalam 5 menit
+		$attempts = $this->session->userdata('login_attempts') ?: 0;
+		$blocked_until = $this->session->userdata('login_blocked_until');
+
+		if ($blocked_until && time() < $blocked_until) {
+			$wait = ceil(($blocked_until - time()) / 60);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
+			redirect('user/login');
+			return;
+		}
+
+		if ($attempts >= 5) {
+			$this->session->set_userdata('login_blocked_until', time() + 300);
+			$this->session->set_userdata('login_attempts', 0);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
+			redirect('user/login');
+			return;
+		}
+
 		$username = $this->input->post('username', TRUE);
 		$password = $this->input->post('password', TRUE);
 
 		$result = $this->User_Model->login($username, $password);
-        $valid  = $this->User_Model->valid($username); // cek apakah sudah voting
+        $valid  = $this->User_Model->valid($username);
 
         if ($valid === true) {
+        	$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
         	$this->session->set_flashdata('block', 'Anda sudah pernah melakukan voting. Akun Anda dinonaktifkan. Jika ini kesalahan, hubungi panitia.');
         	redirect('user/login');
         }
 
         if (is_array($result)) {
+        	$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
         	$this->session->set_userdata([
         		'username' => $result['username'],
-    'nisn'     => $result['username'] // karena nisn = username
+    'nisn'     => $result['username']
 ]);
 
         	redirect('user/index');
         } else {
+        	$this->session->set_userdata('login_attempts', $attempts + 1);
         	$this->session->set_flashdata('failed', 'Username atau Password salah');
         	redirect('user/login');
         }

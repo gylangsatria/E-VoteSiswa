@@ -39,33 +39,37 @@
 		<div class="col-lg-5">
 			<h4>Tambah Data Satu/Satu</h4>
 			<hr/>
-			<label class="label-control">NISN</label>
+			<label class="label-control" for="nisn">NISN</label>
 			<?php
 				$form_attribute = array(
 					'type'		=> 'text',
 					'class'		=> 'form-control',
 					'name'		=> 'nisn',
-					'required'	=> 'required'
+					'id'		=> 'nisn',
+					'required'	=> 'required',
+					'pattern'	=> '[0-9]{8,20}',
+					'title'		=> 'Masukkan NISN yang valid (8-20 digit angka)'
 				);
 				echo form_input($form_attribute);
 			?>
-			<label class="label-control">Nama</label>
+			<label class="label-control" for="nm_siswa">Nama</label>
 			<?php
 				$form_attribute = array(
 					'type'		=> 'text',
 					'class'		=> 'form-control',
 					'name'		=> 'nm_siswa',
+					'id'		=> 'nm_siswa',
 					'required'	=> 'required'
 				);
 				echo form_input($form_attribute);
 			?>
-			<label class="label-control">Jenis Kelamin</label>
-			<select class="form-control" name="jk">
+			<label class="label-control" for="jk">Jenis Kelamin</label>
+			<select class="form-control" name="jk" id="jk">
 				<option selected value="L">L</option>
 				<option value="P">P</option>
 			</select>
-			<label class="label-control">Kelas</label>
-			<select class="form-control" name="kd_kelas" required>
+			<label class="label-control" for="kd_kelas">Kelas</label>
+			<select class="form-control" name="kd_kelas" id="kd_kelas" required>
 				<?php foreach($datakelas as $load) { ?>
 					<option value="<?php echo $load['kd_kelas']; ?>"> (<?php echo $load['kd_kelas']; ?>) <?php echo $load['nm_kelas']; ?> </option>
 				<?php 
@@ -78,19 +82,15 @@
 		<?php 
 			echo form_close();
 		?>
-		<div class="col-lg-6 text-center" style="background: #d3d3d3; padding: 10px 20px; opacity: 0.6; pointer-events: none;">
-    <h4>Tambah Data Massal <span class="label label-warning">Dalam Pengembangan</span></h4>
+		<div class="col-lg-6 text-center" style="background: #f5f5f5; padding: 10px 20px; border: 1px solid #ddd; border-radius: 4px;">
+    <h4>Tambah Data Massal</h4>
     <hr/>
-    <a href="<?php echo base_url(); ?>asset/file/Format_DPT_Pilketos.xls">
-        <button type="button" class="btn btn-default" style="width: 100%;" disabled>
-            <span class="glyphicon glyphicon-cloud-download"></span> Download Format Excel
-        </button>
-    </a>
-    <br/><br/>
+    <p class="text-muted">Gunakan file Excel dengan format: kolom NISN, Nama, JK (L/P), dan Kode Kelas.</p>
+    <br/>
     <div class="box">
         <div class="box-inner">
             <div class="box-header well">
-                <h2>Upload File Format DPT Pilketos</h2>
+                <h2>Upload File DPT (Excel)</h2>
             </div>
             <div class="box-content">
                 <?php 
@@ -100,8 +100,8 @@
                 );
                 echo form_open_multipart('admin/simpanmassaldpt', $form_attribute);
                 ?>
-                    <input name='datadpt' type="file" required class="form-control" disabled/> <br/>
-                    <button type="submit" class="btn btn-default" style="width: 100%;" disabled>
+                    <input name='datadpt' type="file" required class="form-control" accept=".xls,.xlsx"/> <br/>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
                         <span class="glyphicon glyphicon-cloud-upload"></span> Upload Data
                     </button>
                 <?php 
@@ -111,7 +111,7 @@
         </div>
     </div>
     <br/>
-    <span style="color: red;">Catatan: Fitur ini sedang dalam pengembangan. Silakan input data secara manual untuk sementara waktu atau hubungi system administrator.</span>
+    <span style="color: #888;">Pastikan file Excel memiliki format yang benar. Data akan ditambahkan ke DPT yang sudah ada.</span>
 </div>
 
 </div>

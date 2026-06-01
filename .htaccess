@@ -1,0 +1,40 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Redirect HTTP to HTTPS (uncomment for production)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+    # Remove index.php from URLs
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+
+<IfModule mod_authz_core.c>
+    # Apache 2.4
+    <FilesMatch "\.(md|sql|log|env|json|lock)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    # Apache 2.2
+    <FilesMatch "\.(md|sql|log|env|json|lock)$">
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# Protect sensitive directories
+RedirectMatch 403 ^/application/?$
+RedirectMatch 403 ^/system/?$
+RedirectMatch 403 ^/user_guide/?$
+RedirectMatch 403 ^/vendor/?$
+RedirectMatch 403 /\.git
+
+# Prevent directory listing
+Options -Indexes
+
+# Set default charset
+AddDefaultCharset UTF-8

@@ -1,97 +1,106 @@
-# ⚠️ **DEPRECATED**  
-<p>Proyek ini sudah tidak dikembangkan lagi karena menggunakan Codeigniter 3 dan PHP yang sudah usang. </p>
-<p>Gunakan hanya untuk Local saja / Only use for Local Only</p>
+# E-VoteSiswa
 
+Aplikasi e-voting untuk pemilihan Ketua OSIS dan MPK di sekolah. Dikembangkan sebagai penyesuaian dan pengembangan ulang dari [E-Pilketos](https://github.com/fpls-software/pilketos).
 
-# DAFTAR PERUBAHAN
-<ol>
-  <li>Perubahan template dari <b>Charisma</b> ke <b>AdminLTE</b></li>
-  <li>19 Oktober 2025: Fork dari <b><a href="https://github.com/fpls-software/pilketos">pilketos</a></b> </li>
-  <li>21 Oktober 2025: Penambahan entitas <b>Calon MPK</b> dan <b>Calon OSIS</b></li>
-  <li>22 Oktober 2025: Penyesuaian tampilan dan perbaikan beberapa fitur</li>
-  <li>22 Oktober 2025: Penambahan validasi panjang karakter pada kolom <code>nm_siswa</code> saat impor CSV</li>
-  <li>22 Oktober 2025: Penyesuaian struktur database agar kolom <code>hadir</code> memiliki nilai default <code>"Tidak Hadir"</code></li>
-  <li>22 Oktober 2025: Perbaikan dokumentasi <code>README.md</code> untuk penyesuaian fitur dan instruksi instalasi</li>
-  <li>Rilis E-VoteSiswa V.0.9 BETA</li>
-  <li>V.0.9.1 : Penambahan fitur pencarian DPT dan Perbaikan Login</li>
-  <li>V.0.9.2 : Penambahan fitur grafik di hasil vote</li>
-  <li>V.0.9.3 : Perbaikan opsi Osis dan MPK yang terbalik</li>
-  <li>V.0.9.4 : Perbaikan opsi Hapus semua data dan penambahan tombol Reset Vote</li>
-  <li>V.0.9.5 : Perbaikan laporan E-VoteSiswa</li>
-  <li>V.0.9.6 : Penambahan Logo di Login screen</li>
-  <li>V.1.0 : Uji coba masal dan penyempurnaan fitur</li>
-</ol>
+Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
+---
 
-# TENTANG E-VoteSiswa
-E-VoteSiswa adalah aplikasi e-voting untuk pemilihan Ketua OSIS dan MPK yang dikembangkan sebagai penyesuaian dan pengembangan ulang dari E-Pilketos. Aplikasi ini dirancang agar proses pemilihan di sekolah menjadi lebih mudah, cepat, dan transparan.
+## Daftar Perubahan
 
-Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah. 
+| Tanggal | Versi | Keterangan |
+|---------|-------|------------|
+| 20 Mei 2026 | 1.1 | Kompatibilitas PHP 8.1, perbaikan keamanan & bug (lihat [CHANGELOG.md](CHANGELOG.md)) |
+| - | 1.0 | Uji coba masal dan penyempurnaan fitur |
+| - | 0.9.6 | Penambahan Logo di Login screen |
+| - | 0.9.5 | Perbaikan laporan E-VoteSiswa |
+| - | 0.9.4 | Perbaikan opsi Hapus semua data dan penambahan tombol Reset Vote |
+| - | 0.9.3 | Perbaikan opsi OSIS dan MPK yang terbalik |
+| - | 0.9.2 | Penambahan fitur grafik di hasil vote |
+| - | 0.9.1 | Penambahan fitur pencarian DPT dan perbaikan login |
+| - | 0.9 BETA | Rilis awal E-VoteSiswa |
+| 19 Okt 2025 | - | Fork dari [pilketos](https://github.com/fpls-software/pilketos) |
 
-# Fitur
-<ol>
-  <li><b>Reset Data</b> — Menghapus seluruh data pemilihan agar dapat digunakan kembali untuk periode berikutnya.</li>
-  <li><b>Kunci Akun</b> — Mengunci akun DPT setelah memilih, mencegah pemilih melakukan pemilihan lebih dari satu kali.</li>
-  <li><b>Reset User</b> — Membuka kembali akun DPT yang terkunci jika ada komplain bahwa pemilih belum menggunakan hak suaranya.</li>
-  <li><b>Data Sekolah</b> — Memperbarui informasi profil sekolah.</li>
-  <li><b>Data Kelas DPT</b> — Menambahkan atau menghapus kelas yang digunakan dalam daftar pemilih tetap.</li>
-  <li><b>Data Kandidat</b> — Menambahkan atau menghapus kandidat Ketua OSIS dan MPK.</li>
-  <li><b>Data DPT</b> — Menambahkan atau menghapus Daftar Pemilih Tetap (DPT).</li>
-  <li><b>Hasil Pemilihan</b> — Melihat hasil akhir pemilihan Ketua OSIS dan MPK secara real-time.</li>
-  <li><b>Daftar Hadir</b> — Mengunduh daftar kehadiran pemilih dalam format yang siap cetak.</li>
-  <li><b>Laporan Pilketos</b> — Mengunduh laporan hasil pemilihan dalam format PDF untuk dokumentasi resmi.</li>
-</ol>
+---
 
+## Fitur
 
-# User Guide
-<h2>Local Instalation</h2>
-<ol>
-	<li>Download XAMPP <a href="https://www.apachefriends.org/download.html" target="_blank">Disini</a> dan install</li>
-	<li>Jalankan XAMPP Control Panel dan Klik Start(Mulai) pada <b>Apache</b> dan <b>Mysql</b></li>
-	<li>Copy File <b>pilketos-master.zip</b> ke Folder <b>C://xampp/htdocs/</b> Kemudian Extract</li>
-</ol>
-<br/>
-<h2>Creating Database</h2>
-<ol>
-	<li>Masuk ke Browser kemudian tulis di Address Bar http://localhost/phpmyadmin</li>
-	<li>Buat Database dengan Nama <b>db_pilketos</b></li>
-	<li>Import Database <b>db_evotesiswa.sql</b> <a href="https://www.domainesia.com/panduan/cara-import-database-mysql-di-phpmyadmin/" target="_blank">Tutorial Disini</a></li>
-</ol>
-<br/>
-<h2>E-VoteSiswa Konfiguration</h2>
-<b>Konfigurasi Database</b>
-<ul>
-	<li>Edit File <b>database.php</b> yang ada pada Folder <b>application/config/</b></li>
-	<li>Kemudian Pastikan <b>Hostname</b>nya Bernilai <b>localhost</b></li>
-	<li><b>Username</b> bernilai <b>root</b></li>
-	<li><b>Password</b> dibiarkan <b>kosong</b></li>
-	<li>dan <b>Database</b> bernilai <b>db_pilketos</b> <b>Note: <i>Sesuaikan dengan nama database yang Dibuat Tadi</i></b></li>
-	<li>Simpan File</li>
-		
-</ul>
-<b>Konfigurasi Base URL</b>
-<ul>
-  <li>Edit file <b>config.php</b> yang ada pada folder <b>application/config/</b></li>
-  <li>Secara default, aplikasi sudah menggunakan konfigurasi <b>dinamis</b> untuk menentukan <code>$config['base_url']</code>, sehingga Anda tidak perlu mengubahnya secara manual.</li>
-  <li>Namun, jika aplikasi tidak berjalan dengan benar karena konfigurasi server tertentu (misalnya reverse proxy, subdomain, atau hosting publik), Anda dapat menetapkan nilai tetap seperti <code>'http://localhost/pilketos/'</code></li>
-  <li>Simpan file setelah melakukan penyesuaian.</li>
-</ul>
-<br/>
-<h2>Akses Aplikasi</h2>
-<b>Akses Admin</b>
-<ul> 
-	<li>Masuk ke Browser kemudian tulis di address bar <b>http://localhost/pilketos/index.php/admin/</b></li>
-	<li>Login dengan menggunakan <b>Username = admin</b> dan <b>Password = admin</b></li> 
-</ul>
-<b>Akses User (DPT)</b>
-<ul> 
-	<li>Masuk Ke Browser kemudian tulis di address bar <b>http://localhost/pilketos</b></li>
-	<li>Login dengan menggunakan <b>Username dan Password = NISN</b> DPT yang bersangkutan, yang telah di INPUT oleh Admin sebelumnya</li>
-</ul>
+- **Reset Data** — Menghapus seluruh data pemilihan untuk periode berikutnya
+- **Kunci Akun** — Mengunci akun DPT setelah memilih, mencegah pemilihan ganda
+- **Reset User** — Membuka kembali akun DPT yang terkunci jika ada komplain
+- **Data Sekolah** — Memperbarui informasi profil sekolah
+- **Data Kelas** — Menambahkan atau menghapus kelas untuk DPT
+- **Data Kandidat** — Menambahkan kandidat Ketua OSIS dan MPK
+- **Data DPT** — Mengelola Daftar Pemilih Tetap dengan pencarian
+- **Hasil Pemilihan** — Melihat hasil voting real-time dengan grafik
+- **Daftar Hadir** — Mengunduh daftar kehadiran pemilih (PDF)
+- **Laporan** — Mengunduh laporan hasil pemilihan (PDF)
 
-# Bug Diketahui
-- Fitur Upload Massal DPT belum berfungsi. Untuk sementara import data dalam format .CSV secara langsung ke tb_siswa. 
+---
 
+## Instalasi Lokal
 
+### 1. Persiapan
+- Download dan install [XAMPP](https://www.apachefriends.org/download.html)
+- Jalankan XAMPP Control Panel, start **Apache** dan **MySQL**
+- Clone atau copy project ke folder `C:/xampp/htdocs/evotesiswa/` atau `/var/www/html/evotesiswa/`
 
- 
+### 2. Database
+1. Buka `http://localhost/phpmyadmin`
+2. Buat database dengan nama **db_pilketos**
+3. Import file `db_evotesiswa.sql`
+
+### 3. Konfigurasi Database
+Edit `application/config/database.php`:
+- `hostname` => `localhost`
+- `username` => `root`
+- `password` => `""` (kosong)
+- `database` => `db_pilketos`
+
+> **Catatan 1:** Secara default `base_url` di `config.php` sudah menggunakan deteksi dinamis, tidak perlu diubah.
+> **Catatan 2:** CSRF Protection sudah diaktifkan. Semua form POST otomatis menyertakan token CSRF via `form_open()`. Jika menambahkan form baru, gunakan `form_open()` atau sertakan manual token CSRF.
+
+### 4. Admin Default
+Setelah import database, admin sudah langsung bisa login dengan:
+
+- **Username:** `admin`
+- **Password:** `admin`
+
+> **Catatan:** Database baru (`db_evotesiswa.sql`) sudah menyertakan admin dengan bcrypt hash. Jika Anda migrasi dari database lama yang menggunakan MD5, jalankan `db_migrate_from_md5.sql` untuk update struktur dan password.
+
+### 5. Akses
+
+| Role | URL | Login |
+|------|-----|-------|
+| Admin | `http://localhost/evotesiswa/index.php/admin/` | Username: `admin`, Password: `admin` |
+| Siswa | `http://localhost/evotesiswa/` | Username & Password = NISN |
+
+---
+
+## Perbaikan & Perubahan (Branch: `fix/bugs`)
+
+Branch `fix/bugs` berisi perbaikan keamanan, kompatibilitas, dan tambahan fitur. Detail lengkap ada di [CHANGELOG.md](CHANGELOG.md).
+
+Ringkasan perbaikan utama:
+- **Kompatibilitas PHP 8.1** — Session driver dan error reporting disesuaikan
+- **Operator `=` diganti `===`** — Feedback error sekarang berfungsi dengan benar
+- **SQL Injection dihapus** — Semua query menggunakan Query Builder dengan parameter binding
+- **MD5 diganti bcrypt** — Password di-hash dengan `password_hash()`
+- **Password siswa dipisah dari NISN** — Password di-hash sebelum disimpan
+- **CSRF Protection diaktifkan**
+- **XSS Filtering diaktifkan**
+- **Encryption key diset**
+- **HttpOnly cookie, IP session matching, session regenerate destroy diaktifkan**
+
+---
+
+## Bug Diketahui
+
+- Validasi MIME type upload foto masih bisa ditingkatkan (hanya ekstensi file yang dicek)
+- Belum ada reCAPTCHA di halaman login
+
+---
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).

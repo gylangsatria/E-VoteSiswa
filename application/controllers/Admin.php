@@ -31,9 +31,9 @@ Class Admin extends CI_Controller {
 	public function updatepassword() {
 		$username		= $this->input->post('username');
 		$password		= $this->input->post('password');
-		$password_hash	= md5($password);
+		$password_hash	= password_hash($password, PASSWORD_DEFAULT);
 		$update			= $this->Admin_Model->gantipassword($username, $password_hash);
-		if($update = true) {
+		if($update === true) {
 			$updateuser	= $this->Admin_Model->updateuser($username);
 			$this->session->set_flashdata('update', 'Berhasil Memperbarui Password');
 			redirect('admin/gantipassword');
@@ -48,11 +48,30 @@ Class Admin extends CI_Controller {
 		redirect('admin/login');
 	}
 	public function loginvalidation() {
+		// Rate limiting: max 5 percobaan dalam 5 menit
+		$attempts = $this->session->userdata('login_attempts') ?: 0;
+		$blocked_until = $this->session->userdata('login_blocked_until');
+
+		if ($blocked_until && time() < $blocked_until) {
+			$wait = ceil(($blocked_until - time()) / 60);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
+			redirect('admin/login');
+			return;
+		}
+
+		if ($attempts >= 5) {
+			$this->session->set_userdata('login_blocked_until', time() + 300); // 5 menit
+			$this->session->set_userdata('login_attempts', 0);
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
+			redirect('admin/login');
+			return;
+		}
+
 		$username				= $this->input->post('username', TRUE);
 		$password				= $this->input->post('password', TRUE);
-		$password_hash			= md5($password);
-		$result					= $this->Admin_Model->login($username, $password_hash);
+		$result					= $this->Admin_Model->login($username, $password);
 		if($result == true) {
+			$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
 			$this->session->set_userdata(array(
 				'username'	=> $username
 			));
@@ -60,6 +79,7 @@ Class Admin extends CI_Controller {
 		}
 		else
 		{
+			$this->session->set_userdata('login_attempts', $attempts + 1);
 			$this->session->set_flashdata('failed', 'Username atau Password Salah');
 			redirect('admin/login');
 		}
@@ -89,7 +109,7 @@ Class Admin extends CI_Controller {
 	}
 	public function regsekolah() {
 		$data = $this->Admin_Model->regvalid();
-		if($data == true) {
+		if(!empty($data)) {
 			redirect('admin/index');
 		}
 		$this->load->view('admin/head');
@@ -99,7 +119,7 @@ Class Admin extends CI_Controller {
 		$npsn		= $this->input->post('npsn');
 		$nm_sekolah	= $this->input->post('nm_sekolah');
 		$reg		= $this->Admin_Model->regsekolah($npsn,$nm_sekolah);
-		if($reg = true) {
+		if($reg === true) {
 			redirect('admin/index');
 		}
 		else {
@@ -113,7 +133,7 @@ Class Admin extends CI_Controller {
 			redirect('admin/login');
 		}
 		$data['valid'] = $this->Admin_Model->regvalid();
-		if(! $data['valid'] == true) {
+		if(empty($data['valid'])) {
 			redirect('admin/regsekolah');
 		}
 		$data['jmlcalon']	= $this->Admin_Model->countcalon();
@@ -146,7 +166,7 @@ Class Admin extends CI_Controller {
 public function resetuser() {
 	$username	= $this->input->post('username');
 	$reset		= $this->Admin_Model->resetuser($username);
-	if($reset = true) {
+	if($reset === true) {
 		$updateuser	= $this->Admin_Model->updateuser($username);
 		$this->session->set_flashdata('info', 'Berhasil Mereset User');
 		redirect('admin/index');
@@ -158,7 +178,7 @@ public function resetuser() {
 }
 public function resetdata() {
 	$reset = $this->Admin_Model->resetdata();
-	if($reset = true) {
+	if($reset === true) {
 		$this->session->set_flashdata('reset', 'Berhasil Mereset Data');
 		redirect('admin/index');
 	}
@@ -173,7 +193,7 @@ public function idsekolah() {
 		redirect('admin/login');
 	}
 	$data['valid'] = $this->Admin_Model->regvalid();
-	if(! $data['valid'] == true) {
+	if(empty($data['valid'])) {
 		redirect('admin/regsekolah');
 	}
 	$data['idsekolah']	= $this->Admin_Model->idsekolah();
@@ -192,7 +212,7 @@ public function updateidsekolah() {
 	$kpl_sekolah	= $this->input->post('kpl_sekolah');
 	$nip			= $this->input->post('nip');
 	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
 		redirect('admin/idsekolah');
 	}
@@ -217,7 +237,7 @@ public function datakelas() {
 public function simpankelas() {
 	$nm_kelas	= $this->input->post('nm_kelas');
 	$save		= $this->Admin_Model->simpankelas($nm_kelas);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
 		redirect('admin/datakelas');
 	}
@@ -229,7 +249,7 @@ public function simpankelas() {
 }
 public function hapuskelas($kd_kelas) {
 	$hapus = $this->Admin_Model->hapuskelas($kd_kelas);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datakelas');
 	}
@@ -288,7 +308,7 @@ public function tambahcalon() {
 }
 public function hapuscalon($nisn) {
 	$hapus = $this->Admin_Model->hapuscalon($nisn);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datacalon/');
 	}
@@ -354,7 +374,7 @@ public function simpandpt() {
 	$jk 		= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
-	if($save = true) {
+	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
 		redirect('admin/tambahdpt/');
 	}
@@ -406,6 +426,21 @@ public function simpanmassaldpt() {
 		return;
 	}
 
+	// Validasi MIME type untuk Excel/CSV files
+	$allowed_mime = array('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+	$file_mime = $_FILES['datadpt']['type'];
+	if (!in_array($file_mime, $allowed_mime)) {
+		$log[] = '❌ Tipe file tidak didukung. Gunakan file Excel (.xls, .xlsx) atau CSV.';
+		$this->session->set_flashdata('failed', 'Tipe file tidak didukung.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	// Whitelist karakter nama file
+	$filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
+	$target = $upload_dir . $filename;
+
     // Pindahkan file ke folder uploads
 	if (!move_uploaded_file($_FILES['datadpt']['tmp_name'], $target)) {
 		$log[] = '❌ Gagal memindahkan file ke folder uploads.';
@@ -415,8 +450,8 @@ public function simpanmassaldpt() {
 		return;
 	}
 
-    // Opsional: beri permission agar bisa dibaca
-	chmod($target, 0777);
+    // Set permission aman (readable only)
+	@chmod($target, 0644);
 
     // Baca isi file
 	$data = new Spreadsheet_Excel_Reader($target, false);
@@ -483,7 +518,7 @@ public function simpanmassaldpt() {
 
 public function hapusdpt($username) {
 	$hapus	= $this->Admin_Model->hapusdpt($username);
-	if($hapus = true) {
+	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
 		redirect('admin/datadpt/');
 	}
@@ -508,7 +543,7 @@ public function updatedpt($username){
 	$jk			= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
-	if($update = true) {
+	if($update === true) {
 		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
 		redirect('admin/editdpt/'.$username);
 	}
@@ -528,36 +563,7 @@ public function editcalon($nisn) {
 	$this->load->view('admin/footer', $data);
 }
 
-	//menambahkan opsi osis atau mpk
-	/*
-public function simpancalon() {
-    if (! $this->session->userdata('username')) {
-        redirect('admin/login');
-    }
 
-    $nisn = $this->input->post('nisn');
-    $no   = $this->input->post('no');
-    $nama = $this->input->post('nama');
-
-    $config['upload_path']   = './asset/img/';
-    $config['allowed_types'] = 'gif|jpg|jpeg|png';
-    $config['max_size']      = 1024;
-    $config['file_name']     = $nisn;
-
-    $this->load->library('upload', $config);
-
-    if ($this->upload->do_upload('photo')) {
-        $upload_data = $this->upload->data();
-        $photo       = $upload_data['file_name'];
-
-        $this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo);
-        $this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
-    } else {
-        $this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
-    }
-
-    redirect('admin/tambahcalon');
-} */
 
 public function simpancalon() {
 	if (! $this->session->userdata('username')) {
@@ -596,7 +602,7 @@ public function simpancalon() {
 		$no			= $this->input->post('no');
 		$nama		= $this->input->post('nama');
 		$upade		= $this->Admin_Model->updatecalon($nisn, $no ,$nama);
-		if($update = true) {
+		if($update === true) {
 			$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
 			redirect('admin/editcalon/'.$nisn);
 		}
@@ -896,5 +902,4 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf->Output();
 }
 }
-?>
 

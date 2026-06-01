@@ -4,10 +4,16 @@ class User_Model extends CI_Model {
 	public function login($username, $password) {
 		$this->db->select('username, password');
 		$this->db->from('tb_siswa');
-		$this->db->where(['username' => $username, 'password' => $password]);
+		$this->db->where('username', $username);
 		$login = $this->db->get();
 
-		return $login->num_rows() > 0 ? ['username' => $username, 'nisn' => $username] : false;
+		if ($login->num_rows() > 0) {
+			$row = $login->row_array();
+			if (password_verify($password, $row['password'])) {
+				return ['username' => $username, 'nisn' => $username];
+			}
+		}
+		return false;
 	}
 
 	public function valid($username) {
@@ -30,7 +36,8 @@ class User_Model extends CI_Model {
 	}
 
 	public function hadir($username) {
-		return $this->db->query("UPDATE tb_siswa SET hadir='Hadir' WHERE username='$username'");
+		$this->db->where('username', $username);
+		return $this->db->update('tb_siswa', array('hadir' => 'Hadir'));
 	}
 
 	public function sudah_vote($username, $opsi_mpkosis) {
@@ -40,5 +47,4 @@ class User_Model extends CI_Model {
 		])->num_rows() > 0;
 	}
 }
-?>
 

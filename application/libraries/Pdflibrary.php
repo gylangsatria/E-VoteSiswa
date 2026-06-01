@@ -6,4 +6,3 @@ class Pdflibrary {
         include_once APPPATH . '/third_party/fpdf/fpdf.php';
     }
 }
-?>

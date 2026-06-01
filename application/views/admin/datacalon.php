@@ -26,17 +26,17 @@
                         $jenis = ($loaddata['opsi_mpkosis'] == 1) ? 'OSIS' : 'MPK';
                 ?>
                     <tr>
-                        <td class="text-center"><?php echo $loaddata['no']; ?></td>
-                        <td><?php echo $loaddata['nama']; ?></td>
-                        <td class="text-center"><span class="label label-<?php echo ($jenis == 'OSIS') ? 'primary' : 'warning'; ?>"><?php echo $jenis; ?></span></td>
+                        <td class="text-center"><?php echo htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><span class="label label-<?php echo ($jenis == 'OSIS') ? 'primary' : 'warning'; ?>"><?php echo htmlspecialchars($jenis, ENT_QUOTES, 'UTF-8'); ?></span></td>
                         <td class="text-center">
-                            <img width="50" height="60" src="<?php echo base_url(); ?>/asset/img/<?php echo $loaddata['photo']; ?>">
+                            <img width="50" height="60" src="<?php echo base_url(); ?>/asset/img/<?php echo htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
                         </td>
                         <td>
-                            <a class="btn btn-info" href="<?php echo base_url(); ?>index.php/admin/editcalon/<?php echo $loaddata['nisn']; ?>">
+                            <a class="btn btn-info" href="<?php echo base_url(); ?>index.php/admin/editcalon/<?php echo htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>">
                                 <i class="glyphicon glyphicon-edit icon-white"></i> Edit
                             </a>
-                            <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');" href="<?php echo base_url(); ?>index.php/admin/hapuscalon/<?php echo $loaddata['nisn']; ?>">
+                            <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');" href="<?php echo base_url(); ?>index.php/admin/hapuscalon/<?php echo htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>">
                                 <i class="glyphicon glyphicon-trash icon-white"></i> Hapus
                             </a>
                         </td>
