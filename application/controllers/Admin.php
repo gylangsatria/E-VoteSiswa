@@ -419,6 +419,20 @@ public function simpanmassaldpt() {
 	$target = $upload_dir . $filename;
 	$log = [];
 
+	// Buat folder uploads jika belum ada
+	if (!is_dir($upload_dir)) {
+		@mkdir($upload_dir, 0755, true);
+	}
+
+	// Fallback ke system temp jika folder uploads tidak bisa dibuat/ditulis
+	if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
+		$upload_dir = sys_get_temp_dir() . '/evotesiswa_uploads/';
+		@mkdir($upload_dir, 0755, true);
+	}
+
+	$filename = basename($_FILES['datadpt']['name']);
+	$target = $upload_dir . $filename;
+
     // Validasi file upload
 	if (!isset($_FILES['datadpt']) || $_FILES['datadpt']['error'] != 0) {
 		$log[] = '❌ File tidak valid atau gagal diupload.';
@@ -455,38 +469,44 @@ public function simpanmassaldpt() {
     // Set permission aman (readable only)
 	@chmod($target, 0644);
 
-    // Baca isi file
-	$data = new Spreadsheet_Excel_Reader($target, false);
-	$sheets = $data->sheets ?? null;
-	$log[] = '📄 Struktur sheets: ' . print_r($sheets, true);
+    // Baca isi file menggunakan SpreadsheetReader (mendukung CSV, XLS, XLSX)
+	require_once APPPATH . 'third_party/spreadsheet-reader/SpreadsheetReader.php';
 
-    // Validasi sheet
-	if (
-		!is_array($sheets) ||
-		!array_key_exists(0, $sheets) ||
-		!isset($sheets[0]['cells']) ||
-		!is_array($sheets[0]['cells'])
-	) {
-		$log[] = '❌ Sheet pertama tidak ditemukan atau kosong.';
+	try {
+		$reader = new SpreadsheetReader($target);
+		$rows = iterator_to_array($reader);
+	} catch (Exception $e) {
+		$log[] = '❌ Gagal membaca file: ' . $e->getMessage();
 		unlink($target);
-		$this->session->set_flashdata('failed', 'File Excel kosong atau tidak valid.');
+		$this->session->set_flashdata('failed', 'Gagal membaca file. Pastikan format CSV/Excel benar.');
 		$this->session->set_flashdata('log', $log);
 		redirect('admin/tambahdpt/');
 		return;
 	}
 
-	$jumlah_baris = $data->rowcount(0);
+	$jumlah_baris = count($rows);
 	$log[] = "📊 Jumlah baris terbaca: $jumlah_baris";
+
+	if ($jumlah_baris < 2) {
+		$log[] = '❌ File tidak memiliki data (minimal 1 baris data + header).';
+		unlink($target);
+		$this->session->set_flashdata('failed', 'File kosong atau tidak memiliki data.');
+		$this->session->set_flashdata('log', $log);
+		redirect('admin/tambahdpt/');
+		return;
+	}
 
 	$berhasil = 0;
 
-	for ($i = 2; $i <= $jumlah_baris; $i++) {
-		$nisn  = trim($data->val($i, 2));
-		$nama  = trim($data->val($i, 3));
-		$jk    = trim($data->val($i, 4));
-		$kelas = trim($data->val($i, 5));
+	// Baris 0 = header, data dimulai dari baris 1
+	for ($i = 1; $i < $jumlah_baris; $i++) {
+		$row = $rows[$i];
+		$nisn  = trim($row[0] ?? '');
+		$nama  = trim($row[1] ?? '');
+		$jk    = trim($row[2] ?? '');
+		$kelas = trim($row[3] ?? '');
 
-		$log[] = "🔍 Baris $i: NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
+		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
 		if ($nisn && $nama && $jk && $kelas) {
 			$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
@@ -496,7 +516,7 @@ public function simpanmassaldpt() {
 				$log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
 			}
 		} else {
-			$log[] = "⚠️ Data tidak lengkap di baris $i, dilewati.";
+			$log[] = "⚠️ Data tidak lengkap di baris " . ($i + 1) . ", dilewati.";
 		}
 	}
 

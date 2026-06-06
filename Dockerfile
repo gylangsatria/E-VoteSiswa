@@ -22,6 +22,11 @@ RUN chown -R www-data:www-data /var/www/html/application/cache && \
     chmod -R 755 /var/www/html/application/third_party/fpdf && \
     chown -R www-data:www-data /var/www/html/application/third_party/fpdf
 
+# Create uploads directory for mass DPT import
+RUN mkdir -p /var/www/html/uploads && \
+    chown -R www-data:www-data /var/www/html/uploads && \
+    chmod -R 755 /var/www/html/uploads
+
 # Create session directory (outside of bind mount)
 RUN mkdir -p /tmp/sessions && chown -R www-data:www-data /tmp/sessions && chmod 755 /tmp/sessions
 
