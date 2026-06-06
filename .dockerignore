@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+*.md
+*.rst
+*.txt
+user_guide/
+system/core/
+system/database/
+system/fonts/
+system/helpers/
+system/language/
+system/libraries/
+docker/
+db_data/
+node_modules/

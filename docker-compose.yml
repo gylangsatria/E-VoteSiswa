@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: evotesiswa-web
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    environment:
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - DB_NAME=db_pilketos
+      - SESS_SAVE_PATH=/tmp/sessions
+      - CI_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - evotesiswa-network
+
+  db:
+    image: mysql:8.0
+    container_name: evotesiswa-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: db_pilketos
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db_evotesiswa.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - evotesiswa-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: evotesiswa-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+      UPLOAD_LIMIT: 100M
+    depends_on:
+      - db
+    networks:
+      - evotesiswa-network
+
+networks:
+  evotesiswa-network:
+    driver: bridge
+
+volumes:
+  db_data:
