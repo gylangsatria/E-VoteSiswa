@@ -5,6 +5,22 @@
 
 ---
 
+## [1.2.1] - 7 Juni 2026
+
+### Fixed
+- **Flashdata Conflict** — Pisahkan flashdata key `'failed'` antara admin dan user (siswa) di `User.php`, `Admin.php`, dan `user/login.php` agar pesan error login tidak terbawa antar halaman.
+- **Dockerfile** — Perbaiki permission FPDF di `Dockerfile` agar rebuild tidak error.
+
+### Files yang Diperbaiki
+| File | Perbaikan |
+|------|-----------|
+| `application/controllers/Admin.php` | Pembersihan flashdata `'failed'` saat login sukses |
+| `application/controllers/User.php` | Ubah flashdata key `'failed'` menjadi `'user_failed'` |
+| `application/views/user/login.php` | Sesuaikan flashdata key menjadi `'user_failed'` |
+| `Dockerfile` | Perbaiki permission FPDF untuk rebuild |
+
+---
+
 ## [1.2] - 21 Mei 2026
 
 ### UI/UX Modernization

@@ -10,6 +10,8 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 7 Juni 2026 | 1.2.1 | Perbaikan flashdata conflict & Dockerfile FPDF permission |
+| 21 Mei 2026 | 1.2 | Modernisasi UI/UX tampilan aplikasi |
 | 20 Mei 2026 | 1.1 | Kompatibilitas PHP 8.1, perbaikan keamanan & bug (lihat [CHANGELOG.md](CHANGELOG.md)) |
 | - | 1.0 | Uji coba masal dan penyempurnaan fitur |
 | - | 0.9.6 | Penambahan Logo di Login screen |
