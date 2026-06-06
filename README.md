@@ -79,6 +79,38 @@ Setelah import database, admin sudah langsung bisa login dengan:
 
 ---
 
+## Docker Branch Workflow
+
+Proyek menggunakan 2 branch untuk memisahkan konfigurasi Docker dari kode aplikasi:
+
+| Branch | Berisi Docker? | Kegunaan |
+|--------|:---:|----------|
+| `main` | ❌ | Kode aplikasi murni (production) |
+| `docker` | ✅ | Kode aplikasi + konfigurasi Docker |
+
+### Script Bantuan
+
+| Script | Arah | Fungsi |
+|--------|:----:|--------|
+| `./sync-docker.sh` | **main → docker** | Ambil perubahan terbaru dari `main` ke `docker` |
+| `./merge-docker-to-main.sh` | **docker → main** | Gabungkan hasil develop di `docker` ke `main` (file Docker otomatis dikeluarkan) |
+
+### Workflow Develop
+
+```bash
+# 1. Mulai develop di branch docker
+git checkout docker
+git push origin docker
+
+# 2. Saat selesai fitur → kirim ke main
+./merge-docker-to-main.sh
+
+# 3. Sync balik main → docker (agar kedua branch tetap sejajar)
+./sync-docker.sh
+```
+
+---
+
 ## Perbaikan & Perubahan (Branch: `fix/bugs`)
 
 Branch `fix/bugs` berisi perbaikan keamanan, kompatibilitas, dan tambahan fitur. Detail lengkap ada di [CHANGELOG.md](CHANGELOG.md).
