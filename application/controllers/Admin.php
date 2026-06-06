@@ -9,6 +9,8 @@ Class Admin extends CI_Controller {
 		$this->load->model(array('Admin_Model'));
 	}
 	public function login() {
+		// Bersihkan flashdata 'failed' dari session siswa (User) agar tidak muncul di halaman admin
+		$this->session->unset_userdata('failed');
 		if($this->session->userdata('username'))
 		{
 			redirect('admin/index');
@@ -71,7 +73,7 @@ Class Admin extends CI_Controller {
 		$password				= $this->input->post('password', TRUE);
 		$result					= $this->Admin_Model->login($username, $password);
 		if($result == true) {
-			$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
+			$this->session->unset_userdata(array('login_attempts', 'login_blocked_until', 'failed'));
 			$this->session->set_userdata(array(
 				'username'	=> $username
 			));

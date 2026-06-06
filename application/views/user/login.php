@@ -125,10 +125,10 @@
         <b>Gunakan NISN Anda sebagai Username dan Password</b>
     </div>
 
-    <?php if($this->session->flashdata('failed')) { ?>
+    <?php if($this->session->flashdata('user_failed')) { ?>
         <div class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <?php echo $this->session->flashdata('failed'); ?>
+            <?php echo $this->session->flashdata('user_failed'); ?>
         </div>
     <?php } ?>
 

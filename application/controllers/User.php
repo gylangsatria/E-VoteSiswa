@@ -27,15 +27,15 @@ class User extends CI_Controller {
 
 		if ($blocked_until && time() < $blocked_until) {
 			$wait = ceil(($blocked_until - time()) / 60);
-			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
+			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
 			redirect('user/login');
 			return;
 		}
 
 		if ($attempts >= 5) {
-			$this->session->set_userdata('login_blocked_until', time() + 300);
+			$this->session->set_userdata('login_blocked_until', time() + 300); // 5 menit
 			$this->session->set_userdata('login_attempts', 0);
-			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
+			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
 			redirect('user/login');
 			return;
 		}
@@ -62,7 +62,7 @@ class User extends CI_Controller {
         	redirect('user/index');
         } else {
         	$this->session->set_userdata('login_attempts', $attempts + 1);
-        	$this->session->set_flashdata('failed', 'Username atau Password salah');
+        	$this->session->set_flashdata('user_failed', 'Username atau Password salah');
         	redirect('user/login');
         }
     }
@@ -111,7 +111,7 @@ class User extends CI_Controller {
     log_message('error', 'Vote attempt: username=' . $username . ', nisn=' . $nisn_pemilih . ', calon_nisn=' . $calon_nisn . ', opsi=' . $opsi);
 
     if (empty($nisn_pemilih) || empty($username) || empty($calon_nisn) || $opsi === null) {
-    	$this->session->set_flashdata('failed', 'Data tidak lengkap. Silakan login ulang.');
+    	$this->session->set_flashdata('user_failed', 'Data tidak lengkap. Silakan login ulang.');
     	redirect('user/login');
     }
 
@@ -130,7 +130,7 @@ class User extends CI_Controller {
     	redirect('user/viewlogout');
     } else {
     	log_message('error', 'Vote gagal: ' . $this->db->error()['message']);
-    	$this->session->set_flashdata('failed', 'Gagal menyimpan suara. Silakan coba lagi.');
+    	$this->session->set_flashdata('user_failed', 'Gagal menyimpan suara. Silakan coba lagi.');
     	redirect('user/index');
     }
 }
@@ -144,7 +144,7 @@ public function viewlogout() {
     $cek_mpk  = $this->User_Model->sudah_vote($username, 1);
 
     if (! $cek_osis || ! $cek_mpk) {
-        $this->session->set_flashdata('failed', 'Anda belum memilih OSIS dan MPK. Silakan selesaikan voting terlebih dahulu.');
+        $this->session->set_flashdata('user_failed', 'Anda belum memilih OSIS dan MPK. Silakan selesaikan voting terlebih dahulu.');
         redirect('user/index');
     }
 
