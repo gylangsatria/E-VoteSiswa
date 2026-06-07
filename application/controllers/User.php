@@ -91,8 +91,10 @@ class User extends CI_Controller {
     		'sudah_memilih_mpk'   => $this->User_Model->sudah_vote($username, 1)
     	];
 
+    	$navbar_data = ['username' => $username];
+
     	$this->load->view('user/head');
-    	$this->load->view('user/navbar');
+    	$this->load->view('user/navbar', $navbar_data);
     	$this->load->view('user/index', $data);
     	$this->load->view('user/footer');
     }
@@ -149,8 +151,9 @@ public function viewlogout() {
     }
 
     // Jika sudah lengkap, tampilkan halaman logout
+    $navbar_data = ['username' => $username];
     $this->load->view('user/head');
-    $this->load->view('user/navbar');
+    $this->load->view('user/navbar', $navbar_data);
     $this->load->view('user/viewlogout');
     $this->load->view('user/footer');
 }

@@ -11,5 +11,7 @@
     <link href='<?php echo base_url(); ?>asset/vendor/bootstrap-tour/build/css/bootstrap-tour.min.css' rel='stylesheet'>
     <link href="<?php echo base_url(); ?>asset/css/charisma-app.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>asset/vendor/responsive-tables/responsive-tables.css" rel='stylesheet'>
+    <link href="<?php echo base_url(); ?>asset/css/main.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
