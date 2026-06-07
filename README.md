@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 7 Juni 2026 | 1.3 | Modernisasi halaman voting siswa: progress tracker OSIS/MPK, kartu kandidat dengan animasi, modal konfirmasi pilihan, navbar gradient, halaman sukses voting |
 | 7 Juni 2026 | 1.2.1 | Perbaikan flashdata conflict, upload massal DPT (CSV/XLS/XLSX), & Dockerfile |
 | 21 Mei 2026 | 1.2 | Modernisasi UI/UX tampilan aplikasi |
 | 20 Mei 2026 | 1.1 | Kompatibilitas PHP 8.1, perbaikan keamanan & bug (lihat [CHANGELOG.md](CHANGELOG.md)) |
@@ -27,6 +28,9 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 ## Fitur
 
+- **Tampilan Voting Modern** — Progress tracker OSIS/MPK, kartu kandidat dengan efek hover & animasi, modal konfirmasi pilihan
+- **Navbar Gradient** — Navigasi modern dengan gradien warna dan ikon SVG
+- **Halaman Sukses** — Tampilan setelah voting selesai dengan desain yang informatif
 - **Reset Data** — Menghapus seluruh data pemilihan untuk periode berikutnya
 - **Kunci Akun** — Mengunci akun DPT setelah memilih, mencegah pemilihan ganda
 - **Reset User** — Membuka kembali akun DPT yang terkunci jika ada komplain
