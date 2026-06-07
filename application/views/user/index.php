@@ -3,8 +3,8 @@
 	<div class="vote-progress-wrapper">
 		<div class="vote-progress-header">
 			<h2>
-				<img src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" class="vote-logo">
-				<span>E-VoteSiswa</span>
+				<img src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" class="vote-logo" onerror="this.style.display='none'">
+				<span style="color:#fff">E-VoteSiswa</span>
 			</h2>
 			<p>Pilihlah Calon Ketua OSIS dan MPK dengan bijak!</p>
 		</div>

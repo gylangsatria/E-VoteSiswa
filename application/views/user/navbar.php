@@ -7,10 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
-        <span class="brand-icon">
-          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </span>
+      <a class="navbar-brand" href="<?php echo base_url('#'); ?>" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500;">
         E-VoteSiswa
       </a>
     </div>
