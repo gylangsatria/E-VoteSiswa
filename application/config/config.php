@@ -382,11 +382,11 @@ $config['encryption_key'] = 'e5a8d9f1c2b3a4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'files';
+$config['sess_driver'] = getenv('SESS_DRIVER') ?: 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = getenv('SESS_SAVE_PATH') ?: APPPATH.'cache/sessions/';
-$config['sess_match_ip'] = TRUE;
+$config['sess_match_ip'] = getenv('SESS_MATCH_IP') === '1';
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = TRUE;
 

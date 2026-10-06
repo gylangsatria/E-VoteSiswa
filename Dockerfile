@@ -5,7 +5,8 @@ RUN a2enmod rewrite
 
 # Install required PHP extensions
 RUN docker-php-ext-install mysqli pdo pdo_mysql && \
-    docker-php-ext-enable mysqli
+    docker-php-ext-enable mysqli && \
+    docker-php-ext-enable opcache
 
 # Set working directory
 WORKDIR /var/www/html

@@ -53,7 +53,9 @@ CREATE TABLE `tb_pilih` (
   `opsi_mpkosis` tinyint(1) DEFAULT NULL COMMENT '0 = MPK, 1 = OSIM',
   `calon_nisn` varchar(32) NOT NULL,
   `waktu_vote` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_pilih`)
+  PRIMARY KEY (`id_pilih`),
+  KEY `idx_pilih_username_opsi` (`username`,`opsi_mpkosis`),
+  KEY `idx_pilih_calon` (`calon_nisn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP TABLE IF EXISTS `tb_pilihan`;
@@ -75,7 +77,8 @@ CREATE TABLE `tb_siswa` (
   `jk` char(1) NOT NULL,
   `kd_kelas` int DEFAULT NULL,
   `hadir` varchar(12) NOT NULL DEFAULT 'Tidak Hadir',
-  PRIMARY KEY (`username`)
+  PRIMARY KEY (`username`),
+  KEY `idx_siswa_kelas` (`kd_kelas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 DROP VIEW IF EXISTS `view_daftarhadir`;
