@@ -54,7 +54,7 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
         <div class="card-header"><h2>Reset Data Pemilihan</h2></div>
         <div class="card-body">
             <p class="text-sm text-slate-600">Fitur ini akan menghapus semua data kecuali Identitas <?php echo org_label('satuan'); ?> dan Data Kelas.</p>
-            <p class="mt-2 text-sm text-slate-600">Gunakan apabila pemilihan telah selesai dan Anda telah mengunduh <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/cetakdaftarhadir'); ?>">Daftar Hadir</a> dan <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a>.</p>
+            <p class="mt-2 text-sm text-slate-600">Gunakan apabila pemilihan telah selesai dan Anda telah mengunduh <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/daftarhadir'); ?>">Daftar Hadir</a> dan <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a>.</p>
             <?php if($this->session->flashdata('reset')) { ?>
                 <div class="alert alert-success mt-4"><?php echo $this->session->flashdata('reset'); ?></div>
             <?php } ?>
@@ -70,7 +70,9 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
                     <p class="mt-2">Apakah anda yakin ingin me-reset semua data?</p>
                 </div>
                 <div class="flex justify-end gap-2 border-t border-slate-200 px-5 py-3">
-                    <a class="btn btn-success" href="<?php echo base_url('index.php/admin/resetdata'); ?>">Ya</a>
+                    <?php echo form_open('admin/resetdata'); ?>
+                        <button type="submit" class="btn btn-success">Ya</button>
+                    <?php echo form_close(); ?>
                     <button type="button" class="btn btn-danger" data-close-dialog>Batal</button>
                 </div>
             </dialog>

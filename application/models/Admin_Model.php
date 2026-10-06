@@ -201,6 +201,21 @@ Class Admin_Model extends CI_Model {
 	public function dataadadpt($username) {
 		return $this->db->get_where('tb_siswa', array('username' => $username))->num_rows() > 0;
 	}
+	public function login_attempts($username) {
+		$row = $this->db->get_where('tb_login_attempts', array('username' => substr($username, 0, 32)))->row_array();
+		return $row ? (int) $row['attempts'] : 0;
+	}
+	public function record_login_attempt($username) {
+		$this->db->query(
+			'INSERT INTO tb_login_attempts (username, attempts) VALUES (?, 1)
+			 ON DUPLICATE KEY UPDATE attempts = attempts + 1',
+			array(substr($username, 0, 32))
+		);
+		return $this->db->affected_rows();
+	}
+	public function reset_login_attempts($username) {
+		return $this->db->delete('tb_login_attempts', array('username' => substr($username, 0, 32)));
+	}
 	public function countcalon() {
 		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_pilihan")->row_array();
 	}
@@ -218,7 +233,7 @@ Class Admin_Model extends CI_Model {
 		return $this->db
 		->select('p.no, p.nama, p.nama_wakil, p.photo, p.opsi_mpkosis, COUNT(v.id_pilih) AS jumlah')
 		->from('tb_pilihan p')
-		->join('tb_pilih v', 'p.nisn = v.calon_nisn', 'left')
+		->join('tb_pilih v', 'p.nisn = v.calon_nisn AND p.opsi_mpkosis = v.opsi_mpkosis', 'left')
 		->group_by('p.nisn')
 		->order_by('p.opsi_mpkosis ASC, jumlah DESC')
 		->get()

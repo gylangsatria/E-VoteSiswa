@@ -25,9 +25,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 /*$config['base_url'] = 'http://10.1.80.36:8080';*/
 
-$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === "on") ? "https" : "http");
-$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
-$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$config['base_url'] = getenv('APP_BASE_URL');
+if (empty($config['base_url'])) {
+	if (defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
+		$config['base_url'] = 'http://localhost/';
+	} else {
+		$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+		if (preg_match('/^[A-Za-z0-9.\-]+(:[0-9]{1,5})?$/', $host)) {
+			$scheme = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+				|| (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) ? 'https' : 'http';
+			$config['base_url'] = $scheme . '://' . $host;
+			$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+		} else {
+			$config['base_url'] = 'http://localhost/';
+		}
+	}
+}
 
 
 /*
@@ -329,7 +342,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'e5a8d9f1c2b3a4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8';
+$config['encryption_key'] = getenv('ENCRYPTION_KEY') ?: 'e5a8d9f1c2b3a4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8';
 
 /*
 |--------------------------------------------------------------------------
@@ -389,6 +402,7 @@ $config['sess_save_path'] = getenv('SESS_SAVE_PATH') ?: APPPATH.'cache/sessions/
 $config['sess_match_ip'] = getenv('SESS_MATCH_IP') === '1';
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = TRUE;
+$config['sess_samesite'] = 'Lax';
 
 /*
 |--------------------------------------------------------------------------
@@ -408,7 +422,7 @@ $config['sess_regenerate_destroy'] = TRUE;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
+$config['cookie_secure']	= ( ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 $config['cookie_httponly'] 	= TRUE;
 
 /*
@@ -437,7 +451,7 @@ $config['standardize_newlines'] = FALSE;
 |          for backwards compatibility purposes!
 |
 */
-$config['global_xss_filtering'] = TRUE;
+$config['global_xss_filtering'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------

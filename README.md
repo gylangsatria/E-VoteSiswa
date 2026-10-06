@@ -10,6 +10,8 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 7 Oktober 2026 | 1.5.1 | Keamanan lanjutan (uji brutal): atasi Host Header Injection, Reflected XSS keyword, ballot manipulation, forced-action GET (wajib POST), session fixation (rotasi ID), SameSite cookie, array-injection DoS, validasi ekstensi upload, tutup kebocoran docker-compose/ini/entrypoint |
+| 7 Oktober 2026 | 1.5.0 | Perbaikan keamanan: guard semua endpoint admin, CSRF + POST untuk aksi destruktif, rate-limit login persisten (DB), escape output XSS, hardening Docker (DB/PMA tidak terekspos) |
 | 7 Oktober 2026 | 1.4.1 | Perbaikan bug: status voting OSIS/MPK tertukar, isolasi sesi admin vs siswa, ganti password admin, cegah duplikat DPT, validasi MIME import, hapus dead code |
 | 7 Oktober 2026 | 1.4.0 | Pilihan jenis satuan (Sekolah/Madrasah) dengan label dinamis OSIS/OSIM, perbaikan update identitas, dan perapian form kandidat |
 | 6 Oktober 2026 | 1.3.2 | Ganti istilah OSIS → OSIM, tambah kolom calon wakil ketua pada form & data kandidat |
@@ -93,14 +95,19 @@ Setelah import database, admin sudah langsung bisa login dengan:
 Konfigurasi Docker sudah terintegrasi langsung di branch `main`.
 
 ```bash
+cp .env.example .env        # lalu ubah DB_PASSWORD dan ENCRYPTION_KEY
 docker compose up -d
 ```
 
 | Layanan | URL | Kredensial |
 |---------|-----|------------|
 | Aplikasi | `http://localhost:8080` | Admin: `admin` / `admin` — Siswa: NISN |
-| phpMyAdmin | `http://localhost:8081` | `root` / `rootpassword` |
-| MySQL | `localhost:3308` | `root` / `rootpassword`, database `db_pilketos` |
+
+MySQL dan phpMyAdmin **tidak** dipublikasikan ke host. Database hanya dapat diakses dari dalam jaringan Docker (`db:3306`). Untuk membuka phpMyAdmin secara sementara (hanya bind ke localhost):
+
+```bash
+docker compose --profile tools up -d phpmyadmin
+```
 
 Database `db_pilketos` otomatis dibuat dan di-import dari `db_evotesiswa.sql` saat container pertama kali dijalankan.
 
@@ -112,7 +119,7 @@ docker compose down          # hentikan
 docker compose down -v       # hentikan + hapus data database
 ```
 
-Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `SESS_SAVE_PATH`) sehingga lokal tanpa Docker tetap jalan dengan nilai default XAMPP.
+Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `SESS_SAVE_PATH`, `ENCRYPTION_KEY`, `CI_ENV`) sehingga lokal tanpa Docker tetap jalan dengan nilai default XAMPP.
 
 
 ---

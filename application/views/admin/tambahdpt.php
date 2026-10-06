@@ -50,7 +50,7 @@
 					<label class="label mt-4" for="kd_kelas">Kelas</label>
 					<select class="input" name="kd_kelas" id="kd_kelas" required>
 						<?php foreach($datakelas as $load) { ?>
-							<option value="<?php echo $load['kd_kelas']; ?>"> (<?php echo $load['kd_kelas']; ?>) <?php echo $load['nm_kelas']; ?> </option>
+							<option value="<?php echo htmlspecialchars($load['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?>"> (<?php echo htmlspecialchars($load['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?>) <?php echo htmlspecialchars($load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?> </option>
 						<?php } ?>
 					</select>
 					<button type="submit" class="btn btn-primary mt-5"><i class="fa fa-save"></i> Simpan DPT</button>

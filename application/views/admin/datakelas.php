@@ -31,9 +31,9 @@
 <div class="card">
 	<div class="card-header">
 		<h2>Data Kelas</h2>
-		<form method="post" action="<?= base_url('index.php/admin/hapussemuakelas'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data kelas?');">
+		<?php echo form_open('admin/hapussemuakelas', array('onsubmit' => "return confirm('Apakah anda yakin ingin menghapus semua data kelas?');")); ?>
 			<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
-		</form>
+		<?php echo form_close(); ?>
 	</div>
 	<div class="card-body">
 		<div class="table-wrap">
@@ -53,10 +53,12 @@
 					?>
 						<tr>
 							<td class="text-center"><?php echo $no++; ?></td>
-							<td><?php echo $load['kd_kelas']; ?></td>
-							<td><?php echo $load['nm_kelas']; ?></td>
+							<td><?php echo htmlspecialchars($load['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
+							<td><?php echo htmlspecialchars($load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
 							<td>
-								<a class="btn btn-warning btn-sm" href="<?php echo base_url('index.php/admin/hapuskelas'); ?>/<?php echo $load['kd_kelas']; ?>" onClick="return confirm('Apakah anda yakin ingin menghapus data ini?');"><i class="fa fa-remove"></i> Hapus</a>
+								<?php echo form_open('admin/hapuskelas/'.$load['kd_kelas'], array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?');")); ?>
+									<button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-remove"></i> Hapus</button>
+								<?php echo form_close(); ?>
 							</td>
 						</tr>
 					<?php

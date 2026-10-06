@@ -27,7 +27,7 @@ foreach($datakddpt as $load) { $dpt = $load; }
 			<label class="label mt-4" for="edp-kelas">Kelas</label>
 			<select class="input" name="kd_kelas" id="edp-kelas" required>
 				<?php foreach($datakelas as $kelas) { ?>
-					<option value="<?php echo $kelas['kd_kelas']; ?>" <?php echo ($kelas['kd_kelas'] == $dpt['kd_kelas']) ? 'selected' : ''; ?>> <?php echo $kelas['nm_kelas']; ?> </option>
+					<option value="<?php echo htmlspecialchars($kelas['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?>" <?php echo ($kelas['kd_kelas'] == $dpt['kd_kelas']) ? 'selected' : ''; ?>> <?php echo htmlspecialchars($kelas['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?> </option>
 				<?php } ?>
 			</select>
 			<button type="submit" class="btn btn-primary mt-5"><i class="fa fa-save"></i> Simpan DPT</button>

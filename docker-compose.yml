@@ -11,11 +11,13 @@ services:
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       - DB_HOST=db
-      - DB_USERNAME=root
-      - DB_PASSWORD=rootpassword
-      - DB_NAME=db_pilketos
+      - DB_USERNAME=${DB_USERNAME:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-rootpassword}
+      - DB_NAME=${DB_NAME:-db_pilketos}
       - SESS_SAVE_PATH=/tmp/sessions
-      - CI_ENV=development
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8080}
+      - CI_ENV=${CI_ENV:-production}
     depends_on:
       db:
         condition: service_healthy
@@ -25,16 +27,14 @@ services:
   db:
     image: mysql:8.0
     container_name: evotesiswa-db
-    ports:
-      - "3308:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: db_pilketos
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-db_pilketos}
     volumes:
       - db_data:/var/lib/mysql
       - ./db_evotesiswa.sql:/docker-entrypoint-initdb.d/01-init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-rootpassword}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,12 +45,12 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: evotesiswa-phpmyadmin
-    ports:
-      - "8081:80"
+    profiles:
+      - tools
     environment:
       PMA_HOST: db
       PMA_USER: root
-      PMA_PASSWORD: rootpassword
+      PMA_PASSWORD: ${DB_PASSWORD:-rootpassword}
       UPLOAD_LIMIT: 100M
     depends_on:
       - db

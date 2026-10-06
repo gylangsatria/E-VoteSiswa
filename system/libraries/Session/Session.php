@@ -286,13 +286,14 @@ class CI_Session {
 		isset($params['cookie_domain']) OR $params['cookie_domain'] = config_item('cookie_domain');
 		isset($params['cookie_secure']) OR $params['cookie_secure'] = (bool) config_item('cookie_secure');
 
-		session_set_cookie_params(
-			$params['cookie_lifetime'],
-			$params['cookie_path'],
-			$params['cookie_domain'],
-			$params['cookie_secure'],
-			TRUE // HttpOnly; Yes, this is intentional and not configurable for security reasons
-		);
+		session_set_cookie_params(array(
+			'lifetime' => $params['cookie_lifetime'],
+			'path'     => $params['cookie_path'],
+			'domain'   => $params['cookie_domain'],
+			'secure'   => $params['cookie_secure'],
+			'httponly' => TRUE,
+			'samesite' => config_item('sess_samesite') ?: 'Lax'
+		));
 
 		if (empty($expiration))
 		{

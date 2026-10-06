@@ -1,13 +1,13 @@
 <div class="card">
     <div class="card-header">
         <h2>Data Pemilih Tetap (DPT)</h2>
-        <form method="post" action="<?= base_url('index.php/admin/hapussemuadpt'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data DPT?');">
+        <?php echo form_open('admin/hapussemuadpt', array('onsubmit' => "return confirm('Apakah anda yakin ingin menghapus semua data DPT?');")); ?>
             <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
-        </form>
+        <?php echo form_close(); ?>
     </div>
     <div class="card-body">
         <form method="GET" action="<?php echo base_url('index.php/admin/datadpt'); ?>" class="mb-4 flex flex-col gap-2 sm:flex-row">
-            <input type="text" name="keyword" class="input sm:max-w-xs" placeholder="Cari NISN atau Nama..." value="<?php echo $this->input->get('keyword'); ?>">
+            <input type="text" name="keyword" class="input sm:max-w-xs" placeholder="Cari NISN atau Nama..." value="<?php echo htmlspecialchars($this->input->get('keyword'), ENT_QUOTES, 'UTF-8'); ?>">
             <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Cari</button>
             <a href="<?php echo base_url('index.php/admin/datadpt'); ?>" class="btn btn-default">Reset</a>
         </form>
@@ -31,14 +31,16 @@
                     ?>
                         <tr>
                             <td class="text-center"><?php echo $no++; ?></td>
-                            <td class="text-center"><?php echo $load['username']; ?></td>
-                            <td><?php echo $load['nm_siswa']; ?></td>
-                            <td class="text-center"><?php echo $load['jk']; ?></td>
-                            <td><?php echo $load['nm_kelas']; ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($load['username'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars($load['nm_siswa'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($load['jk'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars($load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td>
                                 <div class="flex flex-wrap gap-2">
-                                    <a class="btn btn-primary btn-sm" href="<?php echo base_url('index.php/admin/editdpt/'.$load['username']); ?>"><i class="fa fa-pencil"></i> Edit</a>
-                                    <a class="btn btn-warning btn-sm" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" href="<?php echo base_url('index.php/admin/hapusdpt/'.$load['username']); ?>"><i class="fa fa-remove"></i> Hapus</a>
+                                    <a class="btn btn-primary btn-sm" href="<?php echo base_url('index.php/admin/editdpt/'.rawurlencode($load['username'])); ?>"><i class="fa fa-pencil"></i> Edit</a>
+                                    <?php echo form_open('admin/hapusdpt/'.$load['username'], array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?')")); ?>
+                                        <button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-remove"></i> Hapus</button>
+                                    <?php echo form_close(); ?>
                                 </div>
                             </td>
                         </tr>

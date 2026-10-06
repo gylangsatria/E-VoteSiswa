@@ -5,7 +5,41 @@
 
 ---
 
-## [1.4.1] - 7 Oktober 2026
+## [1.5.1] - 7 Oktober 2026
+
+### Security
+- **Host Header Injection** — `base_url` tidak lagi memakai `HTTP_HOST` mentah. Produksi memakai `APP_BASE_URL`; jika kosong pada `ENVIRONMENT=production`, fallback ke nilai tetap (tidak mengikuti header Host). Header Host sekarang hanya dipakai di mode development.
+- **Reflected XSS** — nilai `?keyword` pada halaman DPT kini di-escape (`htmlspecialchars`) saat di-render ke `value` input.
+- **Ballot Manipulation** — `User::vote` tidak lagi memercayai `nisn`/`opsi_mpkosis` dari klien. Varian `tb_pilihan` divalidasi server-side; `opsi_mpkosis` diambil dari baris kandidat, bukan dari POST. Vote untuk kandidat tak dikenal ditolak.
+- **Forced-Action / CSRF GET** — seluruh endpoint tulis admin (`simpankelas`, `simpandpt`, `simpancalon`, `updatecalon`, `updatedpt`, `updateidsekolah`, `simpansekolah`, `updatedatapilketos`, `updatepassword`, `resetuser`, `reset_vote`, `hapussemuakelas`, `hapussemuadpt`, `simpanmassaldpt`, dll.) dan `User::vote` kini menolak metode non-POST (405).
+- **Session Fixation** — ID sesi dirotasi (`sess_regenerate`) saat login admin dan siswa berhasil.
+- **Cookie Hardening** — cookie sesi dan CSRF kini menyetel `SameSite=Lax` (via `sess_samesite`).
+- **Array Injection (DoS)** — input `username`/`password` divalidasi bertipe string sebelum diproses; mencegah error 500/response kosong akibat `username[]=`.
+- **Upload Berbahaya** — impor DPT massal kini membatasi ekstensi (`.xls/.xlsx/.csv`) selain validasi MIME.
+- **Exposure Konfigurasi** — berkas `docker-compose.yml`, `docker/entrypoint.sh`, `docker/php/php.ini`, `.env.example`, dll. tidak lagi dapat diunduh (deny list `.htaccess` diperluas + direktori `docker/` diblokir).
+
+### Changed
+- `application/config/config.php`: `base_url` env-aware (`APP_BASE_URL`), `sess_samesite`.
+- `system/libraries/Session/Session.php` & `system/core/Security.php`: dukungan `SameSite`.
+- `.env.example` & `docker-compose.yml`: variabel `APP_BASE_URL`.
+
+---
+
+## [1.5.0] - 7 Oktober 2026
+
+### Security
+- **Guard Mutasi Admin** — `Admin::__construct()` kini menolak seluruh aksi kecuali `login`/`loginvalidation` bila sesi admin tidak ada. Sebelumnya endpoint mutasi (`simpankelas`, `simpancalon`, `updateidsekolah`, `reset_vote`, `hapussemuadpt`, dll.) dapat dipanggil tanpa login karena guard hanya ada di fungsi view.
+- **CSRF untuk Aksi Destruktif** — `hapuscalon`, `hapusdpt`, `hapuskelas`, `hapussemuakelas`, `hapussemuadpt`, `resetdata`, `reset_vote`, dan `cetakdaftarhadir` kini wajib `POST` (GET ditolak 405) dan memakai `form_open` sehingga token CSRF wajib. Menutup CSRF berbasis `<img src>` yang memanfaatkan `Security::csrf_verify()` yang tidak memeriksa GET.
+- **Rate-Limit Login Persisten** — counter percobaan login admin dan siswa dipindah dari session ke tabel `tb_login_attempts` (per akun), sehingga tidak dapat dilewati dengan menghapus cookie/lintas session.
+- **XSS Output** — `global_xss_filtering` dimatikan (cegah double-encode) dan seluruh output data dinamis kini di-escape eksplisit (`datadpt`, `daftarhadir`, `datakelas`, `hasilvote`, `footer`, `editdpt`, `tambahdpt`). Data tetap tersimpan utuh tanpa mutasi.
+- **Cek Registrasi Valid** — `cetakdaftarhadir` (PDF berisi PII) kini memerlukan sesi admin dan metode POST.
+
+### Changed
+- **Infra Docker** — `db` tidak lagi mempublikasikan port MySQL (hanya jaringan internal); `phpmyadmin` masuk profile `tools` (tidak jalan default) dan tidak lagi dipublikasikan ke host. Kredensial DB dan `encryption_key` dibaca dari environment (`.env`, lihat `.env.example`); `.env` di-`gitignore`.
+- **Cookie & Environment** — `cookie_secure` otomatis `TRUE` saat HTTPS aktif; default `CI_ENV` compose menjadi `production`.
+- **DB** — tabel baru `tb_login_attempts` (tersedia di `db_evotesiswa.sql` dan `db_migrate_from_md5.sql`).
+
+---
 
 ### Fixed
 - **Pemetaan Status Voting Tertukar** — Pada halaman voting, status "sudah memilih" untuk OSIS/OSIM dan MPK sebelumnya tertukar (`opsi_mpkosis` 0/1 dipakai kebalik). Akibatnya siswa baru memilih salah satu kategori tetapi kategori lain yang terkunci, sehingga voting tidak bisa diselesaikan. Kini dipetakan sesuai penandaan database (`0 = MPK`, `1 = OSIS/OSIM`), termasuk di `viewlogout`.

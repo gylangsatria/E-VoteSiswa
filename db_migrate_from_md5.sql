@@ -32,3 +32,11 @@ ALTER TABLE tb_pilihan ADD COLUMN nama_wakil VARCHAR(100) NOT NULL DEFAULT '' AF
 -- 6. Tambah kolom jenis satuan pendidikan (sekolah/madrasah) untuk label dinamis
 ALTER TABLE tb_identitassekolah ADD COLUMN jenis VARCHAR(10) NOT NULL DEFAULT 'sekolah' AFTER nip;
 
+-- 7. Tabel rate-limit login (persisten, tahan lintas session)
+CREATE TABLE IF NOT EXISTS tb_login_attempts (
+  username VARCHAR(32) NOT NULL,
+  attempts INT NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+

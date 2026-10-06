@@ -29,9 +29,9 @@ foreach ($vote as $v) {
 <div class="card">
     <div class="card-header">
         <h2>Hasil Voting</h2>
-        <form method="post" action="<?= base_url('index.php/admin/reset_vote'); ?>" onsubmit="return confirm('Yakin ingin mereset semua hasil vote?');">
+        <?php echo form_open('admin/reset_vote', array('onsubmit' => "return confirm('Yakin ingin mereset semua hasil vote?');")); ?>
             <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i> Reset hasil vote</button>
-        </form>
+        <?php echo form_close(); ?>
     </div>
     <div class="card-body">
         <?php foreach ($kategori as $key => $kat): ?>
@@ -44,8 +44,8 @@ foreach ($vote as $v) {
                 ?>
                     <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                         <div class="bg-slate-50 py-2 text-center text-xs font-bold uppercase tracking-wide text-slate-500"><?= $kat['label']; ?></div>
-                        <h2 class="px-4 pt-3 text-base font-semibold text-slate-800">No <?= $datavote['no']; ?> | <?= $datavote['nama']; ?> / <?= $datavote['nama_wakil']; ?></h2>
-                        <img class="h-[250px] w-full object-cover" src="<?= base_url(); ?>asset/img/<?= $datavote['photo']; ?>" alt="Foto Kandidat">
+                        <h2 class="px-4 pt-3 text-base font-semibold text-slate-800">No <?= (int) $datavote['no']; ?> | <?= htmlspecialchars($datavote['nama'], ENT_QUOTES, 'UTF-8'); ?> / <?= htmlspecialchars($datavote['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></h2>
+                        <img class="h-[250px] w-full object-cover" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($datavote['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto Kandidat">
                         <hr class="border-slate-200"/>
                         <div class="pb-4 text-center">
                             <p class="text-sm text-slate-500">Jumlah Vote</p>

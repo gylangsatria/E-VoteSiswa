@@ -82,6 +82,13 @@ CREATE TABLE `tb_siswa` (
   KEY `idx_siswa_kelas` (`kd_kelas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE `tb_login_attempts` (
+  `username` varchar(32) NOT NULL,
+  `attempts` int NOT NULL DEFAULT 0,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 DROP VIEW IF EXISTS `view_daftarhadir`;
 DROP VIEW IF EXISTS `view_vote`;
 

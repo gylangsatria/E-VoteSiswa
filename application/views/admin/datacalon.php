@@ -37,9 +37,9 @@
                                 <a class="btn btn-info btn-sm" href="<?php echo base_url('index.php/admin/editcalon/'.htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8')); ?>">
                                     <i class="fa fa-pencil"></i> Edit
                                 </a>
-                                <a class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?');" href="<?php echo base_url('index.php/admin/hapuscalon/'.htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8')); ?>">
-                                    <i class="fa fa-trash"></i> Hapus
-                                </a>
+                                <?php echo form_open('admin/hapuscalon/'.$loaddata['nisn'], array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?');")); ?>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>
+                                <?php echo form_close(); ?>
                             </div>
                         </td>
                     </tr>

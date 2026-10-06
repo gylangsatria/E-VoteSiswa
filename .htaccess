@@ -14,14 +14,14 @@
 
 <IfModule mod_authz_core.c>
     # Apache 2.4
-    <FilesMatch "\.(md|sql|log|env|json|lock)$">
+    <FilesMatch "\.(md|sql|log|env|json|lock|ya?ml|ini|sh|conf|dist|bak|swp|orig|save|copy|example)$">
         Require all denied
     </FilesMatch>
 </IfModule>
 
 <IfModule !mod_authz_core.c>
     # Apache 2.2
-    <FilesMatch "\.(md|sql|log|env|json|lock)$">
+    <FilesMatch "\.(md|sql|log|env|json|lock|ya?ml|ini|sh|conf|dist|bak|swp|orig|save|copy|example)$">
         Deny from all
     </FilesMatch>
 </IfModule>
@@ -31,6 +31,7 @@ RedirectMatch 403 ^/application/?$
 RedirectMatch 403 ^/system/?$
 RedirectMatch 403 ^/user_guide/?$
 RedirectMatch 403 ^/vendor/?$
+RedirectMatch 403 ^/docker/?$
 RedirectMatch 403 /\.git
 
 # Prevent directory listing

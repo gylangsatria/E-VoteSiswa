@@ -4,9 +4,9 @@
 <div class="card">
     <div class="card-header">
         <h2>Daftar Hadir Pemilihan Ketua <?php echo org_label('organisasi'); ?></h2>
-        <form method="post" action="<?= base_url('index.php/admin/cetakdaftarhadir'); ?>">
+        <?php echo form_open('admin/cetakdaftarhadir'); ?>
             <button class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download Daftar Hadir</button>
-        </form>
+        <?php echo form_close(); ?>
     </div>
 
     <div class="card-body">
@@ -40,10 +40,10 @@
                     <?php $no = 1; foreach($daftarhadir as $loaddata): ?>
                     <tr>
                         <td class="text-center"><?= $no++; ?></td>
-                        <td><?= $loaddata['username']; ?></td>
-                        <td><?= $loaddata['nm_siswa']; ?></td>
-                        <td><?= $loaddata['nm_kelas']; ?></td>
-                        <td class="text-center"><?= $loaddata['hadir']; ?></td>
+                        <td><?= htmlspecialchars($loaddata['username'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?= htmlspecialchars($loaddata['nm_siswa'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?= htmlspecialchars($loaddata['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><?= htmlspecialchars($loaddata['hadir'], ENT_QUOTES, 'UTF-8'); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

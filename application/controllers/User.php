@@ -21,46 +21,39 @@ class User extends CI_Controller {
 	}
 
 	public function loginvalidation() {
-		// Rate limiting: max 5 percobaan dalam 5 menit
-		$attempts = $this->session->userdata('login_attempts') ?: 0;
-		$blocked_until = $this->session->userdata('login_blocked_until');
-
-		if ($blocked_until && time() < $blocked_until) {
-			$wait = ceil(($blocked_until - time()) / 60);
-			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam ' . $wait . ' menit.');
-			redirect('user/login');
-			return;
-		}
-
-		if ($attempts >= 5) {
-			$this->session->set_userdata('login_blocked_until', time() + 300); // 5 menit
-			$this->session->set_userdata('login_attempts', 0);
-			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login. Silakan coba lagi dalam 5 menit.');
-			redirect('user/login');
-			return;
-		}
-
 		$username = $this->input->post('username', TRUE);
 		$password = $this->input->post('password', TRUE);
+
+		if (! is_string($username) || ! is_string($password)) {
+			$this->session->set_flashdata('user_failed', 'Username atau Password salah');
+			redirect('user/login');
+			return;
+		}
+
+		if ($this->User_Model->login_attempts($username) >= 5) {
+			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login untuk akun ini. Silakan hubungi panitia.');
+			redirect('user/login');
+			return;
+		}
 
 		$result = $this->User_Model->login($username, $password);
         $valid  = $this->User_Model->valid($username);
 
         if ($valid === true) {
-        	$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
         	$this->session->set_flashdata('block', 'Anda sudah pernah melakukan voting. Akun Anda dinonaktifkan. Jika ini kesalahan, hubungi panitia.');
         	redirect('user/login');
         }
 
         if (is_array($result)) {
-        	$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
+        	$this->User_Model->reset_login_attempts($username);
+        	$this->session->sess_regenerate(TRUE);
         	$this->session->set_userdata([
         		'nisn' => $result['username']
 ]);
 
         	redirect('user/index');
         } else {
-        	$this->session->set_userdata('login_attempts', $attempts + 1);
+        	$this->User_Model->record_login_attempt($username);
         	$this->session->set_flashdata('user_failed', 'Username atau Password salah');
         	redirect('user/login');
         }
@@ -103,15 +96,27 @@ class User extends CI_Controller {
     		redirect('user/login');
     	}
 
-    $calon_nisn   = $this->input->post('nisn', TRUE); // NISN calon
-    $opsi         = $this->input->post('opsi_mpkosis', TRUE); // 0 = MPK, 1 = OSIM
-    $username     = $this->session->userdata('nisn');
-    $nisn_pemilih = $this->session->userdata('nisn');
+    	if (strtoupper($this->input->method()) !== 'POST') {
+    		show_error('Metode tidak diizinkan.', 405);
+    	}
 
-    if (empty($nisn_pemilih) || empty($username) || empty($calon_nisn) || $opsi === null) {
+    $calon_nisn   = $this->input->post('nisn', TRUE); // NISN calon
+    $username     = $this->session->userdata('nisn');
+
+    if (empty($username) || empty($calon_nisn) || ! is_string($calon_nisn)) {
     	$this->session->set_flashdata('user_failed', 'Data tidak lengkap. Silakan login ulang.');
     	redirect('user/login');
+    	return;
     }
+
+    $calon = $this->User_Model->calon_select($calon_nisn);
+    if ($calon === NULL) {
+    	$this->session->set_flashdata('user_failed', 'Kandidat tidak ditemukan.');
+    	redirect('user/index');
+    	return;
+    }
+
+    $opsi = (int) $calon['opsi_mpkosis'];
 
     // Cek apakah sudah vote untuk kategori ini
     if ($this->User_Model->sudah_vote($username, $opsi)) {
@@ -120,7 +125,7 @@ class User extends CI_Controller {
     }
 
     // Simpan vote
-    $simpan = $this->User_Model->vote($username, $nisn_pemilih, $calon_nisn, $opsi);
+    $simpan = $this->User_Model->vote($username, $calon_nisn);
     $this->User_Model->hadir($username);
 
     if ($simpan) {

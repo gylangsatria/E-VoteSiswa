@@ -7,7 +7,7 @@
     <div class="flex flex-col items-center justify-between gap-2 sm:flex-row">
         <p>&copy; <?php echo date('Y') ?> <a class="text-brand-600 hover:underline" href="https://github.com/fpls-software/pilketo" target="_blank">Original Epilketos</a> | <a class="text-brand-600 hover:underline" href="https://gylang.my.id">Recreate by Gylang Satria</a></p>
         <p><b><a class="text-brand-600 hover:underline" href="https://github.com/gylangsatria/E-VoteSiswa" target="_blank">E-VoteSiswa V.1.4.1</a></b></p>
-        <p>Powered by: <a class="text-brand-600 hover:underline" href="#"><?php echo $load['nm_sekolah']; ?></a></p>
+        <p>Powered by: <a class="text-brand-600 hover:underline" href="#"><?php echo htmlspecialchars($load['nm_sekolah'], ENT_QUOTES, 'UTF-8'); ?></a></p>
     </div>
 </footer>
 </body>
