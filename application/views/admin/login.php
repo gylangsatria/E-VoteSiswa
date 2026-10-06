@@ -10,8 +10,8 @@
     <?php include(APPPATH . 'views/partials/tw.php'); ?>
 </head>
 <body class="flex min-h-screen items-center justify-center bg-slate-900 p-5 font-sans">
-    <div class="fixed inset-0 -z-10 bg-cover bg-center" style="background-image:url('<?php echo base_url(); ?>asset/img/backgroundmts.png')"></div>
-    <div class="fixed inset-0 -z-10 bg-slate-900/60"></div>
+    <div class="fixed inset-0 -z-10 bg-cover bg-center" style="background-image:url('<?php echo base_url(); ?>asset/img/background-login.webp')"></div>
+    <div class="fixed inset-0 -z-10 bg-gradient-to-b from-slate-900/70 via-slate-900/60 to-slate-900/80"></div>
 
     <div class="w-full max-w-md rounded-2xl bg-white px-6 py-10 text-center shadow-2xl sm:px-8">
         <img class="mx-auto mb-4 max-w-[120px]" src="<?php echo base_url(); ?>asset/img/logomt11.png" alt="Logo Admin E-VoteSiswa">
