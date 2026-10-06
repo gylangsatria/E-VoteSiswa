@@ -4,7 +4,7 @@
 			<i class="fa fa-check-circle text-5xl"></i>
 		</div>
 		<h2 class="mb-2 text-2xl font-bold text-slate-800">Voting Berhasil!</h2>
-		<p class="mb-6 text-sm text-slate-500">Terima kasih telah berpartisipasi dalam pemilihan OSIM dan MPK.</p>
+		<p class="mb-6 text-sm text-slate-500">Terima kasih telah berpartisipasi dalam pemilihan <?php echo org_label('organisasi'); ?> dan MPK.</p>
 		<div class="mb-6 space-y-2 rounded-xl bg-slate-50 px-5 py-4 text-left text-sm text-slate-700">
 			<div class="flex items-center gap-2.5"><i class="fa fa-check text-brand-500"></i><span>Suara Anda telah tercatat</span></div>
 			<div class="flex items-center gap-2.5"><i class="fa fa-shield text-brand-500"></i><span>Setiap suara dijaga kerahasiaannya</span></div>

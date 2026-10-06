@@ -5,7 +5,7 @@
     <script>alert("Gagal Menghapus Data");</script>
 <?php } ?>
 <div class="card">
-    <div class="card-header"><h2>Data Calon Ketua OSIM dan MPK</h2></div>
+    <div class="card-header"><h2>Data Calon Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
     <div class="card-body">
         <div class="table-wrap">
             <table class="table">
@@ -22,13 +22,13 @@
                 <tbody>
                 <?php
                     foreach($datacalon as $loaddata) {
-                        $jenis = ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK';
+                        $jenis = ($loaddata['opsi_mpkosis'] == 1) ? org_label('organisasi') : 'MPK';
                 ?>
                     <tr>
                         <td class="text-center"><?php echo htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td class="text-center"><span class="badge badge-<?php echo ($jenis == 'OSIM') ? 'primary' : 'warning'; ?>"><?php echo htmlspecialchars($jenis, ENT_QUOTES, 'UTF-8'); ?></span></td>
+                        <td class="text-center"><span class="badge badge-<?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'primary' : 'warning'; ?>"><?php echo htmlspecialchars($jenis, ENT_QUOTES, 'UTF-8'); ?></span></td>
                         <td class="text-center">
                             <img class="mx-auto h-[60px] w-[50px] rounded-md object-cover" src="<?php echo base_url(); ?>/asset/img/<?php echo htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto <?php echo htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?>">
                         </td>

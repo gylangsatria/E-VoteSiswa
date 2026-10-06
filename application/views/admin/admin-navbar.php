@@ -12,9 +12,9 @@
 
             <li class="relative">
                 <details class="group">
-                    <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-brand-600"><i class="fa fa-graduation-cap"></i> Data Sekolah <i class="fa fa-caret-down text-xs"></i></summary>
+                    <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-brand-600"><i class="fa fa-graduation-cap"></i> Data <?php echo org_label('satuan'); ?> <i class="fa fa-caret-down text-xs"></i></summary>
                     <ul class="absolute left-0 z-50 mt-1 w-56 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg">
-                        <li><a class="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-600" href="<?php echo base_url('index.php/admin/idsekolah'); ?>"><i class="fa fa-home"></i> Identitas Sekolah</a></li>
+                        <li><a class="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-600" href="<?php echo base_url('index.php/admin/idsekolah'); ?>"><i class="fa fa-home"></i> Identitas <?php echo org_label('satuan'); ?></a></li>
                         <li><a class="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-600" href="<?php echo base_url('index.php/admin/datakelas'); ?>"><i class="fa fa-th-list"></i> Data Kelas</a></li>
                     </ul>
                 </details>
@@ -67,7 +67,7 @@
             <div class="absolute left-0 right-0 z-50 border-b border-slate-200 bg-white px-4 py-3 shadow-lg">
                 <ul class="flex flex-col gap-1 text-sm">
                     <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php'); ?>"><i class="fa fa-globe"></i> Visit Site</a></li>
-                    <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php/admin/idsekolah'); ?>"><i class="fa fa-home"></i> Identitas Sekolah</a></li>
+                    <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php/admin/idsekolah'); ?>"><i class="fa fa-home"></i> Identitas <?php echo org_label('satuan'); ?></a></li>
                     <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php/admin/datakelas'); ?>"><i class="fa fa-th-list"></i> Data Kelas</a></li>
                     <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php/admin/tambahcalon'); ?>"><i class="fa fa-plus"></i> Tambah Kandidat</a></li>
                     <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url('index.php/admin/datacalon'); ?>"><i class="fa fa-eye"></i> Lihat Kandidat</a></li>

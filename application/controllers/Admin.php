@@ -213,7 +213,8 @@ public function updateidsekolah() {
 	$kab			= $this->input->post('kab');
 	$kpl_sekolah	= $this->input->post('kpl_sekolah');
 	$nip			= $this->input->post('nip');
-	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip);
+	$jenis			= ($this->input->post('jenis') === 'madrasah') ? 'madrasah' : 'sekolah';
+	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip, $jenis);
 	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
 		redirect('admin/idsekolah');
@@ -757,7 +758,7 @@ public function cetakdaftarhadir(){
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','B',16);
 	$pdf->Cell(190,7, $loaddata['nm_sekolah'],0,1,'C');
-	$pdf->Cell(190,7, 'Daftar Hadir Pemilihan Ketua OSIM',0,1,'C');
+	$pdf->Cell(190,7, 'Daftar Hadir Pemilihan Ketua ' . org_label('organisasi'),0,1,'C');
 	$pdf->Cell(10,7,'',0,1);
 	$pdf->SetFont('Arial','B',12);
 	$pdf->Cell(10,10, 'No',1,0, 'C');
@@ -778,7 +779,7 @@ public function cetakdaftarhadir(){
 	$pdf->Cell(115,10, '',0,0, 'L');
 	$pdf->Cell(70,10, $loaddata['desa'].', '. $this->tgl_indo(date('Y-m-d')),0,1, 'L');
 	$pdf->Cell(115,10, '',0,0, 'L');
-	$pdf->Cell(70,10, 'Kepala Sekolah',0,1, 'L');
+	$pdf->Cell(70,10, org_label('kepala'),0,1, 'L');
 	$pdf->Cell(10,20,'',0,1);
 	$pdf->Cell(115,6, '',0,0, 'L');
 	$pdf->SetFont('Arial','B',12);
@@ -824,7 +825,7 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf = new FPDF('L', 'mm', 'Legal');
     $pdf->AddPage();
     $pdf->SetFont('Arial','B',16);
-    $pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIM DAN MPK',0,1,'C');
+    $pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA ' . strtoupper(org_label('organisasi')) . ' DAN MPK',0,1,'C');
     $pdf->Cell(330,7, 'TAHUN PELAJARAN '.$pilketos['tapel'],0,1,'C');
     $pdf->Cell(10,7,'',0,1);
     $pdf->SetFont('Arial','',12);
@@ -838,7 +839,7 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     // Tabel DPT
     $pdf->SetFont('Arial','B',12);
     $pdf->Cell(10,21, 'No',1,0, 'C');
-    $pdf->Cell(90,21, 'Nama Sekolah',1,0, 'C');
+    $pdf->Cell(90,21, 'Nama ' . org_label('satuan'),1,0, 'C');
     $pdf->Cell(60,7, 'Daftar Pemilih Tetap',1,0, 'C');
     $pdf->Cell(60,7, 'Jumlah Yang Menggunakan',1,0, 'C');
     $pdf->Cell(80,7, 'Jumlah Yang Tidak Menggunakan',1,0, 'C');
@@ -880,7 +881,7 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
 
     // Hasil OSIM
     $pdf->Cell(10,7,'',0,1);
-    $pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIM', 0,1);
+    $pdf->Cell(60,7, 'Hasil Pemilihan Ketua ' . org_label('organisasi'), 0,1);
     $pdf->Cell(30,12, 'No Urut',1,0, 'C');
     $pdf->Cell(100,12, 'Nama Kandidat',1,0, 'C');
     $pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
@@ -914,7 +915,7 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf->Cell(220,10, '',0,0, 'L');
     $pdf->Cell(70,10, $loaddata['desa'].', '.$this->tgl_indo(date('Y-m-d')),0,1, 'L');
     $pdf->Cell(220,10, '',0,0, 'L');
-    $pdf->Cell(70,10, 'Kepala Sekolah',0,1, 'L');
+    $pdf->Cell(70,10, org_label('kepala'),0,1, 'L');
     $pdf->Cell(10,20,'',0,1);
     $pdf->Cell(220,6, '',0,0, 'L');
     $pdf->SetFont('Arial','B',12);

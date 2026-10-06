@@ -146,7 +146,7 @@ public function viewlogout() {
     $cek_mpk  = $this->User_Model->sudah_vote($username, 1);
 
     if (! $cek_osis || ! $cek_mpk) {
-        $this->session->set_flashdata('user_failed', 'Anda belum memilih OSIM dan MPK. Silakan selesaikan voting terlebih dahulu.');
+        $this->session->set_flashdata('user_failed', 'Anda belum memilih ' . org_label('organisasi') . ' dan MPK. Silakan selesaikan voting terlebih dahulu.');
         redirect('user/index');
     }
 

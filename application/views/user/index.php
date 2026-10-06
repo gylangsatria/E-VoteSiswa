@@ -4,10 +4,10 @@
             <img class="h-9 w-9 object-contain" src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" onerror="this.style.display='none'">
             E-VoteSiswa
         </h2>
-        <p class="text-sm text-blue-600/80">Pilihlah Calon Ketua dan Wakil Ketua OSIM dan MPK dengan bijak!</p>
+        <p class="text-sm text-blue-600/80">Pilihlah Calon Ketua dan Wakil Ketua <?= org_label('organisasi'); ?> dan MPK dengan bijak!</p>
 
         <div class="mt-5 flex items-center justify-center gap-2">
-            <?php foreach ([['OSIM', $sudah_memilih_osis, '1'], ['MPK', $sudah_memilih_mpk, '2']] as $i => $step): ?>
+            <?php foreach ([[org_label('organisasi'), $sudah_memilih_osis, '1'], ['MPK', $sudah_memilih_mpk, '2']] as $i => $step): ?>
                 <?php if ($i === 1): ?>
                     <div class="mb-6 h-[3px] w-8 rounded sm:w-14 <?= ($sudah_memilih_osis && $sudah_memilih_mpk) ? 'bg-blue-600' : ($sudah_memilih_osis ? 'bg-blue-400' : 'bg-blue-200') ?>"></div>
                 <?php endif; ?>
@@ -24,14 +24,14 @@
         <?php if (!$sudah_memilih_osis || !$sudah_memilih_mpk): ?>
             <div class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-blue-100 px-4 py-2.5 text-sm text-blue-700">
                 <i class="fa fa-exclamation-triangle"></i>
-                <span>Anda harus menyelesaikan voting untuk <strong>OSIM</strong> dan <strong>MPK</strong></span>
+                <span>Anda harus menyelesaikan voting untuk <strong><?= org_label('organisasi'); ?></strong> dan <strong>MPK</strong></span>
             </div>
         <?php endif; ?>
 
     </div>
 
     <?php foreach ([
-        ['key' => 1, 'target' => 'osis', 'badge' => 'OSIM', 'title' => 'Calon Ketua dan Wakil Ketua OSIM', 'done' => $sudah_memilih_osis, 'badge_class' => 'bg-red-500/10 text-red-600'],
+        ['key' => 1, 'target' => 'osis', 'badge' => org_label('organisasi'), 'title' => 'Calon Ketua dan Wakil Ketua ' . org_label('organisasi'), 'done' => $sudah_memilih_osis, 'badge_class' => 'bg-red-500/10 text-red-600'],
         ['key' => 0, 'target' => 'mpk',  'badge' => 'MPK',  'title' => 'Calon Ketua dan Wakil Ketua MPK',  'done' => $sudah_memilih_mpk,  'badge_class' => 'bg-brand-100 text-brand-600'],
     ] as $section):
         $list = array_values(array_filter($datacalon, function ($c) use ($section) { return $c['opsi_mpkosis'] == $section['key']; }));
@@ -116,7 +116,7 @@ document.querySelectorAll('.vote-trigger').forEach(function (btn) {
 		document.getElementById('confirmPhoto').src = card.dataset.photo;
 		document.getElementById('confirmName').textContent = card.dataset.name;
 		document.getElementById('confirmNumber').textContent = 'No. Urut ' + card.dataset.number;
-		document.getElementById('confirmCategory').textContent = card.dataset.target === 'osis' ? 'OSIM' : 'MPK';
+		document.getElementById('confirmCategory').textContent = card.dataset.target === 'osis' ? '<?= org_label('organisasi'); ?>' : 'MPK';
 		document.getElementById('confirmNisn').value = card.dataset.nisn;
 		document.getElementById('confirmOpsi').value = card.dataset.opsi;
 		document.getElementById('confirmModal').showModal();

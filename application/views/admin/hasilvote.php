@@ -3,7 +3,7 @@ $pemilih = isset($jmlpemilih['jumlah']) ? (int) $jmlpemilih['jumlah'] : 0;
 $hadir   = isset($jmlvote['jumlah']) ? (int) $jmlvote['jumlah'] : 0;
 
 $kategori = [
-    1 => ['label' => 'OSIM', 'total' => 0, 'labels' => [], 'data' => [], 'colors' => ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#6f42c1']],
+    1 => ['label' => org_label('organisasi'), 'total' => 0, 'labels' => [], 'data' => [], 'colors' => ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#6f42c1']],
     0 => ['label' => 'MPK',  'total' => 0, 'labels' => [], 'data' => [], 'colors' => ['#dc3545', '#20c997', '#fd7e14', '#6610f2', '#e83e8c']],
 ];
 
@@ -74,7 +74,7 @@ foreach ($vote as $v) {
 
         <div class="mt-8 flex flex-wrap justify-center gap-10">
             <div class="w-full max-w-md text-center">
-                <h3 class="mb-3 font-semibold text-slate-800">Grafik Vote OSIM</h3>
+                <h3 class="mb-3 font-semibold text-slate-800">Grafik Vote <?= org_label('organisasi'); ?></h3>
                 <canvas id="chartOsim"></canvas>
             </div>
             <div class="w-full max-w-md text-center">

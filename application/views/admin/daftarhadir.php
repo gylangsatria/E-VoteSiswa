@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h2>Daftar Hadir Pemilihan Ketua OSIM</h2>
+        <h2>Daftar Hadir Pemilihan Ketua <?php echo org_label('organisasi'); ?></h2>
         <form method="post" action="<?= base_url('index.php/admin/cetakdaftarhadir'); ?>">
             <button class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download Daftar Hadir</button>
         </form>

@@ -28,3 +28,7 @@ INSERT INTO tb_admin (username, password) VALUES ('admin', '$2y$10$92IXUNpkjO0rO
 
 -- 5. Tambah kolom nama calon wakil pada tabel kandidat (OSIM/MPK)
 ALTER TABLE tb_pilihan ADD COLUMN nama_wakil VARCHAR(100) NOT NULL DEFAULT '' AFTER nama;
+
+-- 6. Tambah kolom jenis satuan pendidikan (sekolah/madrasah) untuk label dinamis
+ALTER TABLE tb_identitassekolah ADD COLUMN jenis VARCHAR(10) NOT NULL DEFAULT 'sekolah' AFTER nip;
+

@@ -3,7 +3,7 @@
 ?>
 
 <div class="card">
-    <div class="card-header"><h2>Edit Calon Ketua OSIM dan MPK</h2></div>
+    <div class="card-header"><h2>Edit Calon Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
     <div class="card-body">
         <?php if($this->session->flashdata('info')) { ?>
             <div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
@@ -23,12 +23,12 @@
                 echo form_input(array('type' => 'text', 'id' => 'edit-no', 'name' => 'no', 'class' => 'input', 'value' => $loaddata['no']));
             ?>
 
-            <label class="label mt-4" for="edit-nama">Nama Calon Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
+            <label class="label mt-4" for="edit-nama">Nama Calon Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? org_label('organisasi') : 'MPK'; ?></span></label>
             <?php
                 echo form_input(array('type' => 'text', 'id' => 'edit-nama', 'name' => 'nama', 'class' => 'input', 'value' => $loaddata['nama']));
             ?>
 
-            <label class="label mt-4" for="edit-nama-wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
+            <label class="label mt-4" for="edit-nama-wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? org_label('organisasi') : 'MPK'; ?></span></label>
             <?php
                 echo form_input(array('type' => 'text', 'id' => 'edit-nama-wakil', 'name' => 'nama_wakil', 'class' => 'input', 'value' => $loaddata['nama_wakil']));
             ?>
@@ -37,7 +37,7 @@
             <?php
                 $options_kandidat = array(
                     '0' => 'MPK',
-                    '1' => 'OSIM'
+                    '1' => org_label('organisasi')
                 );
                 $form_attribute = array(
                     'class'    => 'input',
@@ -60,7 +60,7 @@
 
 <script>
 document.getElementById('opsi_mpkosis').addEventListener('change', function() {
-    var label = this.value === '1' ? 'OSIM' : 'MPK';
+    var label = this.value === '1' ? '<?php echo org_label('organisasi'); ?>' : 'MPK';
     document.querySelectorAll('.kategori-label').forEach(function(el) {
         el.textContent = label;
     });

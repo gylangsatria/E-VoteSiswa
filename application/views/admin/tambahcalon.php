@@ -1,5 +1,5 @@
 <div class="card">
-	<div class="card-header"><h2>Tambah Kandidat Ketua OSIM dan MPK</h2></div>
+	<div class="card-header"><h2>Tambah Kandidat Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
 	<div class="card-body">
 		<?php if($this->session->flashdata('info')) { ?>
 			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
@@ -26,7 +26,7 @@
 			<?php
 			$options_kandidat = array(
 				'0' => 'MPK',
-				'1' => 'OSIM'
+				'1' => org_label('organisasi')
 			);
 			$form_attribute = array(
 				'class'    => 'input',
@@ -37,7 +37,7 @@
 			echo form_dropdown($form_attribute['name'], $options_kandidat, '1', $form_attribute);
 			?>
 
-			<label class="label mt-4" for="nama">Nama Calon Ketua <span class="kategori-label">OSIM</span></label>
+			<label class="label mt-4" for="nama">Nama Calon Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
 			<?php
 			$form_attribute	= array (
 				'type'		=> 'text',
@@ -49,7 +49,7 @@
 			echo form_input($form_attribute);
 			?>
 
-			<label class="label mt-4" for="nama_wakil">Nama Calon Wakil Ketua <span class="kategori-label">OSIM</span></label>
+			<label class="label mt-4" for="nama_wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
 			<?php
 			$form_attribute	= array (
 				'type'		=> 'text',
@@ -92,7 +92,7 @@
 
 <script>
 document.getElementById('opsi_mpkosis').addEventListener('change', function() {
-	var label = this.value === '1' ? 'OSIM' : 'MPK';
+	var label = this.value === '1' ? '<?php echo org_label('organisasi'); ?>' : 'MPK';
 	document.querySelectorAll('.kategori-label').forEach(function(el) {
 		el.textContent = label;
 	});

@@ -35,6 +35,7 @@ CREATE TABLE `tb_identitassekolah` (
   `kab` varchar(100) DEFAULT NULL,
   `kpl_sekolah` varchar(100) DEFAULT NULL,
   `nip` varchar(25) DEFAULT NULL,
+  `jenis` varchar(10) NOT NULL DEFAULT 'sekolah',
   PRIMARY KEY (`npsn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 

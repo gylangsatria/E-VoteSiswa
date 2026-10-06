@@ -75,7 +75,9 @@ Class Admin_Model extends CI_Model {
 		$load = $this->db->query("SELECT * FROM tb_identitassekolah");
 		return $load->result_array();
 	}
-	public function updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip){
+	public function updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip, $jenis){
+		$id = $this->db->select('npsn')->get('tb_identitassekolah')->row_array();
+		$this->db->where('npsn', isset($id['npsn']) ? $id['npsn'] : $npsn);
 		return $this->db->update('tb_identitassekolah', array(
 			'npsn'			=> $npsn,
 			'nm_sekolah'	=> $nm_sekolah,
@@ -84,7 +86,8 @@ Class Admin_Model extends CI_Model {
 			'kec'			=> $kec,
 			'kab'			=> $kab,
 			'kpl_sekolah'	=> $kpl_sekolah,
-			'nip'			=> $nip
+			'nip'			=> $nip,
+			'jenis'			=> $jenis
 		));
 	}
 	public function datakelas() {

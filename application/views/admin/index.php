@@ -53,7 +53,7 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
     <div class="card">
         <div class="card-header"><h2>Reset Data Pemilihan</h2></div>
         <div class="card-body">
-            <p class="text-sm text-slate-600">Fitur ini akan menghapus semua data kecuali Identitas Sekolah dan Data Kelas.</p>
+            <p class="text-sm text-slate-600">Fitur ini akan menghapus semua data kecuali Identitas <?php echo org_label('satuan'); ?> dan Data Kelas.</p>
             <p class="mt-2 text-sm text-slate-600">Gunakan apabila pemilihan telah selesai dan Anda telah mengunduh <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/cetakdaftarhadir'); ?>">Daftar Hadir</a> dan <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a>.</p>
             <?php if($this->session->flashdata('reset')) { ?>
                 <div class="alert alert-success mt-4"><?php echo $this->session->flashdata('reset'); ?></div>
@@ -66,7 +66,7 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
             <dialog id="reset" class="w-[90vw] max-w-md rounded-xl p-0 backdrop:bg-black/50">
                 <div class="border-b border-slate-200 px-5 py-4 font-semibold text-slate-800"><i class="fa fa-exclamation-triangle text-amber-500"></i> Peringatan</div>
                 <div class="px-5 py-4 text-sm text-slate-600">
-                    <p>Fitur ini akan menghapus semua data kecuali Identitas Sekolah dan Data Kelas.</p>
+                    <p>Fitur ini akan menghapus semua data kecuali Identitas <?php echo org_label('satuan'); ?> dan Data Kelas.</p>
                     <p class="mt-2">Apakah anda yakin ingin me-reset semua data?</p>
                 </div>
                 <div class="flex justify-end gap-2 border-t border-slate-200 px-5 py-3">
@@ -103,8 +103,8 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
     <div class="card-header"><h2><i class="fa fa-info-circle"></i> Tentang E-VoteSiswa</h2></div>
     <div class="card-body text-sm text-slate-600">
         <p>
-            E-VoteSiswa adalah platform pemilihan digital yang dirancang untuk memudahkan proses demokrasi di lingkungan sekolah.
-            Aplikasi ini memungkinkan siswa memilih Ketua OSIM dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
+            E-VoteSiswa adalah platform pemilihan digital yang dirancang untuk memudahkan proses demokrasi di lingkungan <?php echo org_label('satuan_lc'); ?>.
+            Aplikasi ini memungkinkan siswa memilih Ketua <?php echo org_label('organisasi'); ?> dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
         </p>
     </div>
 </div>
