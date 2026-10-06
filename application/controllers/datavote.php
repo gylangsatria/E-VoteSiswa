@@ -46,6 +46,6 @@
 <script type="text/javascript">
 var auto_refresh = setInterval(
 function () {
-    $('#data').load('<?php echo base_url();?>index.php/admin/autorefresh');
+    $('#data').load('<?php echo base_url('index.php/admin/autorefresh');?>');
 }, 1000);
 </script>

@@ -10,7 +10,7 @@
 			<div class="flex items-center gap-2.5"><i class="fa fa-shield text-brand-500"></i><span>Setiap suara dijaga kerahasiaannya</span></div>
 		</div>
 		<p class="mb-5 text-sm text-slate-500">Silakan logout untuk mengakhiri sesi Anda.</p>
-		<a href="<?php echo base_url(); ?>index.php/user/logout" class="btn btn-primary px-9 py-3 text-base">
+		<a href="<?php echo base_url('index.php/user/logout'); ?>" class="btn btn-primary px-9 py-3 text-base">
 			<i class="fa fa-sign-out"></i> Logout Sekarang
 		</a>
 	</div>
