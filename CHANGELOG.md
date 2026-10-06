@@ -5,6 +5,25 @@
 
 ---
 
+## [1.4.0] - 7 Oktober 2026
+
+### Added
+- **Pilihan Jenis Satuan (Sekolah/Madrasah)** — Admin dapat memilih jenis satuan pendidikan pada halaman Identitas. Seluruh label terkait menyesuaikan otomatis: `OSIS ↔ OSIM`, `Sekolah ↔ Madrasah`, dan `Kepala Sekolah ↔ Kepala Madrasah` pada halaman admin, halaman voting siswa, serta laporan PDF.
+- **Helper `labels_helper.php`** — Helper baru (`org_mode()`, `org_label()`) dengan cache per-request untuk membaca jenis satuan dan menyediakan label dinamis; di-autoload melalui `config/autoload.php`.
+- **Kolom DB `jenis`** — Ditambahkan pada `tb_identitassekolah` (`varchar(10)` default `sekolah`).
+
+### Changed
+- **Form Tambah Kandidat** — Layout dirapikan menjadi grid dua kolom; field pendek (NISN, Nomor Urut, Kandidat, Foto) berdampingan, field nama calon memakai lebar penuh.
+- **Form Identitas** — Jarak antar label diseragamkan (`mt-4`).
+
+### Fixed
+- **Update Identitas** — `UPDATE tb_identitassekolah` sebelumnya tanpa klausa `WHERE` sehingga memperbarui seluruh baris dan memicu error duplikat saat lebih dari satu baris; kini di-scope ke baris identitas aktif.
+
+### Migration
+- Database lama perlu menambahkan kolom `jenis` pada `tb_identitassekolah` (bagian #6 `db_migrate_from_md5.sql`).
+
+---
+
 ## [1.3.2] - 6 Oktober 2026
 
 ### Changed
