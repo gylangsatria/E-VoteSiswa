@@ -5,7 +5,7 @@
 				<svg viewBox="0 0 24 24" width="56" height="56" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
 			</div>
 			<h2>Voting Berhasil!</h2>
-			<p class="logout-subtitle">Terima kasih telah berpartisipasi dalam pemilihan OSIS dan MPK.</p>
+			<p class="logout-subtitle">Terima kasih telah berpartisipasi dalam pemilihan OSIM dan MPK.</p>
 			<div class="logout-details">
 				<div class="logout-detail-item">
 					<svg viewBox="0 0 24 24" width="18" height="18" stroke="#3EA99F" stroke-width="2" fill="none"><polyline points="20 6 9 17 4 12"/></svg>

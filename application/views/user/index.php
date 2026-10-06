@@ -6,7 +6,7 @@
 				<img src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" class="vote-logo" onerror="this.style.display='none'">
 				<span style="color:#fff">E-VoteSiswa</span>
 			</h2>
-			<p>Pilihlah Calon Ketua OSIS dan MPK dengan bijak!</p>
+			<p>Pilihlah Calon Ketua OSIM dan MPK dengan bijak!</p>
 		</div>
 
 		<div class="vote-progress-steps">
@@ -18,7 +18,7 @@
 						<span>1</span>
 					<?php endif; ?>
 				</div>
-				<div class="vote-step-label">OSIS</div>
+				<div class="vote-step-label">OSIM</div>
 				<div class="vote-step-status <?= $sudah_memilih_osis ? 'done' : 'pending' ?>">
 					<?= $sudah_memilih_osis ? 'Selesai' : 'Belum' ?>
 				</div>
@@ -42,7 +42,7 @@
 		<?php if (!$sudah_memilih_osis || !$sudah_memilih_mpk): ?>
 			<div class="vote-notice">
 				<svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-				<span>Anda harus menyelesaikan voting untuk <strong>OSIS</strong> dan <strong>MPK</strong></span>
+				<span>Anda harus menyelesaikan voting untuk <strong>OSIM</strong> dan <strong>MPK</strong></span>
 			</div>
 		<?php endif; ?>
 
@@ -54,13 +54,13 @@
 		<?php endif; ?>
 	</div>
 
-	<!-- Calon Ketua OSIS -->
+	<!-- Calon Ketua OSIM -->
 	<div class="section-wrapper">
 		<div class="section-badge osis">
 			<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-			<span>OSIS</span>
+			<span>OSIM</span>
 		</div>
-		<h3 class="section-title">Calon Ketua OSIS</h3>
+		<h3 class="section-title">Calon Ketua OSIM</h3>
 
 		<div class="row candidate-row">
 			<?php 
@@ -70,14 +70,15 @@
 			<?php foreach($datacalon as $loaddata): ?>
 				<?php if ($loaddata['opsi_mpkosis'] == 1): ?>
 					<div class="<?= $col_class ?> col-sm-12">
-						<div class="vote-card card-osis" data-number="<?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?>" data-nisn="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>" data-opsi="0" data-photo="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
+						<div class="vote-card card-osis" data-number="<?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?= htmlspecialchars($loaddata['nama'] . ' / ' . $loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?>" data-nisn="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>" data-opsi="0" data-photo="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
 							<div class="vote-card-badge">No. Urut <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?></div>
 							<div class="vote-card-img-wrap">
-								<img class="vote-card-img" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto Calon OSIS" loading="lazy"/>
+								<img class="vote-card-img" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto Calon OSIM" loading="lazy"/>
 							</div>
 							<div class="vote-card-body">
 								<h4 class="vote-card-name"><?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h4>
-								<p class="vote-card-position">Calon Ketua OSIS</p>
+								<p class="vote-card-position">Calon Ketua OSIM</p>
+								<p class="vote-card-position">Wakil: <?= htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></p>
 								<?php if (!$sudah_memilih_osis): ?>
 									<button type="button" class="vote-btn btn-osis vote-trigger" data-target="osis">
 										<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
@@ -113,7 +114,7 @@
 			<?php foreach($datacalon as $loaddata): ?>
 				<?php if ($loaddata['opsi_mpkosis'] == 0): ?>
 					<div class="<?= $col_class_mpk ?> col-sm-12">
-						<div class="vote-card card-mpk" data-number="<?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?>" data-nisn="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>" data-opsi="1" data-photo="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
+						<div class="vote-card card-mpk" data-number="<?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?>" data-name="<?= htmlspecialchars($loaddata['nama'] . ' / ' . $loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?>" data-nisn="<?= htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>" data-opsi="1" data-photo="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
 							<div class="vote-card-badge">No. Urut <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?></div>
 							<div class="vote-card-img-wrap">
 								<img class="vote-card-img" src="<?= base_url(); ?>asset/img/<?= htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto Calon MPK" loading="lazy"/>
@@ -121,6 +122,7 @@
 							<div class="vote-card-body">
 								<h4 class="vote-card-name"><?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h4>
 								<p class="vote-card-position">Calon Ketua MPK</p>
+								<p class="vote-card-position">Wakil: <?= htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></p>
 								<?php if (!$sudah_memilih_mpk): ?>
 									<button type="button" class="vote-btn btn-mpk vote-trigger" data-target="mpk">
 										<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
@@ -654,7 +656,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			const badge = document.getElementById('confirmCategory');
 			if (target === 'osis') {
-				badge.textContent = 'OSIS';
+				badge.textContent = 'OSIM';
 				badge.className = 'confirm-category-badge osis-badge';
 			} else {
 				badge.textContent = 'MPK';

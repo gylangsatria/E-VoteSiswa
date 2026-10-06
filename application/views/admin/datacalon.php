@@ -7,7 +7,7 @@
 <div class="box">
     <div class="box-inner">
         <div class="box-header well">
-            <h2>Data Calon Ketua OSIS dan MPK</h2>
+            <h2>Data Calon Ketua OSIM dan MPK</h2>
         </div>
         <div class="box-content">
             <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
@@ -15,20 +15,22 @@
                     <tr>
                         <th class="text-center">No Kandidat</th>
                         <th class="text-center">Nama Calon</th>
+                        <th class="text-center">Nama Calon Wakil</th>
                         <th class="text-center">Jenis Kandidat</th>
-                        <th class="text-center">Photo Calon</th>
+                        <th class="text-center">Foto Paslon</th>
                         <th class="text-center" width="200">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php 
                     foreach($datacalon as $loaddata) {
-                        $jenis = ($loaddata['opsi_mpkosis'] == 1) ? 'OSIS' : 'MPK';
+                        $jenis = ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK';
                 ?>
                     <tr>
                         <td class="text-center"><?php echo htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?></td>
                         <td><?php echo htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></td>
-                        <td class="text-center"><span class="label label-<?php echo ($jenis == 'OSIS') ? 'primary' : 'warning'; ?>"><?php echo htmlspecialchars($jenis, ENT_QUOTES, 'UTF-8'); ?></span></td>
+                        <td><?php echo htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class="text-center"><span class="label label-<?php echo ($jenis == 'OSIM') ? 'primary' : 'warning'; ?>"><?php echo htmlspecialchars($jenis, ENT_QUOTES, 'UTF-8'); ?></span></td>
                         <td class="text-center">
                             <img width="50" height="60" src="<?php echo base_url(); ?>/asset/img/<?php echo htmlspecialchars($loaddata['photo'], ENT_QUOTES, 'UTF-8'); ?>">
                         </td>

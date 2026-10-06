@@ -595,7 +595,8 @@ public function simpancalon() {
 	$nisn          = $this->input->post('nisn');
 	$no            = $this->input->post('no');
 	$nama          = $this->input->post('nama');
-    $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIS
+	$nama_wakil    = $this->input->post('nama_wakil');
+    $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIM
 
     $config['upload_path']   = './asset/img/';
     $config['allowed_types'] = 'gif|jpg|jpeg|png';
@@ -609,7 +610,7 @@ public function simpancalon() {
     	$photo       = $upload_data['file_name'];
 
         // Pastikan method tambahcalon di Admin_Model menerima parameter tambahan
-    	$this->Admin_Model->tambahcalon($nisn, $no, $nama, $photo, $opsi_mpkosis);
+    	$this->Admin_Model->tambahcalon($nisn, $no, $nama, $nama_wakil, $photo, $opsi_mpkosis);
     	$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
     } else {
     	$this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
@@ -643,6 +644,7 @@ public function simpancalon() {
 		$nisn          = $this->input->post('nisn');
 		$no            = $this->input->post('no');
 		$nama          = $this->input->post('nama');
+		$nama_wakil    = $this->input->post('nama_wakil');
 		$opsi_mpkosis  = $this->input->post('opsi_mpkosis');
 
     // Konfigurasi upload
@@ -667,7 +669,7 @@ public function simpancalon() {
     }
 
     // Kirim ke model
-    $update = $this->Admin_Model->updatecalon($nisn, $no, $nama, $opsi_mpkosis, $photo);
+    $update = $this->Admin_Model->updatecalon($nisn, $no, $nama, $nama_wakil, $opsi_mpkosis, $photo);
 
     if ($update) {
     	$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
@@ -755,7 +757,7 @@ public function cetakdaftarhadir(){
 	$pdf->AddPage();
 	$pdf->SetFont('Arial','B',16);
 	$pdf->Cell(190,7, $loaddata['nm_sekolah'],0,1,'C');
-	$pdf->Cell(190,7, 'Daftar Hadir Pemilihan Ketua Osis',0,1,'C');
+	$pdf->Cell(190,7, 'Daftar Hadir Pemilihan Ketua OSIM',0,1,'C');
 	$pdf->Cell(10,7,'',0,1);
 	$pdf->SetFont('Arial','B',12);
 	$pdf->Cell(10,10, 'No',1,0, 'C');
@@ -822,7 +824,7 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf = new FPDF('L', 'mm', 'Legal');
     $pdf->AddPage();
     $pdf->SetFont('Arial','B',16);
-    $pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIS DAN MPK',0,1,'C');
+    $pdf->Cell(330,7, 'LAPORAN PELAKSANAAN PEMILIHAN KETUA OSIM DAN MPK',0,1,'C');
     $pdf->Cell(330,7, 'TAHUN PELAJARAN '.$pilketos['tapel'],0,1,'C');
     $pdf->Cell(10,7,'',0,1);
     $pdf->SetFont('Arial','',12);
@@ -876,17 +878,17 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf->SetFont('Arial','B',12);
     $pdf->Cell(60,7, 'Persentase Partisipasi Pemilih: '.$partisipasi.'%', 0,1);
 
-    // Hasil OSIS
+    // Hasil OSIM
     $pdf->Cell(10,7,'',0,1);
-    $pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIS', 0,1);
+    $pdf->Cell(60,7, 'Hasil Pemilihan Ketua OSIM', 0,1);
     $pdf->Cell(30,12, 'No Urut',1,0, 'C');
     $pdf->Cell(100,12, 'Nama Kandidat',1,0, 'C');
     $pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
     $pdf->SetFont('Arial','',12);
     foreach($datavote as $hasil) {
-    	if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 0) {
+    	if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 1) {
     		$pdf->Cell(30,7, $hasil['no'],1,0, 'C');
-    		$pdf->Cell(100,7, $hasil['nama'],1,0, 'L');
+    		$pdf->Cell(100,7, $hasil['nama'] . ' / ' . $hasil['nama_wakil'],1,0, 'L');
     		$pdf->Cell(80,7, $hasil['jumlah'],1,1, 'C');
     	}
     }
@@ -900,9 +902,9 @@ $voteP = isset($jmlvoteP['P']) ? (int) $jmlvoteP['P'] : 0;
     $pdf->Cell(80,12, 'Jumlah Perolehan Suara',1,1, 'C');
     $pdf->SetFont('Arial','',12);
     foreach($datavote as $hasil) {
-    	if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 1) {
+    	if (isset($hasil['opsi_mpkosis']) && $hasil['opsi_mpkosis'] == 0) {
     		$pdf->Cell(30,7, $hasil['no'], 1,0, 'C');
-    		$pdf->Cell(100,7, $hasil['nama'], 1,0, 'L');
+    		$pdf->Cell(100,7, $hasil['nama'] . ' / ' . $hasil['nama_wakil'], 1,0, 'L');
     		$pdf->Cell(80,7, $hasil['jumlah'], 1,1, 'C');
     	}
     }

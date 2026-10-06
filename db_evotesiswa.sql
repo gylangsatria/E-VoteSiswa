@@ -50,7 +50,7 @@ CREATE TABLE `tb_pilih` (
   `id_pilih` int NOT NULL AUTO_INCREMENT,
   `nisn` varchar(32) NOT NULL,
   `username` varchar(32) NOT NULL,
-  `opsi_mpkosis` tinyint(1) DEFAULT NULL COMMENT '0 = MPK, 1 = OSIS',
+  `opsi_mpkosis` tinyint(1) DEFAULT NULL COMMENT '0 = MPK, 1 = OSIM',
   `calon_nisn` varchar(32) NOT NULL,
   `waktu_vote` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_pilih`)
@@ -60,6 +60,7 @@ DROP TABLE IF EXISTS `tb_pilihan`;
 CREATE TABLE `tb_pilihan` (
   `nisn` varchar(32) NOT NULL,
   `nama` varchar(100) NOT NULL,
+  `nama_wakil` varchar(100) NOT NULL,
   `photo` varchar(100) NOT NULL,
   `no` int NOT NULL,
   `opsi_mpkosis` tinyint(1) NOT NULL DEFAULT '0',

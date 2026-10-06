@@ -106,11 +106,12 @@ Class Admin_Model extends CI_Model {
 		return $this->db->truncate('tb_siswa');}
 
 
-		public function tambahcalon($nisn, $no , $nama, $photo, $opsi_mpkosis) {
+		public function tambahcalon($nisn, $no , $nama, $nama_wakil, $photo, $opsi_mpkosis) {
 			$data = array(
 				'nisn'          => $nisn,
 				'no'            => $no,
 				'nama'          => $nama,
+				'nama_wakil'    => $nama_wakil,
 				'photo'         => $photo,
         'opsi_mpkosis'  => $opsi_mpkosis
     );
@@ -124,10 +125,11 @@ Class Admin_Model extends CI_Model {
 		public function hapussemuakelas() {
 			return $this->db->truncate('tb_kelas');}
 
-	public function updatecalon($nisn, $no, $nama, $opsi_mpkosis, $photo) {
+	public function updatecalon($nisn, $no, $nama, $nama_wakil, $opsi_mpkosis, $photo) {
 		$data = array(
 			'no'           => $no,
 			'nama'         => $nama,
+			'nama_wakil'   => $nama_wakil,
 			'opsi_mpkosis' => $opsi_mpkosis
 		);
 
@@ -208,7 +210,7 @@ Class Admin_Model extends CI_Model {
 
 	public function hasilvote() {
 		return $this->db
-		->select('p.no, p.nama, p.photo, p.opsi_mpkosis, COUNT(v.id_pilih) AS jumlah')
+		->select('p.no, p.nama, p.nama_wakil, p.photo, p.opsi_mpkosis, COUNT(v.id_pilih) AS jumlah')
 		->from('tb_pilihan p')
 		->join('tb_pilih v', 'p.nisn = v.calon_nisn', 'left')
 		->group_by('p.nisn')

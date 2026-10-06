@@ -1,6 +1,6 @@
 # E-VoteSiswa
 
-Aplikasi e-voting untuk pemilihan Ketua OSIS dan MPK di sekolah. Dikembangkan sebagai penyesuaian dan pengembangan ulang dari [E-Pilketos](https://github.com/fpls-software/pilketos).
+Aplikasi e-voting untuk pemilihan Ketua OSIM dan MPK di sekolah. Dikembangkan sebagai penyesuaian dan pengembangan ulang dari [E-Pilketos](https://github.com/fpls-software/pilketos).
 
 Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 6 Oktober 2026 | 1.3.2 | Ganti istilah OSIS → OSIM, tambah kolom calon wakil ketua pada form & data kandidat |
 | 6 Oktober 2026 | 1.3.1 | Integrasi Docker permanen di `main` + perbaikan permission bind mount, port MySQL, dan `.dockerignore` |
 | 7 Juni 2026 | 1.3 | Modernisasi halaman voting siswa: progress tracker OSIS/MPK, kartu kandidat dengan animasi, modal konfirmasi pilihan, navbar gradient, halaman sukses voting |
 | 7 Juni 2026 | 1.2.1 | Perbaikan flashdata conflict, upload massal DPT (CSV/XLS/XLSX), & Dockerfile |
@@ -29,7 +30,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 ## Fitur
 
-- **Tampilan Voting Modern** — Progress tracker OSIS/MPK, kartu kandidat dengan efek hover & animasi, modal konfirmasi pilihan
+- **Tampilan Voting Modern** — Progress tracker OSIM/MPK, kartu kandidat dengan efek hover & animasi, modal konfirmasi pilihan
 - **Navbar Gradient** — Navigasi modern dengan gradien warna dan ikon SVG
 - **Halaman Sukses** — Tampilan setelah voting selesai dengan desain yang informatif
 - **Reset Data** — Menghapus seluruh data pemilihan untuk periode berikutnya
@@ -37,7 +38,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 - **Reset User** — Membuka kembali akun DPT yang terkunci jika ada komplain
 - **Data Sekolah** — Memperbarui informasi profil sekolah
 - **Data Kelas** — Menambahkan atau menghapus kelas untuk DPT
-- **Data Kandidat** — Menambahkan kandidat Ketua OSIS dan MPK
+- **Data Kandidat** — Menambahkan kandidat Ketua/Wakil Ketua OSIM dan MPK
 - **Data DPT** — Mengelola Daftar Pemilih Tetap dengan pencarian
 - **Hasil Pemilihan** — Melihat hasil voting real-time dengan grafik
 - **Daftar Hadir** — Mengunduh daftar kehadiran pemilih (PDF)

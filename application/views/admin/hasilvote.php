@@ -5,23 +5,23 @@ $pemilih = isset($jmlpemilih['jumlah']) ? (int) $jmlpemilih['jumlah'] : 0;
 // Jumlah siswa yang memilih (unik)
 $hadir = isset($jmlvote['jumlah']) ? (int) $jmlvote['jumlah'] : 0;
 
-// Hitung total suara OSIS dan MPK untuk grafik
-$totalVoteOsis = 0;
+// Hitung total suara OSIM dan MPK untuk grafik
+$totalVoteOsim = 0;
 $totalVoteMpk = 0;
-$labelsOsis = [];
-$dataOsis = [];
+$labelsOsim = [];
+$dataOsim = [];
 $labelsMpk = [];
 $dataMpk = [];
 
 foreach ($vote as $v) {
     $jumlah = isset($v['jumlah']) ? (int) $v['jumlah'] : 0;
     if ($v['opsi_mpkosis'] == 1) {
-        $totalVoteOsis += $jumlah;
-        $labelsOsis[] = addslashes($v['nama']);
-        $dataOsis[] = $jumlah;
+        $totalVoteOsim += $jumlah;
+        $labelsOsim[] = addslashes($v['nama'] . ' / ' . $v['nama_wakil']);
+        $dataOsim[] = $jumlah;
     } else {
         $totalVoteMpk += $jumlah;
-        $labelsMpk[] = addslashes($v['nama']);
+        $labelsMpk[] = addslashes($v['nama'] . ' / ' . $v['nama_wakil']);
         $dataMpk[] = $jumlah;
     }
 }
@@ -67,19 +67,19 @@ foreach ($vote as $v) {
 <!-- Konten -->
 <div class="box-content">
     <div class="row">
-    <!-- Vote OSIS -->
+    <!-- Vote OSIM -->
     <div class="col-12">
-        <h3 class="text-center">Kandidat OSIS</h3>
+        <h3 class="text-center">Kandidat OSIM</h3>
         <div class="row">
             <?php foreach($vote as $datavote): 
                 if ($datavote['opsi_mpkosis'] == 1): 
                     $jumlah = isset($datavote['jumlah']) ? (int) $datavote['jumlah'] : 0;
-                    $persen = ($totalVoteOsis > 0) ? round(($jumlah / $totalVoteOsis) * 100, 2) : 0;
+                    $persen = ($totalVoteOsim > 0) ? round(($jumlah / $totalVoteOsim) * 100, 2) : 0;
             ?>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="vote-card">
-                        <div class="category text-center">OSIS</div>
-                        <h2>No <?= $datavote['no']; ?> | <?= $datavote['nama']; ?></h2>
+                        <div class="category text-center">OSIM</div>
+                        <h2>No <?= $datavote['no']; ?> | <?= $datavote['nama']; ?> / <?= $datavote['nama_wakil']; ?></h2>
                         <img src="<?= base_url(); ?>asset/img/<?= $datavote['photo']; ?>" width="100%" height="250" alt="Foto Kandidat">
                         <hr/>
                         <div class="text-center">
@@ -105,7 +105,7 @@ foreach ($vote as $v) {
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="vote-card">
                         <div class="category text-center">MPK</div>
-                        <h2>No <?= $datavote['no']; ?> | <?= $datavote['nama']; ?></h2>
+                        <h2>No <?= $datavote['no']; ?> | <?= $datavote['nama']; ?> / <?= $datavote['nama_wakil']; ?></h2>
                         <img src="<?= base_url(); ?>asset/img/<?= $datavote['photo']; ?>" width="100%" height="250" alt="Foto Kandidat">
                         <hr/>
                         <div class="text-center">
@@ -146,8 +146,8 @@ foreach ($vote as $v) {
         <!-- Grafik -->
         <div class="chart-row">
             <div class="chart-box">
-                <h3>Grafik Vote OSIS</h3>
-                <canvas id="chartOsis"></canvas>
+                <h3>Grafik Vote OSIM</h3>
+                <canvas id="chartOsim"></canvas>
             </div>
             <div class="chart-box">
                 <h3>Grafik Vote MPK</h3>
@@ -159,8 +159,8 @@ foreach ($vote as $v) {
 
 <!-- Script Chart -->
 <script>
-    const labelsOsis = <?= json_encode($labelsOsis); ?>;
-    const dataOsis = <?= json_encode($dataOsis); ?>;
+    const labelsOsim = <?= json_encode($labelsOsim); ?>;
+    const dataOsim = <?= json_encode($dataOsim); ?>;
     const labelsMpk = <?= json_encode($labelsMpk); ?>;
     const dataMpk = <?= json_encode($dataMpk); ?>;
 
@@ -180,12 +180,12 @@ foreach ($vote as $v) {
         }
     };
 
-    new Chart(document.getElementById('chartOsis'), {
+    new Chart(document.getElementById('chartOsim'), {
         type: 'pie',
         data: {
-            labels: labelsOsis,
+            labels: labelsOsim,
             datasets: [{
-                data: dataOsis,
+                data: dataOsim,
                 backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#6f42c1'],
             }]
         },

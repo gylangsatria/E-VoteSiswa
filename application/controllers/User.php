@@ -105,7 +105,7 @@ class User extends CI_Controller {
     	}
 
     $calon_nisn   = $this->input->post('nisn', TRUE); // NISN calon
-    $opsi         = $this->input->post('opsi_mpkosis', TRUE); // 0 = OSIS, 1 = MPK
+    $opsi         = $this->input->post('opsi_mpkosis', TRUE); // 0 = MPK, 1 = OSIM
     $username     = $this->session->userdata('username');
     $nisn_pemilih = $this->session->userdata('nisn');
 
@@ -141,12 +141,12 @@ class User extends CI_Controller {
 public function viewlogout() {
     $username = $this->session->userdata('username');
 
-    // Cek apakah sudah memilih OSIS dan MPK
+    // Cek apakah sudah memilih OSIM dan MPK
     $cek_osis = $this->User_Model->sudah_vote($username, 0);
     $cek_mpk  = $this->User_Model->sudah_vote($username, 1);
 
     if (! $cek_osis || ! $cek_mpk) {
-        $this->session->set_flashdata('user_failed', 'Anda belum memilih OSIS dan MPK. Silakan selesaikan voting terlebih dahulu.');
+        $this->session->set_flashdata('user_failed', 'Anda belum memilih OSIM dan MPK. Silakan selesaikan voting terlebih dahulu.');
         redirect('user/index');
     }
 

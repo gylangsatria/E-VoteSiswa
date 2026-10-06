@@ -180,7 +180,7 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
             <div class="box-content">
                 <p>
                     E-VoteSiswa adalah platform pemilihan digital yang dirancang untuk memudahkan proses demokrasi di lingkungan sekolah. 
-                    Aplikasi ini memungkinkan siswa memilih Ketua OSIS dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
+                    Aplikasi ini memungkinkan siswa memilih Ketua OSIM dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
                 </p>
             </div>
 

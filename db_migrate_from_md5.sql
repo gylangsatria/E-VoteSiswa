@@ -25,3 +25,6 @@ INSERT INTO tb_admin (username, password) VALUES ('admin', '$2y$10$92IXUNpkjO0rO
 -- Semua siswa harus di-reset passwordnya melalui menu Admin > Reset User,
 -- atau hapus dan input ulang DPT.
 -- Password siswa baru yang ditambahkan akan otomatis di-hash dengan bcrypt.
+
+-- 5. Tambah kolom nama calon wakil pada tabel kandidat (OSIM/MPK)
+ALTER TABLE tb_pilihan ADD COLUMN nama_wakil VARCHAR(100) NOT NULL DEFAULT '' AFTER nama;

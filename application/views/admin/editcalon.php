@@ -5,7 +5,7 @@
 <div class="box">
     <div class="box-inner">
         <div class="box-header well">
-            <h2>Edit Calon Ketua OSIS dan MPK</h2>
+            <h2>Edit Calon Ketua OSIM dan MPK</h2>
         </div>
         <div class="box-content">
             <?php if($this->session->flashdata('info')) { ?>
@@ -41,7 +41,7 @@
                     echo form_input($form_attribute);
                 ?>
 
-                <label class="label-control">No Pemilihan</label>
+                <label class="label-control">Nomor Urut Paslon</label>
                 <?php 
                     $form_attribute = array (
                         'type'  => 'text',
@@ -52,7 +52,7 @@
                     echo form_input($form_attribute);
                 ?>
 
-                <label class="label-control">Nama Calon</label>
+                <label class="label-control">Nama Calon Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
                 <?php 
                     $form_attribute = array (
                         'type'  => 'text',
@@ -63,21 +63,33 @@
                     echo form_input($form_attribute);
                 ?>
 
+                <label class="label-control">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
+                <?php 
+                    $form_attribute = array (
+                        'type'  => 'text',
+                        'name'  => 'nama_wakil',
+                        'class' => 'form-control',
+                        'value' => $loaddata['nama_wakil']
+                    );
+                    echo form_input($form_attribute);
+                ?>
+
                 <label class="label-control">Jenis Kandidat</label>
                 <?php
                     $options_kandidat = array(
                         '0' => 'MPK',
-                        '1' => 'OSIS'
+                        '1' => 'OSIM'
                     );
                     $form_attribute = array(
                         'class'    => 'form-control',
                         'name'     => 'opsi_mpkosis',
+                        'id'       => 'opsi_mpkosis',
                         'required' => 'required'
                     );
                     echo form_dropdown($form_attribute['name'], $options_kandidat, $loaddata['opsi_mpkosis'], $form_attribute);
                 ?>
 
-                <label class="label-control">Photo</label>
+                <label class="label-control">Foto Paslon</label>
                 <?php 
                     $form_attribute = array (
                         'type'  => 'file',
@@ -96,6 +108,15 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('opsi_mpkosis').addEventListener('change', function() {
+    var label = this.value === '1' ? 'OSIM' : 'MPK';
+    document.querySelectorAll('.kategori-label').forEach(function(el) {
+        el.textContent = label;
+    });
+});
+</script>
 
 <?php endforeach; ?>
 

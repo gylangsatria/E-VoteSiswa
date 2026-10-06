@@ -5,6 +5,18 @@
 
 ---
 
+## [1.3.2] - 6 Oktober 2026
+
+### Changed
+- **OSIS → OSIM** — Seluruh label, kartu voting, hasil vote, laporan PDF, dan pesan aplikasi kini menggunakan istilah OSIM (MPK tidak berubah).
+- **Form Kandidat** — Kolom input paslon kini: NISN, Kandidat (OSIM/MPK), Nama Calon Ketua, Nama Calon Wakil Ketua, Nomor Urut Paslon, Foto Paslon.
+- **Kolom DB `nama_wakil`** — Ditambahkan pada `tb_pilihan` untuk menyimpan nama calon wakil ketua; ditampilkan di data calon, kartu voting, hasil vote, dan laporan PDF.
+
+### Fixed
+- **Laporan PDF** — Label kategori hasil pemilihan sebelumnya tertukar (kandidat `0 = MPK` diberi label "OSIS"); kini sesuai penandaan database.
+
+---
+
 ## [1.3.1] - 6 Oktober 2026
 
 ### Changed
@@ -53,7 +65,7 @@
 - **Card Kandidat** — Redesain total: card putih dengan border-radius 12px, shadow, hover translateY(-4px) + shadow-lg.
 - **Image** — `object-fit: cover; height: 280px` untuk rasio konsisten.
 - **Typography** — Nomor urut teal uppercase, nama bold 18px.
-- **Tombol Vote** — Custom styling (merah untuk OSIS, teal untuk MPK), hover efek angkat.
+- **Tombol Vote** — Custom styling (merah untuk OSIM, teal untuk MPK), hover efek angkat.
 - **Section Title** — Underline gradient dekoratif.
 
 ### Halaman Login (Admin & User)
