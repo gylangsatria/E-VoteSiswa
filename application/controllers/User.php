@@ -11,7 +11,7 @@ class User extends CI_Controller {
 	}
 
 	public function login() {
-		if ($this->session->userdata('username')) {
+		if ($this->session->userdata('nisn')) {
 			redirect('user/index');
 		}
 
@@ -55,8 +55,7 @@ class User extends CI_Controller {
         if (is_array($result)) {
         	$this->session->unset_userdata(array('login_attempts', 'login_blocked_until'));
         	$this->session->set_userdata([
-        		'username' => $result['username'],
-    'nisn'     => $result['username']
+        		'nisn' => $result['username']
 ]);
 
         	redirect('user/index');
@@ -68,12 +67,12 @@ class User extends CI_Controller {
     }
 
     public function logout() {
-    	$this->session->unset_userdata(['username', 'nisn']);
+    	$this->session->unset_userdata('nisn');
     	redirect('user/login');
     }
 
     public function index() {
-    	if (! $this->session->userdata('username')) {
+    	if (! $this->session->userdata('nisn')) {
     		redirect('user/login');
     	}
 
@@ -82,13 +81,13 @@ class User extends CI_Controller {
     	$this->output->set_header("Cache-Control: post-check=0, pre-check=0", false);
     	$this->output->set_header("Pragma: no-cache");
 
-    	$username = $this->session->userdata('username');
+    	$username = $this->session->userdata('nisn');
 
     	$data = [
     		'username'            => $username,
     		'datacalon'           => $this->User_Model->datamodel(),
-    		'sudah_memilih_osis'  => $this->User_Model->sudah_vote($username, 0),
-    		'sudah_memilih_mpk'   => $this->User_Model->sudah_vote($username, 1)
+    		'sudah_memilih_osis'  => $this->User_Model->sudah_vote($username, 1),
+    		'sudah_memilih_mpk'   => $this->User_Model->sudah_vote($username, 0)
     	];
 
     	$navbar_data = ['username' => $username];
@@ -100,17 +99,14 @@ class User extends CI_Controller {
     }
 
     public function vote() {
-    	if (! $this->session->userdata('username')) {
+    	if (! $this->session->userdata('nisn')) {
     		redirect('user/login');
     	}
 
     $calon_nisn   = $this->input->post('nisn', TRUE); // NISN calon
     $opsi         = $this->input->post('opsi_mpkosis', TRUE); // 0 = MPK, 1 = OSIM
-    $username     = $this->session->userdata('username');
+    $username     = $this->session->userdata('nisn');
     $nisn_pemilih = $this->session->userdata('nisn');
-
-    // Debug log
-    log_message('error', 'Vote attempt: username=' . $username . ', nisn=' . $nisn_pemilih . ', calon_nisn=' . $calon_nisn . ', opsi=' . $opsi);
 
     if (empty($nisn_pemilih) || empty($username) || empty($calon_nisn) || $opsi === null) {
     	$this->session->set_flashdata('user_failed', 'Data tidak lengkap. Silakan login ulang.');
@@ -128,7 +124,6 @@ class User extends CI_Controller {
     $this->User_Model->hadir($username);
 
     if ($simpan) {
-    	log_message('error', 'Vote berhasil untuk ' . $username);
     	redirect('user/viewlogout');
     } else {
     	log_message('error', 'Vote gagal: ' . $this->db->error()['message']);
@@ -139,11 +134,11 @@ class User extends CI_Controller {
 
 
 public function viewlogout() {
-    $username = $this->session->userdata('username');
+    $username = $this->session->userdata('nisn');
 
     // Cek apakah sudah memilih OSIM dan MPK
-    $cek_osis = $this->User_Model->sudah_vote($username, 0);
-    $cek_mpk  = $this->User_Model->sudah_vote($username, 1);
+    $cek_osis = $this->User_Model->sudah_vote($username, 1);
+    $cek_mpk  = $this->User_Model->sudah_vote($username, 0);
 
     if (! $cek_osis || ! $cek_mpk) {
         $this->session->set_flashdata('user_failed', 'Anda belum memilih ' . org_label('organisasi') . ' dan MPK. Silakan selesaikan voting terlebih dahulu.');

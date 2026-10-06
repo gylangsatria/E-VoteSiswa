@@ -198,6 +198,9 @@ Class Admin_Model extends CI_Model {
 	public function datacalonspesifik($nisn) {
 		return $this->db->get_where('tb_pilihan', array('nisn' => $nisn))->result_array();
 	}
+	public function dataadadpt($username) {
+		return $this->db->get_where('tb_siswa', array('username' => $username))->num_rows() > 0;
+	}
 	public function countcalon() {
 		return $this->db->query("SELECT COUNT(*) AS jumlah FROM tb_pilihan")->row_array();
 	}

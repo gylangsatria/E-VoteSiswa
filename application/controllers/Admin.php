@@ -11,7 +11,7 @@ Class Admin extends CI_Controller {
 	public function login() {
 		// Bersihkan flashdata 'failed' dari session siswa (User) agar tidak muncul di halaman admin
 		$this->session->unset_userdata('failed');
-		if($this->session->userdata('username'))
+		if($this->session->userdata('admin'))
 		{
 			redirect('admin/index');
 		}
@@ -19,7 +19,7 @@ Class Admin extends CI_Controller {
 		$this->load->view('admin/login');
 	}
 	public function gantipassword() {
-		if(! $this->session->userdata('username'))
+		if(! $this->session->userdata('admin'))
 		{
 			redirect('admin/login');
 		}
@@ -31,12 +31,11 @@ Class Admin extends CI_Controller {
 		$this->load->view('admin/footer', $data);
 	}
 	public function updatepassword() {
-		$username		= $this->input->post('username');
+		$username		= $this->session->userdata('admin');
 		$password		= $this->input->post('password');
 		$password_hash	= password_hash($password, PASSWORD_DEFAULT);
 		$update			= $this->Admin_Model->gantipassword($username, $password_hash);
 		if($update === true) {
-			$updateuser	= $this->Admin_Model->updateuser($username);
 			$this->session->set_flashdata('update', 'Berhasil Memperbarui Password');
 			redirect('admin/gantipassword');
 		}
@@ -46,7 +45,7 @@ Class Admin extends CI_Controller {
 		}
 	}
 	public function logout() {
-		$this->session->unset_userdata('username');
+		$this->session->unset_userdata('admin');
 		redirect('admin/login');
 	}
 	public function loginvalidation() {
@@ -75,7 +74,7 @@ Class Admin extends CI_Controller {
 		if($result == true) {
 			$this->session->unset_userdata(array('login_attempts', 'login_blocked_until', 'failed'));
 			$this->session->set_userdata(array(
-				'username'	=> $username
+				'admin'	=> $username
 			));
 			redirect('admin/regvalid');
 		}
@@ -87,7 +86,7 @@ Class Admin extends CI_Controller {
 		}
 	}
 	public function regvalid(){
-		if (! $this->session->userdata('username')) {
+		if (! $this->session->userdata('admin')) {
 			redirect('admin/login');
 		}
 
@@ -130,7 +129,7 @@ Class Admin extends CI_Controller {
 		}
 	}
 	public function index() {
-		if(! $this->session->userdata('username'))
+		if(! $this->session->userdata('admin'))
 		{
 			redirect('admin/login');
 		}
@@ -152,10 +151,7 @@ Class Admin extends CI_Controller {
 		$tgl    = $this->input->post('tgl');
 		$update = $this->Admin_Model->updatedatapilketos($tapel, $tgl);
 
-    $username = $this->session->userdata('username'); // pastikan username diambil dari session
-
     if($update){  // perbandingan benar
-    	$updateuser = $this->Admin_Model->updateuser($username);
     	$this->session->set_flashdata('update', 'Berhasil Menyimpan Data');
     	redirect('admin/index');
     }
@@ -190,7 +186,7 @@ public function resetdata() {
 	}
 }
 public function idsekolah() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -226,7 +222,7 @@ public function updateidsekolah() {
 	}
 }
 public function datakelas() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -264,7 +260,7 @@ public function hapuskelas($kd_kelas) {
 }
 
 public function hapussemuakelas() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -281,7 +277,7 @@ public function hapussemuakelas() {
 }
 
 public function hapussemuadpt() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -299,7 +295,7 @@ public function hapussemuadpt() {
 
 
 public function tambahcalon() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -322,7 +318,7 @@ public function hapuscalon($nisn) {
 	}
 }
 public function tambahdpt() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -344,7 +340,7 @@ public function tambahdpt() {
 }
 
 public function datadpt() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -376,14 +372,20 @@ public function simpandpt() {
 	$nm_siswa	= $this->input->post('nm_siswa');
 	$jk 		= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
+
+	if ($this->Admin_Model->dataadadpt($username)) {
+		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar di DPT.');
+		redirect('admin/tambahdpt/');
+	}
+
 	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
 	if($save === true) {
-		$this->session->set_flashdata('info', 'Berhasil MemperbaruiData');
+		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
 		redirect('admin/tambahdpt/');
 	}
 	else
 	{
-		$this->session->set_flashdata('failed', 'Gagal Memperbarui Data');
+		$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
 		redirect('admin/tambahdpt/');
 	}
 }
@@ -391,7 +393,7 @@ public function simpandpt() {
 // reset hasil vote 
 
 public function reset_vote() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -411,28 +413,11 @@ public function reset_vote() {
 
 //simpan masal edit
 public function simpanmassaldpt() {
-	if (!$this->session->userdata('username')) {
+	if (!$this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
-	$upload_dir = FCPATH . 'uploads/';
-	$filename = basename($_FILES['datadpt']['name']);
-	$target = $upload_dir . $filename;
 	$log = [];
-
-	// Buat folder uploads jika belum ada
-	if (!is_dir($upload_dir)) {
-		@mkdir($upload_dir, 0755, true);
-	}
-
-	// Fallback ke system temp jika folder uploads tidak bisa dibuat/ditulis
-	if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
-		$upload_dir = sys_get_temp_dir() . '/evotesiswa_uploads/';
-		@mkdir($upload_dir, 0755, true);
-	}
-
-	$filename = basename($_FILES['datadpt']['name']);
-	$target = $upload_dir . $filename;
 
     // Validasi file upload
 	if (!isset($_FILES['datadpt']) || $_FILES['datadpt']['error'] != 0) {
@@ -443,9 +428,19 @@ public function simpanmassaldpt() {
 		return;
 	}
 
-	// Validasi MIME type untuk Excel/CSV files
-	$allowed_mime = array('application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
-	$file_mime = $_FILES['datadpt']['type'];
+	// Validasi MIME asli di server (bukan dari nilai klien)
+	$finfo     = finfo_open(FILEINFO_MIME_TYPE);
+	$file_mime = finfo_file($finfo, $_FILES['datadpt']['tmp_name']);
+	finfo_close($finfo);
+
+	$allowed_mime = array(
+		'application/vnd.ms-excel',
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		'application/zip',
+		'application/x-ole-storage',
+		'text/csv',
+		'text/plain'
+	);
 	if (!in_array($file_mime, $allowed_mime)) {
 		$log[] = '❌ Tipe file tidak didukung. Gunakan file Excel (.xls, .xlsx) atau CSV.';
 		$this->session->set_flashdata('failed', 'Tipe file tidak didukung.');
@@ -454,8 +449,18 @@ public function simpanmassaldpt() {
 		return;
 	}
 
+	// Siapkan folder uploads (fallback ke temp jika tidak writable)
+	$upload_dir = FCPATH . 'uploads/';
+	if (!is_dir($upload_dir)) {
+		@mkdir($upload_dir, 0755, true);
+	}
+	if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
+		$upload_dir = sys_get_temp_dir() . '/evotesiswa_uploads/';
+		@mkdir($upload_dir, 0755, true);
+	}
+
 	// Whitelist karakter nama file
-	$filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
+	$filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', basename($_FILES['datadpt']['name']));
 	$target = $upload_dir . $filename;
 
     // Pindahkan file ke folder uploads
@@ -589,7 +594,7 @@ public function editcalon($nisn) {
 
 
 public function simpancalon() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -638,7 +643,7 @@ public function simpancalon() {
 	} */
 
 	public function updatecalon() {
-		if (! $this->session->userdata('username')) {
+		if (! $this->session->userdata('admin')) {
 			redirect('admin/login');
 		}
 
@@ -683,7 +688,7 @@ public function simpancalon() {
 
 
 public function datacalon() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -695,7 +700,7 @@ public function datacalon() {
 	$this->load->view('admin/footer', $data);
 }
 public function hasilvote() {
-	if(! $this->session->userdata('username'))
+	if(! $this->session->userdata('admin'))
 	{
 		redirect('admin/login');
 	}
@@ -710,7 +715,7 @@ public function hasilvote() {
 }
 public function daftarhadir() {
     // Cek sesi login
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 
@@ -791,7 +796,7 @@ public function cetakdaftarhadir(){
 	ob_end_flush();
 }
 public function laporan() {
-	if (! $this->session->userdata('username')) {
+	if (! $this->session->userdata('admin')) {
 		redirect('admin/login');
 	}
 

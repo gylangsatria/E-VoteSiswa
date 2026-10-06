@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 7 Oktober 2026 | 1.4.1 | Perbaikan bug: status voting OSIS/MPK tertukar, isolasi sesi admin vs siswa, ganti password admin, cegah duplikat DPT, validasi MIME import, hapus dead code |
 | 7 Oktober 2026 | 1.4.0 | Pilihan jenis satuan (Sekolah/Madrasah) dengan label dinamis OSIS/OSIM, perbaikan update identitas, dan perapian form kandidat |
 | 6 Oktober 2026 | 1.3.2 | Ganti istilah OSIS → OSIM, tambah kolom calon wakil ketua pada form & data kandidat |
 | 6 Oktober 2026 | 1.3.1 | Integrasi Docker permanen di `main` + perbaikan permission bind mount, port MySQL, dan `.dockerignore` |

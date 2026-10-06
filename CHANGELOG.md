@@ -5,6 +5,23 @@
 
 ---
 
+## [1.4.1] - 7 Oktober 2026
+
+### Fixed
+- **Pemetaan Status Voting Tertukar** — Pada halaman voting, status "sudah memilih" untuk OSIS/OSIM dan MPK sebelumnya tertukar (`opsi_mpkosis` 0/1 dipakai kebalik). Akibatnya siswa baru memilih salah satu kategori tetapi kategori lain yang terkunci, sehingga voting tidak bisa diselesaikan. Kini dipetakan sesuai penandaan database (`0 = MPK`, `1 = OSIS/OSIM`), termasuk di `viewlogout`.
+- **Isolasi Sesi Admin vs Siswa** — Halaman admin sebelumnya dijaga oleh kunci sesi `username` yang sama dengan sesi siswa, sehingga siswa yang login dapat membuka seluruh halaman admin (identitas, kandidat, DPT, hasil vote, reset). Admin kini memakai kunci sesi terpisah (`admin`) dan siswa memakai `nisn`.
+- **Ganti Password Admin** — `updatepassword` tidak lagi memanggil `updateuser()` (efek samping salah ke `tb_siswa.hadir`); username diambil dari sesi admin dan password hanya diubah pada akun admin yang login.
+- **Duplikat DPT** — Form tambah DPT kini menolak NISN yang sudah terdaftar (pesan jelas) alih-alih memicu kegagalan insert.
+- **Validasi Upload Massal** — Validasi MIME file import memakai `finfo` dari isi file di server (bukan `$_FILES['type']` dari klien yang dapat dipalsukan).
+
+### Removed
+- **`application/controllers/datavote.php`** — Berkas berisi view HTML yang tidak terpakai dan merujuk rute `admin/autorefresh` yang tidak ada; dihapus.
+
+### Changed
+- Log debug per-vote pada controller `User` dihapus agar tidak menulis NISN ke log aplikasi.
+
+---
+
 ## [1.4.0] - 7 Oktober 2026
 
 ### Added
