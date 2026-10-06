@@ -3,9 +3,7 @@
 <nav class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
         <a class="mr-auto flex items-center gap-2 text-base font-bold text-slate-800" href="<?php echo base_url('index.php/admin'); ?>">
-            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-white">
-                <i class="fa fa-check-square-o"></i>
-            </span>
+            <img class="h-8 w-8 object-contain" src="<?php echo base_url(); ?>asset/img/logomt11.png" alt="Logo E-VoteSiswa">
             E-VoteSiswa
         </a>
 
