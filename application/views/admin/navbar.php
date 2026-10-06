@@ -1,11 +1,5 @@
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-<div class="container">
-  <a class="navbar-brand" href="#">E-Vote Siswa</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="collapsibleNavbar">
-
-  </div> 
+<nav class="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm">
+<div class="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+  <a class="mr-auto font-bold text-slate-800" href="#">E-Vote Siswa</a>
 </div>
 </nav>

@@ -10,67 +10,41 @@
 	</div>
 <?php endif; ?>
 
-<div class="box">
-	<div class="box-inner">
-		<div class="box-header well">
-			<h2>Tambah Data Kelas</h2>
-		</div>
-		<div class="box-content">
-			<?php if($this->session->flashdata('info')) { ?>
-			<div class="alert alert-success alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('info'); ?>
-			</div>
-			<?php } ?>
-			<?php if($this->session->flashdata('failed')) { ?>
-			<div class="alert alert-danger alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('failed'); ?>
-			</div>
-			<?php } ?>
-			<?php 
-				$form_attribute = array(
-					'method'	=> 'post',
-					'class'		=> 'form-horizontal'
-				);
-				echo form_open('admin/simpankelas', $form_attribute);
+<div class="card">
+	<div class="card-header"><h2>Tambah Data Kelas</h2></div>
+	<div class="card-body">
+		<?php if($this->session->flashdata('info')) { ?>
+		<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+		<?php } ?>
+		<?php if($this->session->flashdata('failed')) { ?>
+		<div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+		<?php } ?>
+		<?php echo form_open('admin/simpankelas', array('method' => 'post', 'class' => 'mx-auto max-w-md')); ?>
+			<label class="label" for="nm_kelas">Nama Kelas</label>
+			<?php
+				echo form_input(array('type' => 'text', 'id' => 'nm_kelas', 'class' => 'input', 'name' => 'nm_kelas'));
 			?>
-				<label class="label-control">Nama Kelas</label>
-				<?php 
-					$form_attribute = array(
-						'type'		=> 'text',
-						'class'		=> 'form-control',
-						'name'		=> 'nm_kelas'
-					);
-					echo form_input($form_attribute);
-				?>
-				<br/>
-				<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Simpan Data</button>
-			<?php 
-				echo form_close();
-			?>
-		</div>
+			<button type="submit" class="btn btn-primary mt-4"><i class="fa fa-save"></i> Simpan Data</button>
+		<?php echo form_close(); ?>
 	</div>
 </div>
-<div class="box">
-	<div class="box-inner">
-		<div class="box-header well d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 25px;">
-			<h2 style="margin: 0; font-size: 20px;">Data Kelas</h2>
-			<form method="post" action="<?= base_url('index.php/admin/hapussemuakelas'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data kelas?');">
-				<button type="submit" class="btn btn-danger btn-sm">
-					Hapus semua data
-				</button>
-			</form>
-		</div>
-			
-		</div>
-		<div class="box-content"> <br/>
-			<table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+<div class="card">
+	<div class="card-header">
+		<h2>Data Kelas</h2>
+		<form method="post" action="<?= base_url('index.php/admin/hapussemuakelas'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data kelas?');">
+			<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
+		</form>
+	</div>
+	<div class="card-body">
+		<div class="table-wrap">
+			<table class="table">
 				<thead>
-					<th width="20">No</th>
-					<th>Kode Kelas</th>
-					<th>Nama Kelas</th>
-					<th>Aksi</th>
+					<tr>
+						<th class="w-14 text-center">No</th>
+						<th>Kode Kelas</th>
+						<th>Nama Kelas</th>
+						<th class="text-center">Aksi</th>
+					</tr>
 				</thead>
 				<tbody>
 					<?php
@@ -78,15 +52,17 @@
 						foreach($datakelas as $load) {
 					?>
 						<tr>
-							<td><?php echo $no++; ?></td>
+							<td class="text-center"><?php echo $no++; ?></td>
 							<td><?php echo $load['kd_kelas']; ?></td>
 							<td><?php echo $load['nm_kelas']; ?></td>
-							<td width="100"><a href="<?php echo base_url('index.php/admin/hapuskelas'); ?>/<?php echo $load['kd_kelas']; ?>"  onClick="return confirm('Apakah anda yakin ingin menghapus data ini?');"><button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span> Hapus</button></a></td>
+							<td>
+								<a class="btn btn-warning btn-sm" href="<?php echo base_url('index.php/admin/hapuskelas'); ?>/<?php echo $load['kd_kelas']; ?>" onClick="return confirm('Apakah anda yakin ingin menghapus data ini?');"><i class="fa fa-remove"></i> Hapus</a>
+							</td>
 						</tr>
 					<?php
 						}
 					?>
-				<tbody>
+				</tbody>
 			</table>
 		</div>
 	</div>

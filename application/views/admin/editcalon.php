@@ -2,110 +2,59 @@
     foreach($datacalon as $loaddata) :
 ?>
 
-<div class="box">
-    <div class="box-inner">
-        <div class="box-header well">
-            <h2>Edit Calon Ketua OSIM dan MPK</h2>
-        </div>
-        <div class="box-content">
-            <?php if($this->session->flashdata('info')) { ?>
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('info'); ?>
-                </div>
-            <?php } ?>
-            <?php if($this->session->flashdata('failed')) { ?>
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('failed'); ?>
-                </div>
-            <?php } ?>
-            
-            <?php 
-                $form_attribute = array (
-                    'method' => 'post',
-                    'class'  => 'form-horizontal'
+<div class="card">
+    <div class="card-header"><h2>Edit Calon Ketua OSIM dan MPK</h2></div>
+    <div class="card-body">
+        <?php if($this->session->flashdata('info')) { ?>
+            <div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+        <?php } ?>
+        <?php if($this->session->flashdata('failed')) { ?>
+            <div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+        <?php } ?>
+
+        <?php echo form_open_multipart('admin/updatecalon', array('method' => 'post', 'class' => 'mx-auto max-w-xl')); ?>
+            <label class="label" for="edit-nisn">NISN</label>
+            <?php
+                echo form_input(array('type' => 'text', 'id' => 'edit-nisn', 'name' => 'nisn', 'class' => 'input bg-slate-50', 'readonly' => '', 'value' => $loaddata['nisn']));
+            ?>
+
+            <label class="label mt-4" for="edit-no">Nomor Urut Paslon</label>
+            <?php
+                echo form_input(array('type' => 'text', 'id' => 'edit-no', 'name' => 'no', 'class' => 'input', 'value' => $loaddata['no']));
+            ?>
+
+            <label class="label mt-4" for="edit-nama">Nama Calon Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
+            <?php
+                echo form_input(array('type' => 'text', 'id' => 'edit-nama', 'name' => 'nama', 'class' => 'input', 'value' => $loaddata['nama']));
+            ?>
+
+            <label class="label mt-4" for="edit-nama-wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
+            <?php
+                echo form_input(array('type' => 'text', 'id' => 'edit-nama-wakil', 'name' => 'nama_wakil', 'class' => 'input', 'value' => $loaddata['nama_wakil']));
+            ?>
+
+            <label class="label mt-4" for="opsi_mpkosis">Jenis Kandidat</label>
+            <?php
+                $options_kandidat = array(
+                    '0' => 'MPK',
+                    '1' => 'OSIM'
                 );
-                echo form_open_multipart('admin/updatecalon', $form_attribute);
+                $form_attribute = array(
+                    'class'    => 'input',
+                    'name'     => 'opsi_mpkosis',
+                    'id'       => 'opsi_mpkosis',
+                    'required' => 'required'
+                );
+                echo form_dropdown($form_attribute['name'], $options_kandidat, $loaddata['opsi_mpkosis'], $form_attribute);
             ?>
-            <div class="form-container" style="width: 400px;">
-                <label class="label-control">NISN</label>
-                <?php 
-                    $form_attribute = array (
-                        'type'     => 'text',
-                        'name'     => 'nisn',
-                        'class'    => 'form-control',
-                        'readonly' => '',
-                        'value'    => $loaddata['nisn']
-                    );
-                    echo form_input($form_attribute);
-                ?>
 
-                <label class="label-control">Nomor Urut Paslon</label>
-                <?php 
-                    $form_attribute = array (
-                        'type'  => 'text',
-                        'name'  => 'no',
-                        'class' => 'form-control',
-                        'value' => $loaddata['no']
-                    );
-                    echo form_input($form_attribute);
-                ?>
-
-                <label class="label-control">Nama Calon Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
-                <?php 
-                    $form_attribute = array (
-                        'type'  => 'text',
-                        'name'  => 'nama',
-                        'class' => 'form-control',
-                        'value' => $loaddata['nama']
-                    );
-                    echo form_input($form_attribute);
-                ?>
-
-                <label class="label-control">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo ($loaddata['opsi_mpkosis'] == 1) ? 'OSIM' : 'MPK'; ?></span></label>
-                <?php 
-                    $form_attribute = array (
-                        'type'  => 'text',
-                        'name'  => 'nama_wakil',
-                        'class' => 'form-control',
-                        'value' => $loaddata['nama_wakil']
-                    );
-                    echo form_input($form_attribute);
-                ?>
-
-                <label class="label-control">Jenis Kandidat</label>
-                <?php
-                    $options_kandidat = array(
-                        '0' => 'MPK',
-                        '1' => 'OSIM'
-                    );
-                    $form_attribute = array(
-                        'class'    => 'form-control',
-                        'name'     => 'opsi_mpkosis',
-                        'id'       => 'opsi_mpkosis',
-                        'required' => 'required'
-                    );
-                    echo form_dropdown($form_attribute['name'], $options_kandidat, $loaddata['opsi_mpkosis'], $form_attribute);
-                ?>
-
-                <label class="label-control">Foto Paslon</label>
-                <?php 
-                    $form_attribute = array (
-                        'type'  => 'file',
-                        'name'  => 'photo',
-                        'class' => 'form-control'
-                    );
-                    echo form_input($form_attribute);
-                ?>
-
-                <br/>
-                <button type="submit" class="btn btn-primary">Simpan Data</button>
-            </div>
-            <?php 
-                echo form_close();
+            <label class="label mt-4" for="edit-photo">Foto Paslon</label>
+            <?php
+                echo form_input(array('type' => 'file', 'id' => 'edit-photo', 'name' => 'photo', 'class' => 'input'));
             ?>
-        </div>
+
+            <button type="submit" class="btn btn-primary mt-5"><i class="fa fa-save"></i> Simpan Data</button>
+        <?php echo form_close(); ?>
     </div>
 </div>
 

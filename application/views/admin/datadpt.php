@@ -1,48 +1,27 @@
-<?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success">
-        <?= $this->session->flashdata('success'); ?>
+<div class="card">
+    <div class="card-header">
+        <h2>Data Pemilih Tetap (DPT)</h2>
+        <form method="post" action="<?= base_url('index.php/admin/hapussemuadpt'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data DPT?');">
+            <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
+        </form>
     </div>
-<?php endif; ?>
+    <div class="card-body">
+        <form method="GET" action="<?php echo base_url('index.php/admin/datadpt'); ?>" class="mb-4 flex flex-col gap-2 sm:flex-row">
+            <input type="text" name="keyword" class="input sm:max-w-xs" placeholder="Cari NISN atau Nama..." value="<?php echo $this->input->get('keyword'); ?>">
+            <button type="submit" class="btn btn-info"><i class="fa fa-search"></i> Cari</button>
+            <a href="<?php echo base_url('index.php/admin/datadpt'); ?>" class="btn btn-default">Reset</a>
+        </form>
 
-<?php if ($this->session->flashdata('warning')): ?>
-    <div class="alert alert-warning">
-        <?= $this->session->flashdata('warning'); ?>
-    </div>
-<?php endif; ?>
-
-<div class="box">
-    <div class="box-inner">
-        <div class="box-header well d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 25px;">
-            <h2 style="margin: 0; font-size: 20px;">Data Pemilih Tetap (DPT)</h2>
-            <form method="post" action="<?= base_url('index.php/admin/hapussemuadpt'); ?>" onsubmit="return confirm('Apakah anda yakin ingin menghapus semua data kelas?');">
-                <button type="submit" class="btn btn-danger btn-sm">
-                    Hapus semua data
-                </button>
-            </form>
-        </div>
-
-        <div class="box-content">
-            <!-- Form Pencarian -->
-            <form method="GET" action="<?php echo base_url('index.php/admin/datadpt'); ?>" class="form-inline mb-3">
-                <div class="form-group">
-                    <input type="text" name="keyword" class="form-control" placeholder="Cari NISN atau Nama..." value="<?php echo $this->input->get('keyword'); ?>">
-                </div>
-                <button type="submit" class="btn btn-info">
-                    <span class="glyphicon glyphicon-search"></span> Cari
-                </button>
-                <a href="<?php echo base_url('index.php/admin/datadpt'); ?>" class="btn btn-default">Reset</a>
-            </form> <br>
-
-            <!-- Tabel Data -->
-            <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+        <div class="table-wrap">
+            <table class="table">
                 <thead>
                     <tr>
                         <th class="text-center">No</th>
                         <th class="text-center">NISN</th>
-                        <th class="text-center">Nama Siswa</th>
+                        <th>Nama Siswa</th>
                         <th class="text-center">L/P</th>
-                        <th class="text-center">Kelas</th>
-                        <th class="text-center" colspan="2">Aksi</th>
+                        <th>Kelas</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,19 +35,11 @@
                             <td><?php echo $load['nm_siswa']; ?></td>
                             <td class="text-center"><?php echo $load['jk']; ?></td>
                             <td><?php echo $load['nm_kelas']; ?></td>
-                            <td width="100">
-                                <a href="<?php echo base_url('index.php/admin/editdpt/'.$load['username']); ?>">
-                                    <button type="button" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-edit"></span> Edit
-                                    </button>
-                                </a>
-                            </td>
-                            <td width="100">
-                                <a onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" href="<?php echo base_url('index.php/admin/hapusdpt/'.$load['username']); ?>">
-                                    <button type="button" class="btn btn-warning">
-                                        <span class="glyphicon glyphicon-remove"></span> Hapus
-                                    </button>
-                                </a>
+                            <td>
+                                <div class="flex flex-wrap gap-2">
+                                    <a class="btn btn-primary btn-sm" href="<?php echo base_url('index.php/admin/editdpt/'.$load['username']); ?>"><i class="fa fa-pencil"></i> Edit</a>
+                                    <a class="btn btn-warning btn-sm" onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')" href="<?php echo base_url('index.php/admin/hapusdpt/'.$load['username']); ?>"><i class="fa fa-remove"></i> Hapus</a>
+                                </div>
                             </td>
                         </tr>
                     <?php } ?>

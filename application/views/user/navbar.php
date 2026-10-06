@@ -1,38 +1,32 @@
-<nav class="navbar navbar-modern">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNavbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="<?php echo base_url('#'); ?>" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500;">
-        E-VoteSiswa
-      </a>
-    </div>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-700 antialiased">
+<div class="flex min-h-screen flex-col">
+<nav class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+    <a class="mr-auto flex items-center gap-2 text-base font-bold text-slate-800" href="<?php echo base_url(); ?>index.php">
+      <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white"><i class="fa fa-check-square-o"></i></span>
+      E-VoteSiswa
+    </a>
 
-    <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span class="user-avatar">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </span>
-            <span class="user-name"><?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
-          </a>
-        </li>
-        <li>
-          <a href="<?php echo base_url(); ?>index.php/user/logout" class="logout-link">
-            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Logout
-          </a>
-        </li>
-      </ul>
+    <details class="md:hidden">
+      <summary class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg border border-slate-300 text-slate-600"><i class="fa fa-bars"></i></summary>
+      <div class="absolute left-0 right-0 z-50 border-b border-slate-200 bg-white px-4 py-3 shadow-lg">
+        <ul class="flex flex-col gap-1 text-sm">
+          <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100" href="<?php echo base_url(); ?>index.php"><i class="fa fa-home"></i> Beranda</a></li>
+          <li><a class="flex items-center gap-2 rounded-lg px-3 py-2 text-red-600 hover:bg-red-50" href="<?php echo base_url(); ?>index.php/user/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="hidden items-center gap-1 md:flex">
+      <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-blue-600" href="<?php echo base_url(); ?>index.php"><i class="fa fa-home"></i> Beranda</a>
+      <span class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600">
+        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-blue-600"><i class="fa fa-user"></i></span>
+        <span class="max-w-[100px] truncate"><?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
+      </span>
+      <a class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50" href="<?php echo base_url(); ?>index.php/user/logout"><i class="fa fa-sign-out"></i> Logout</a>
     </div>
   </div>
 </nav>
+
+<main class="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
 

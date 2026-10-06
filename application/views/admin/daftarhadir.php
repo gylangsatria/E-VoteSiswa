@@ -1,43 +1,38 @@
 <?php $pemilih = $jmlpemilih; ?>
 <?php $vote = $jmlvote; ?>
 
-<div class="box">
-    <div class="box-inner">
-        <div class="box-header well d-flex justify-content-between align-items-center" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 25px;">
-            <h2 style="margin: 0; font-size: 20px;">Daftar Hadir Pemilihan Ketua OSIM</h2>
-            <form method="post" action="<?= base_url('index.php/admin/cetakdaftarhadir'); ?>">
-                <button class="btn btn-sm btn-primary">
-                    <span class="glyphicon glyphicon-save"></span> Download Daftar Hadir
-                </button>
-            </form>
+<div class="card">
+    <div class="card-header">
+        <h2>Daftar Hadir Pemilihan Ketua OSIM</h2>
+        <form method="post" action="<?= base_url('index.php/admin/cetakdaftarhadir'); ?>">
+            <button class="btn btn-primary btn-sm"><i class="fa fa-download"></i> Download Daftar Hadir</button>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <div class="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="text-xs text-slate-500">Jumlah DPT</div>
+                <div class="text-xl font-bold text-slate-800"><?= $pemilih['jumlah']; ?></div>
+            </div>
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="text-xs text-slate-500">Jumlah DPT yang Hadir</div>
+                <div class="text-xl font-bold text-slate-800"><?= $vote['jumlah']; ?></div>
+            </div>
+            <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="text-xs text-slate-500">Jumlah DPT yang Tidak Hadir</div>
+                <div class="text-xl font-bold text-slate-800"><?= $pemilih['jumlah'] - $vote['jumlah']; ?></div>
+            </div>
         </div>
 
-        <div class="box-content">
-            <table border="0">
-                <tr>
-                    <td>Jumlah DPT</td>
-                    <td>:</td>
-                    <td><?= $pemilih['jumlah']; ?></td>
-                </tr>
-                <tr>
-                    <td>Jumlah DPT yang Hadir</td>
-                    <td>:</td>
-                    <td><?= $vote['jumlah']; ?></td>
-                </tr>
-                <tr>
-                    <td>Jumlah DPT yang Tidak Hadir</td>
-                    <td>:</td>
-                    <td><?= $pemilih['jumlah'] - $vote['jumlah']; ?></td>
-                </tr>
-            </table>
-
-            <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+        <div class="table-wrap">
+            <table class="table">
                 <thead>
                     <tr>
-                        <th width="15" class="text-center">No</th>
+                        <th class="w-14 text-center">No</th>
                         <th class="text-center">NISN</th>
-                        <th class="text-center">Nama</th>
-                        <th class="text-center">Kelas</th>
+                        <th>Nama</th>
+                        <th>Kelas</th>
                         <th class="text-center">Keterangan</th>
                     </tr>
                 </thead>
@@ -48,12 +43,12 @@
                         <td><?= $loaddata['username']; ?></td>
                         <td><?= $loaddata['nm_siswa']; ?></td>
                         <td><?= $loaddata['nm_kelas']; ?></td>
-                        <td><?= $loaddata['hadir']; ?></td>
+                        <td class="text-center"><?= $loaddata['hadir']; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
+        </div>
     </div>
-</div>
 </div>
 

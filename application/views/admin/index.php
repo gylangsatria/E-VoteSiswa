@@ -4,186 +4,107 @@ $jumlahPemilih = isset($jmlpemilih['jumlah']) ? $jmlpemilih['jumlah'] : 0;
 $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' => ''];
 ?>
 
-        <div class=" row">
-            <div class="col-md-6 col-sm-6 col-xs-6">
-                <div  class="well top-block">
-                    <i class="glyphicon glyphicon-user blue"></i>
-
-                    <div>Jumlah Kandidat</div>
-                    <div><?php echo $jumlahCalon; ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-sm-6 col-xs-6">
-                <div  class="well top-block">
-                    <i class="glyphicon glyphicon-user green"></i>
-
-                    <div>Jumlah DPT</div>
-                    <div><?php echo $jumlahPemilih; ?></div>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="box">
-            <div class="box-inner">
-                <div class="box-header well">
-                    <h2>Data Pilketos</h2>
-                </div>
-                <div class="box-content">
-                    <?php if($this->session->flashdata('update')) { ?>
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <?php echo $this->session->flashdata('update'); ?>
-                        </div>
-                    <?php } ?>
-                    <?php if($this->session->flashdata('updatefailed')) { ?>
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <?php echo $this->session->flashdata('updatefailed'); ?>
-                        </div>
-                    <?php } ?>
-                    <?php 
-                    $form_attribute = array(
-                        'method'    => 'post',
-                        'class'     => 'form-horizontal'
-                    );
-                    echo form_open('admin/updatedatapilketos', $form_attribute);
-                    ?>
-                    <label class="label-control"> Tahun Pelajaran</label>
-                    <?php
-                    $form_attribute = array(
-                        'type'      => 'text',
-                        'class'     => 'form-control',
-                        'name'      => 'tapel',
-                        'value'     => $loaddata['tapel']
-                    );
-                    echo form_input($form_attribute);
-                    ?>
-                    <label class="label-control"> Tanggal Pelaksanaan</label>
-                    <?php
-                    $form_attribute = array(
-                        'type'      => 'date',
-                        'class'     => 'form-control',
-                        'name'      => 'tgl',
-                        'value'     => $loaddata['tgl']
-                    );
-                    echo form_input($form_attribute);
-                ?><br/>
-                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Simpan Data</button>
-                <?php 
-                echo form_close(); 
-                ?>
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center gap-4">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-xl text-sky-600"><i class="fa fa-users"></i></span>
+            <div>
+                <div class="text-sm text-slate-500">Jumlah Kandidat</div>
+                <div class="text-3xl font-bold text-slate-800"><?php echo $jumlahCalon; ?></div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="box">
-                <div class="box-inner">
-                 <div class="box-header well">
-                  <h2>Reset Data Pemilihan</h2>
-              </div>
-              <div class="box-content">
-               <p>Fitur ini akan menghapus semua data Kecuali Indentitas Sekolah dan Data Kelas</p>
-               <p>Fitur ini digunakan Apabila telah selesai melakukan pemilihan dan telah Mengunduh <a href="<?php echo base_url('index.php/admin/cetakdaftarhadir'); ?>">Daftar Hadir</a> dan <a href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a> dan ingin Melakukan Pemilihan di Tahun berikutnya</p>
-               <?php if($this->session->flashdata('reset')) { ?>
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('reset'); ?>
-                </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="flex items-center gap-4">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-600"><i class="fa fa-user-plus"></i></span>
+            <div>
+                <div class="text-sm text-slate-500">Jumlah DPT</div>
+                <div class="text-3xl font-bold text-slate-800"><?php echo $jumlahPemilih; ?></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-5">
+    <div class="card-header"><h2>Data Pilketos</h2></div>
+    <div class="card-body">
+        <?php if($this->session->flashdata('update')) { ?>
+            <div class="alert alert-success"><?php echo $this->session->flashdata('update'); ?></div>
+        <?php } ?>
+        <?php if($this->session->flashdata('updatefailed')) { ?>
+            <div class="alert alert-danger"><?php echo $this->session->flashdata('updatefailed'); ?></div>
+        <?php } ?>
+        <?php echo form_open('admin/updatedatapilketos', array('method' => 'post')); ?>
+        <label class="label" for="tapel">Tahun Pelajaran</label>
+        <?php
+        echo form_input(array('type' => 'text', 'class' => 'input', 'id' => 'tapel', 'name' => 'tapel', 'value' => $loaddata['tapel']));
+        ?>
+        <label class="label mt-4" for="tgl">Tanggal Pelaksanaan</label>
+        <?php
+        echo form_input(array('type' => 'date', 'class' => 'input', 'id' => 'tgl', 'name' => 'tgl', 'value' => $loaddata['tgl']));
+        ?>
+        <button type="submit" class="btn btn-primary mt-4"><i class="fa fa-save"></i> Simpan Data</button>
+        <?php echo form_close(); ?>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div class="card">
+        <div class="card-header"><h2>Reset Data Pemilihan</h2></div>
+        <div class="card-body">
+            <p class="text-sm text-slate-600">Fitur ini akan menghapus semua data kecuali Identitas Sekolah dan Data Kelas.</p>
+            <p class="mt-2 text-sm text-slate-600">Gunakan apabila pemilihan telah selesai dan Anda telah mengunduh <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/cetakdaftarhadir'); ?>">Daftar Hadir</a> dan <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a>.</p>
+            <?php if($this->session->flashdata('reset')) { ?>
+                <div class="alert alert-success mt-4"><?php echo $this->session->flashdata('reset'); ?></div>
             <?php } ?>
             <?php if($this->session->flashdata('resetfailed')) { ?>
-                <div class="alert alert-danger alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <?php echo $this->session->flashdata('resetfailed'); ?>
-                </div>
+                <div class="alert alert-danger mt-4"><?php echo $this->session->flashdata('resetfailed'); ?></div>
             <?php } ?>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reset"><span class="glyphicon glyphicon-remove"></span> Reset Data Pemilihan</button>
-            <div id="reset" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <b><span class="glyphicon glyphicon-warning"></span> Peringatan</b>
-                        </div>
-                        <div class="modal-body">
-                            <p>Fitur ini akan menghapus semua data Kecuali Indentitas Sekolah dan Data Kelas</p>
-                            <p>Apakah anda yakin ingin Me-Reset semua data? </p>
-                        </div>
-                        <div class="modal-footer">
-                            <a href="<?php echo base_url('index.php/admin/resetdata'); ?>"><button type="button" class="btn btn-success">Ya</button></a>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Tidak</button>
-                        </div>
-                    </div>
+            <button type="button" class="btn btn-primary mt-4" data-open-dialog="reset"><i class="fa fa-trash"></i> Reset Data Pemilihan</button>
+
+            <dialog id="reset" class="w-[90vw] max-w-md rounded-xl p-0 backdrop:bg-black/50">
+                <div class="border-b border-slate-200 px-5 py-4 font-semibold text-slate-800"><i class="fa fa-exclamation-triangle text-amber-500"></i> Peringatan</div>
+                <div class="px-5 py-4 text-sm text-slate-600">
+                    <p>Fitur ini akan menghapus semua data kecuali Identitas Sekolah dan Data Kelas.</p>
+                    <p class="mt-2">Apakah anda yakin ingin me-reset semua data?</p>
                 </div>
-            </div>
+                <div class="flex justify-end gap-2 border-t border-slate-200 px-5 py-3">
+                    <a class="btn btn-success" href="<?php echo base_url('index.php/admin/resetdata'); ?>">Ya</a>
+                    <button type="button" class="btn btn-danger" data-close-dialog>Batal</button>
+                </div>
+            </dialog>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h2>Reset User DPT</h2></div>
+        <div class="card-body">
+            <p class="text-sm text-slate-600">Gunakan apabila seorang pemilih melaporkan belum pernah memilih tetapi usernya telah terkunci karena sudah memilih <b>(usernya digunakan orang lain)</b>.</p>
+            <hr class="my-4 border-slate-200"/>
+            <?php if($this->session->flashdata('info')) { ?>
+                <div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+            <?php } ?>
+            <?php if($this->session->flashdata('failed')) { ?>
+                <div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+            <?php } ?>
+            <?php echo form_open('admin/resetuser', array('method' => 'post')); ?>
+            <label class="label" for="reset-nisn">NISN</label>
+            <?php
+            echo form_input(array('type' => 'text', 'class' => 'input', 'id' => 'reset-nisn', 'name' => 'username', 'required' => ''));
+            ?>
+            <button type="submit" class="btn btn-primary mt-4"><i class="fa fa-remove"></i> Reset User</button>
+            <?php echo form_close(); ?>
         </div>
     </div>
 </div>
-</div>
-<div class="col-lg-6">      
-    <div class="box">
-        <div class="box-inner">
-         <div class="box-header well">
-          <h2>Reset User DPT</h2>
-      </div>
-      <div class="box-content">
-        <p>Fitur ini digunakan apabila Seorang Pemilih melaporkan bahwa dia Belum pernah memilih Sebelumnya tetapi Usernya telah dikunci karena Telah Memilih <b>(Usernya digunakan oleh orang lain)</b> </p>
-        <hr/>
-        <?php if($this->session->flashdata('info')) { ?>
-            <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo $this->session->flashdata('info'); ?>
-            </div>
-        <?php } ?>
-        <?php if($this->session->flashdata('failed')) { ?>
-            <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <?php echo $this->session->flashdata('failed'); ?>
-            </div>
-        <?php } ?>
-        <?php
-        $form_attribute = array(
-            'method'    => 'post',
-            'class'     => 'form-horizontal'
-        );
-        echo form_open('admin/resetuser', $form_attribute);
-        ?>
-        <label class="label-control"> NISN</label>
-        <?php
-        $form_attribute = array(
-            'type'      => 'text',
-            'class'     => 'form-control',
-            'name'      => 'username',
-            'required'  => ''
-        );
-        echo form_input($form_attribute);
-        ?>
-        <br/>
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Reset User</button>
-        <?php 
-        echo form_close();
-        ?>
-    </div>
-</div>
-</div>
-</div>
-</div>
-<div class="row">
-    <div class="box col-md-12">
-        <div class="box-inner">
-            <div class="box-header well">
-                <h2><i class="glyphicon glyphicon-info-sign"></i> Tentang E-VoteSiswa</h2>
 
-                
-            </div>
-            <div class="box-content">
-                <p>
-                    E-VoteSiswa adalah platform pemilihan digital yang dirancang untuk memudahkan proses demokrasi di lingkungan sekolah. 
-                    Aplikasi ini memungkinkan siswa memilih Ketua OSIM dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
-                </p>
-            </div>
-
-        </div>
+<div class="card mt-5">
+    <div class="card-header"><h2><i class="fa fa-info-circle"></i> Tentang E-VoteSiswa</h2></div>
+    <div class="card-body text-sm text-slate-600">
+        <p>
+            E-VoteSiswa adalah platform pemilihan digital yang dirancang untuk memudahkan proses demokrasi di lingkungan sekolah.
+            Aplikasi ini memungkinkan siswa memilih Ketua OSIM dan MPK secara aman, transparan, dan efisien—langsung dari perangkat mereka.
+        </p>
     </div>
 </div>

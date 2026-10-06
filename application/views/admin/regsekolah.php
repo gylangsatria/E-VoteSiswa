@@ -1,68 +1,34 @@
-<div class="ch-container">
-    <div class="row">
-        
-    <div class="row">
-        <div class="col-md-12 center login-header">
-            <h2>Registrasi Sekolah</h2>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-700 antialiased">
+<div class="mx-auto max-w-md py-10">
+    <h2 class="mb-6 text-center text-2xl font-bold text-slate-800">Registrasi Sekolah</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <?php if($this->session->flashdata('regfailed')) { ?>
+                <div class="alert alert-danger"><?php echo $this->session->flashdata('regfailed'); ?></div>
+            <?php } ?>
+            <?php echo form_open('admin/simpansekolah', array('method' => 'post')); ?>
+                <label class="label" for="reg-npsn">NPSN</label>
+                <div class="mb-4 flex items-stretch">
+                    <span class="flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-50 px-4 text-brand-500"><i class="fa fa-star"></i></span>
+                    <?php
+                        echo form_input(array('type' => 'text', 'class' => 'input rounded-l-none', 'id' => 'reg-npsn', 'name' => 'npsn', 'placeholder' => 'NPSN'));
+                    ?>
+                </div>
+
+                <label class="label" for="reg-nm_sekolah">Nama Sekolah</label>
+                <div class="mb-6 flex items-stretch">
+                    <span class="flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-50 px-4 text-brand-500"><i class="fa fa-home"></i></span>
+                    <?php
+                        echo form_input(array('type' => 'text', 'class' => 'input rounded-l-none', 'id' => 'reg-nm_sekolah', 'name' => 'nm_sekolah', 'placeholder' => 'Nama Sekolah'));
+                    ?>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full py-3 text-base">Daftar</button>
+            <?php echo form_close(); ?>
         </div>
-        <!--/span-->
-    </div><!--/row-->
+    </div>
+</div>
 
-    <div class="row">
-        <div class="well col-md-5 center login-box">
-			<?php if($this->session->flashdata('regfailed')) { ?>
-				<div class="alert alert-danger alert-dismissible">
-					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					<?php echo $this->session->flashdata('regfailed'); ?>
-				</div>
-			<?php } ?>
-			<?php 
-				$form_attribute = array(
-					'method'	=> 'post',
-					'class'		=> 'form-horizontal' 
-				);
-				echo form_open('admin/simpansekolah', $form_attribute);
-			?>
-            <form class="form-horizontal" action="index.html" method="post">
-                <fieldset>
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-star red"></i></span>
-						<?php
-							$form_attribute 	= array(
-								'type'			=> 'text',
-								'class'			=> 'form-control',
-                                'name'			=> 'npsn',
-                                'placeholder'   => 'NPSN'
-							);
-							echo form_input($form_attribute);
-						?>
-                        
-                    </div>
-                    <div class="clearfix"></div><br>
-
-                    <div class="input-group input-group-lg">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-home red"></i></span>
-                        <?php
-							$form_attribute 	= array(
-								'type'			=> 'text',
-								'class'			=> 'form-control',
-								'name'			=> 'nm_sekolah',
-								'placeholder'	=> 'Nama Sekolah'
-							);
-							echo form_input($form_attribute);
-						?>
-                    </div>
-                    <div class="clearfix"></div>
-
-                    
-                    <div class="clearfix"></div>
-
-                    <p class="center col-md-5">
-                        <button type="submit" class="btn btn-primary">Daftar</button>
-                    </p>
-                </fieldset>
-            </form>
-        </div>
-        <!--/span-->
-    </div><!--/row-->
-</div><!--/fluid-row-->
+</body>
+</html>

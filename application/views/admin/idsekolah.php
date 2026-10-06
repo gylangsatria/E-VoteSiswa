@@ -1,142 +1,55 @@
-<?php 
+<?php
 	foreach($idsekolah as $load) {}
 ?>
-<div class="box">
-	<div class="box-inner">
-		<div class="box-header well">
-			<h2> Identitas Sekolah </h2>
-		</div>
-		<div class="box-content">
-			<?php if($this->session->flashdata('info')) { ?>
-			<div class="alert alert-success alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('info'); ?>
+<div class="card">
+	<div class="card-header"><h2>Identitas Sekolah</h2></div>
+	<div class="card-body">
+		<?php if($this->session->flashdata('info')) { ?>
+			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+		<?php } ?>
+		<?php if($this->session->flashdata('failed')) { ?>
+			<div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+		<?php } ?>
+		<?php echo form_open("admin/updateidsekolah", array('method' => 'post')); ?>
+			<div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+				<div class="card mb-0">
+					<div class="card-header"><h2>Data Sekolah</h2></div>
+					<div class="card-body">
+						<?php
+						$fields = array(
+							'npsn'       => 'NPSN',
+							'nm_sekolah' => 'Nama Sekolah',
+							'jln'        => 'Alamat Jln',
+							'desa'       => 'Desa / Kelurahan',
+							'kec'        => 'Kecamatan',
+							'kab'        => 'Kabupaten / Kota'
+						);
+						$first = true;
+						foreach ($fields as $name => $label) {
+						?>
+							<label class="label <?php echo $first ? '' : 'mt-4'; ?>" for="id-<?php echo $name; ?>"><?php echo $label; ?></label>
+						<?php
+							$first = false;
+							echo form_input(array('type' => 'text', 'class' => 'input', 'id' => 'id-' . $name, 'name' => $name, 'value' => $load[$name]));
+						}
+						?>
+					</div>
+				</div>
+				<div class="card mb-0">
+					<div class="card-header"><h2>Kepala Sekolah</h2></div>
+					<div class="card-body">
+						<label class="label" for="id-kpl_sekolah">Nama Kepala Sekolah</label>
+						<?php
+							echo form_input(array('type' => 'text', 'class' => 'input', 'id' => 'id-kpl_sekolah', 'name' => 'kpl_sekolah', 'value' => $load['kpl_sekolah']));
+						?>
+						<label class="label mt-4" for="id-nip">NIP</label>
+						<?php
+							echo form_input(array('type' => 'text', 'class' => 'input', 'id' => 'id-nip', 'name' => 'nip', 'value' => $load['nip']));
+						?>
+						<button type="submit" class="btn btn-primary mt-5"><i class="fa fa-save"></i> Update Data</button>
+					</div>
+				</div>
 			</div>
-			<?php } ?>
-			<?php if($this->session->flashdata('failed')) { ?>
-			<div class="alert alert-danger alert-dismissible">
-				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-				<?php echo $this->session->flashdata('failed'); ?>
-			</div>
-			<?php } ?>
-			<div style="">
-				<?php 
-					$form_attribute = array(
-						'method'	=> 'post',
-						'class'		=> 'form-horizontal'
-					);
-					echo form_open("admin/updateidsekolah", $form_attribute);
-				?>
-					<div class="row">
-					<div class="col-lg-6">
-					<div class="box">
-						<div class="box-inner">
-							<div class="box-header well">
-								<h2>DATA SEKOLAH</h2>
-							</div>
-							<div class="box-content">
-								<label class="label-control">NPSN</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'npsn',
-										'value'		=> $load['npsn']
-									);
-									echo form_input($form_attribute);
-								?>
-								<label class="label-control">Nama Sekolah</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'nm_sekolah',
-										'value'		=> $load['nm_sekolah']
-									);
-									echo form_input($form_attribute);
-								?>
-								<label class="label-control">Alamat Jln</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'jln',
-										'value'		=> $load['jln']
-									);
-									echo form_input($form_attribute);
-								?>
-								<label class="label-control">Desa / Kelurahan</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'desa',
-										'value'		=> $load['desa']
-									);
-									echo form_input($form_attribute);
-								?>
-								<label class="label-control">Kecamatan</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'kec',
-										'value'		=> $load['kec']
-									);
-									echo form_input($form_attribute);
-								?>
-								<label class="label-control">Kabupaten / Kota</label>
-								<?php
-									$form_attribute = array(
-										'type'		=> 'text',
-										'class'		=> 'form-control',
-										'name'		=> 'kab',
-										'value'		=> $load['kab']
-									);
-									echo form_input($form_attribute);
-								?>
-							</div>
-						</div>
-					</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="box">
-							<div class="box-inner">
-								<div class="box-header well">
-									<h2>Kepala Sekolah</h2>
-								</div>
-								<div class="box-content">
-									<label class="label-control">Nama Kepala Sekolah</label>
-									<?php
-										$form_attribute = array(
-											'type'		=> 'text',
-											'class'		=> 'form-control',
-											'name'		=> 'kpl_sekolah',
-											'value'		=> $load['kpl_sekolah']
-										);
-										echo form_input($form_attribute);
-									?>
-									<label class="label-control">NIP</label>
-									<?php
-										$form_attribute = array(
-											'type'		=> 'text',
-											'class'		=> 'form-control',
-											'name'		=> 'nip',
-											'value'		=> $load['nip']
-										);
-										echo form_input($form_attribute);
-									?>
-									<br/>
-									<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Update Data</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					</div>
-				<?php 
-					echo form_close();
-				?>
-			</div>
-		</div>
+		<?php echo form_close(); ?>
 	</div>
 </div>
