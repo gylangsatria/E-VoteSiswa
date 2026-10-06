@@ -7,85 +7,90 @@
 		<?php if($this->session->flashdata('failed')) { ?>
 			<div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
 		<?php } ?>
-		<?php echo form_open_multipart('admin/simpancalon', array('method' => 'post', 'class' => 'mx-auto max-w-xl')); ?>
-			<label class="label" for="nisn">NISN</label>
-			<?php
-			$form_attribute	= array (
-				'type'		=> 'text',
-				'name'		=> 'nisn',
-				'id'		=> 'nisn',
-				'class'		=> 'input',
-				'required'	=> 'required',
-				'pattern'	=> '[0-9]{8,20}',
-				'title'		=> 'Masukkan NISN yang valid (8-20 digit angka)'
-			);
-			echo form_input($form_attribute);
-			?>
+		<?php echo form_open_multipart('admin/simpancalon', array('method' => 'post', 'class' => 'mx-auto max-w-3xl')); ?>
+			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+				<div>
+					<label class="label" for="nisn">NISN</label>
+					<?php
+					echo form_input(array(
+						'type'    => 'text',
+						'name'    => 'nisn',
+						'id'      => 'nisn',
+						'class'   => 'input',
+						'required' => 'required',
+						'pattern' => '[0-9]{8,20}',
+						'title'   => 'Masukkan NISN yang valid (8-20 digit angka)'
+					));
+					?>
+				</div>
 
-			<label class="label mt-4" for="opsi_mpkosis">Kandidat</label>
-			<?php
-			$options_kandidat = array(
-				'0' => 'MPK',
-				'1' => org_label('organisasi')
-			);
-			$form_attribute = array(
-				'class'    => 'input',
-				'name'     => 'opsi_mpkosis',
-				'id'       => 'opsi_mpkosis',
-				'required' => 'required'
-			);
-			echo form_dropdown($form_attribute['name'], $options_kandidat, '1', $form_attribute);
-			?>
+				<div>
+					<label class="label" for="no">Nomor Urut Paslon</label>
+					<?php
+					echo form_input(array(
+						'type'    => 'text',
+						'name'    => 'no',
+						'id'      => 'no',
+						'class'   => 'input',
+						'required' => 'required',
+						'pattern' => '[0-9]{1,3}',
+						'title'   => 'Masukkan nomor urut paslon (1-3 digit angka)'
+					));
+					?>
+				</div>
 
-			<label class="label mt-4" for="nama">Nama Calon Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
-			<?php
-			$form_attribute	= array (
-				'type'		=> 'text',
-				'name'		=> 'nama',
-				'id'		=> 'nama',
-				'class'		=> 'input',
-				'required'	=> 'required'
-			);
-			echo form_input($form_attribute);
-			?>
+				<div>
+					<label class="label" for="opsi_mpkosis">Kandidat</label>
+					<?php
+					echo form_dropdown('opsi_mpkosis', array('0' => 'MPK', '1' => org_label('organisasi')), '1', array(
+						'class'    => 'input',
+						'id'       => 'opsi_mpkosis',
+						'required' => 'required'
+					));
+					?>
+				</div>
 
-			<label class="label mt-4" for="nama_wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
-			<?php
-			$form_attribute	= array (
-				'type'		=> 'text',
-				'name'		=> 'nama_wakil',
-				'id'		=> 'nama_wakil',
-				'class'		=> 'input',
-				'required'	=> 'required'
-			);
-			echo form_input($form_attribute);
-			?>
+				<div>
+					<label class="label" for="photo">Foto Paslon</label>
+					<?php
+					echo form_upload(array(
+						'name'   => 'photo',
+						'id'     => 'photo',
+						'class'  => 'input',
+						'accept' => '.jpg,.jpeg,.png,.gif'
+					));
+					?>
+					<p class="mt-1 text-xs text-slate-400">Format JPG, JPEG, PNG, atau GIF. Maks 1 MB.</p>
+				</div>
 
-			<label class="label mt-4" for="no">Nomor Urut Paslon</label>
-			<?php
-			$form_attribute	= array (
-				'type'		=> 'text',
-				'name'		=> 'no',
-				'id'		=> 'no',
-				'class'		=> 'input',
-				'required'	=> 'required',
-				'pattern'	=> '[0-9]{1,3}',
-				'title'		=> 'Masukkan nomor urut paslon (1-3 digit angka)'
-			);
-			echo form_input($form_attribute);
-			?>
+				<div class="sm:col-span-2">
+					<label class="label" for="nama">Nama Calon Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
+					<?php
+					echo form_input(array(
+						'type'    => 'text',
+						'name'    => 'nama',
+						'id'      => 'nama',
+						'class'   => 'input',
+						'required' => 'required'
+					));
+					?>
+				</div>
 
-			<label class="label mt-4" for="photo">Foto Paslon</label>
-			<?php
-			$form_attribute = array (
-				'name' => 'photo',
-				'id' => 'photo',
-				'class' => 'input',
-				'accept' => '.jpg,.jpeg,.png,.gif'
-			);
-			echo form_upload($form_attribute);
-			?>
-			<button type="submit" class="btn btn-primary mt-5"><i class="fa fa-save"></i> Simpan Data</button>
+				<div class="sm:col-span-2">
+					<label class="label" for="nama_wakil">Nama Calon Wakil Ketua <span class="kategori-label"><?php echo org_label('organisasi'); ?></span></label>
+					<?php
+					echo form_input(array(
+						'type'    => 'text',
+						'name'    => 'nama_wakil',
+						'id'      => 'nama_wakil',
+						'class'   => 'input',
+						'required' => 'required'
+					));
+					?>
+				</div>
+			</div>
+
+			<button type="submit" class="btn btn-primary mt-6"><i class="fa fa-save"></i> Simpan Data</button>
 		<?php echo form_close(); ?>
 	</div>
 </div>
