@@ -1,7 +1,7 @@
 # Changelog Analisis Aplikasi E-VoteSiswa
 
 **Framework:** CodeIgniter 3
-**Branch:** fix/bugs
+**Branch:** main
 
 ---
 

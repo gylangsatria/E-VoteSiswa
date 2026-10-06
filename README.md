@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah-sekolah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 6 Oktober 2026 | 1.3.1 | Integrasi Docker permanen di `main` + perbaikan permission bind mount, port MySQL, dan `.dockerignore` |
 | 7 Juni 2026 | 1.3 | Modernisasi halaman voting siswa: progress tracker OSIS/MPK, kartu kandidat dengan animasi, modal konfirmasi pilihan, navbar gradient, halaman sukses voting |
 | 7 Juni 2026 | 1.2.1 | Perbaikan flashdata conflict, upload massal DPT (CSV/XLS/XLSX), & Dockerfile |
 | 21 Mei 2026 | 1.2 | Modernisasi UI/UX tampilan aplikasi |
@@ -112,9 +113,9 @@ Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB
 
 ---
 
-## Perbaikan & Perubahan (Branch: `fix/bugs`)
+## Perbaikan & Perubahan
 
-Branch `fix/bugs` berisi perbaikan keamanan, kompatibilitas, dan tambahan fitur. Detail lengkap ada di [CHANGELOG.md](CHANGELOG.md).
+Perbaikan keamanan, kompatibilitas, dan tambahan fitur didokumentasikan lengkap di [CHANGELOG.md](CHANGELOG.md).
 
 Ringkasan perbaikan utama:
 - **Kompatibilitas PHP 8.1** — Session driver dan error reporting disesuaikan
