@@ -33,5 +33,11 @@ RUN mkdir -p /tmp/sessions && chown -R www-data:www-data /tmp/sessions && chmod 
 # Configure Apache to allow .htaccess (for CodeIgniter URL rewriting if used)
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
+# Fix writable permissions at runtime (bind mount overrides build-time chown)
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Expose port 80
 EXPOSE 80
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

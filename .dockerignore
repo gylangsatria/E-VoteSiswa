@@ -11,6 +11,6 @@ system/fonts/
 system/helpers/
 system/language/
 system/libraries/
-docker/
+docker/php/
 db_data/
 node_modules/

@@ -83,35 +83,32 @@ Setelah import database, admin sudah langsung bisa login dengan:
 
 ---
 
-## Docker Branch Workflow
+## Menjalankan dengan Docker
 
-Proyek menggunakan 2 branch untuk memisahkan konfigurasi Docker dari kode aplikasi:
-
-| Branch | Berisi Docker? | Kegunaan |
-|--------|:---:|----------|
-| `main` | ❌ | Kode aplikasi murni (production) |
-| `docker` | ✅ | Kode aplikasi + konfigurasi Docker |
-
-### Script Bantuan
-
-| Script | Arah | Fungsi |
-|--------|:----:|--------|
-| `./sync-docker.sh` | **main → docker** | Ambil perubahan terbaru dari `main` ke `docker` |
-| `./merge-docker-to-main.sh` | **docker → main** | Gabungkan hasil develop di `docker` ke `main` (file Docker otomatis dikeluarkan) |
-
-### Workflow Develop
+Konfigurasi Docker sudah terintegrasi langsung di branch `main`.
 
 ```bash
-# 1. Mulai develop di branch docker
-git checkout docker
-git push origin docker
-
-# 2. Saat selesai fitur → kirim ke main
-./merge-docker-to-main.sh
-
-# 3. Sync balik main → docker (agar kedua branch tetap sejajar)
-./sync-docker.sh
+docker compose up -d
 ```
+
+| Layanan | URL | Kredensial |
+|---------|-----|------------|
+| Aplikasi | `http://localhost:8080` | Admin: `admin` / `admin` — Siswa: NISN |
+| phpMyAdmin | `http://localhost:8081` | `root` / `rootpassword` |
+| MySQL | `localhost:3308` | `root` / `rootpassword`, database `db_pilketos` |
+
+Database `db_pilketos` otomatis dibuat dan di-import dari `db_evotesiswa.sql` saat container pertama kali dijalankan.
+
+Perintah umum:
+
+```bash
+docker compose logs -f web   # lihat log
+docker compose down          # hentikan
+docker compose down -v       # hentikan + hapus data database
+```
+
+Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `SESS_SAVE_PATH`) sehingga lokal tanpa Docker tetap jalan dengan nilai default XAMPP.
+
 
 ---
 

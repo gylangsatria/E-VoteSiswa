@@ -5,6 +5,22 @@
 
 ---
 
+## [1.3.1] - 6 Oktober 2026
+
+### Changed
+- **Integrasi Docker** — Konfigurasi Docker (`Dockerfile`, `docker-compose.yml`, `.dockerignore`, `docker/`) dipindah permanen ke branch `main`; branch terpisah `docker` tidak lagi diperlukan.
+
+### Fixed
+- **Permission bind mount** — `docker/entrypoint.sh` menyetel ulang ownership `application/cache`, `application/logs`, `uploads`, dan `asset/img` ke `www-data` saat container start, karena bind mount `.:/var/www/html` menimpa permission hasil build (menyebabkan upload foto/DPT dan penulisan log/cache gagal).
+- **Port MySQL bentrok** — Port host database diubah ke `3308` agar tidak bertabrakan dengan MySQL lokal.
+- **`.dockerignore`** — Pengecualian `docker/` dipersempit ke `docker/php/` supaya `entrypoint.sh` ikut ter-copy ke image.
+- **`docker-compose.yml`** — Menghapus atribut `version` yang sudah obsolete.
+
+### Removed
+- `merge-docker-to-main.sh`, `sync-docker.sh` — skrip workflow 2-branch yang tidak lagi relevan.
+
+---
+
 ## [1.2.1] - 7 Juni 2026
 
 ### Fixed
