@@ -4,7 +4,7 @@
             <img class="h-9 w-9 object-contain" src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" onerror="this.style.display='none'">
             E-VoteSiswa
         </h2>
-        <p class="text-sm text-blue-600/80">Pilihlah Calon Ketua OSIM dan MPK dengan bijak!</p>
+        <p class="text-sm text-blue-600/80">Pilihlah Calon Ketua dan Wakil Ketua OSIM dan MPK dengan bijak!</p>
 
         <div class="mt-5 flex items-center justify-center gap-2">
             <?php foreach ([['OSIM', $sudah_memilih_osis, '1'], ['MPK', $sudah_memilih_mpk, '2']] as $i => $step): ?>
@@ -31,8 +31,8 @@
     </div>
 
     <?php foreach ([
-        ['key' => 1, 'target' => 'osis', 'badge' => 'OSIM', 'title' => 'Calon Ketua OSIM', 'done' => $sudah_memilih_osis, 'badge_class' => 'bg-red-500/10 text-red-600'],
-        ['key' => 0, 'target' => 'mpk',  'badge' => 'MPK',  'title' => 'Calon Ketua MPK',  'done' => $sudah_memilih_mpk,  'badge_class' => 'bg-brand-100 text-brand-600'],
+        ['key' => 1, 'target' => 'osis', 'badge' => 'OSIM', 'title' => 'Calon Ketua dan Wakil Ketua OSIM', 'done' => $sudah_memilih_osis, 'badge_class' => 'bg-red-500/10 text-red-600'],
+        ['key' => 0, 'target' => 'mpk',  'badge' => 'MPK',  'title' => 'Calon Ketua dan Wakil Ketua MPK',  'done' => $sudah_memilih_mpk,  'badge_class' => 'bg-brand-100 text-brand-600'],
     ] as $section):
         $list = array_values(array_filter($datacalon, function ($c) use ($section) { return $c['opsi_mpkosis'] == $section['key']; }));
     ?>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="p-5 text-center">
                                 <h4 class="text-lg font-bold text-slate-800"><?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h4>
-                                <p class="text-sm text-slate-500">Calon Ketua <?= $section['badge']; ?></p>
+                                <p class="text-sm text-slate-500">Calon Ketua dan Wakil Ketua <?= $section['badge']; ?></p>
                                 <p class="mb-4 text-sm text-slate-500">Wakil: <?= htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php if (!$section['done']): ?>
                                     <button type="button" class="vote-trigger inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition <?= $section['target'] === 'osis' ? 'bg-red-600 hover:bg-red-700' : 'bg-brand-500 hover:bg-brand-600'; ?>">
