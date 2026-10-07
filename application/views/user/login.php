@@ -8,10 +8,11 @@
     <script src="<?php echo base_url(); ?>asset/vendor/tailwind/tailwind.min.js"></script>
     <link href="<?php echo base_url(); ?>asset/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <?php include(APPPATH . 'views/partials/tw.php'); ?>
+    <style>
+        body.login-bg { background-color: #0f172a; background-image: linear-gradient(180deg, rgba(15,23,42,.70), rgba(15,23,42,.60) 50%, rgba(15,23,42,.80)), url('<?php echo base_url(); ?>asset/img/background-login.webp'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+    </style>
 </head>
-<body class="flex min-h-screen items-center justify-center bg-slate-900 p-5 font-sans">
-    <div class="fixed inset-0 -z-10 bg-cover bg-center" style="background-image:url('<?php echo base_url(); ?>asset/img/background-login.webp')"></div>
-    <div class="fixed inset-0 -z-10 bg-gradient-to-b from-slate-900/70 via-slate-900/60 to-slate-900/80"></div>
+<body class="login-bg flex min-h-screen items-center justify-center p-5 font-sans">
 
     <div class="w-full max-w-md rounded-2xl bg-white px-6 py-10 text-center shadow-2xl sm:px-8">
         <img class="mx-auto mb-4 max-w-[120px]" src="<?php echo base_url(); ?>asset/img/logomt11.png" alt="Logo E-VoteSiswa">
