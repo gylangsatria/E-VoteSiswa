@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 8 Oktober 2026 | 1.6.1 | Lock login tidak permanen: terkunci 5 menit lalu terbuka otomatis (khususnya akun admin), username kosong tidak lagi dihitung sebagai percobaan gagal |
 | 7 Oktober 2026 | 1.6.0 | Batas waktu voting (tanggal & jam yang diatur admin, guard server-side) + perbaikan timezone jadwal (Docker UTC → `Asia/Jakarta`) |
 | 7 Oktober 2026 | 1.5.1 | Keamanan lanjutan (uji brutal): atasi Host Header Injection, Reflected XSS keyword, ballot manipulation, forced-action GET (wajib POST), session fixation (rotasi ID), SameSite cookie, array-injection DoS, validasi ekstensi upload, tutup kebocoran docker-compose/ini/entrypoint |
 | 7 Oktober 2026 | 1.5.0 | Perbaikan keamanan: guard semua endpoint admin, CSRF + POST untuk aksi destruktif, rate-limit login persisten (DB), escape output XSS, hardening Docker (DB/PMA tidak terekspos) |

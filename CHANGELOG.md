@@ -5,6 +5,17 @@
 
 ---
 
+## [1.6.1] - 8 Oktober 2026
+
+### Fixed
+- **Akun Terkunci Permanen** — lock rate-limit login tidak lagi permanen. Setelah 5 kali percobaan gagal, akun terkunci 5 menit lalu terbuka otomatis (counter di-reset ke 1 memakai kolom `updated_at`, tanpa kolom baru). Sebelumnya tidak ada reset sama sekali sehingga akun admin harus dibuka manual lewat database.
+- **Lockout DoS pada Akun Admin** — percobaan login dengan username kosong/spasi tidak lagi dicatat sebagai attempt, sehingga akun admin tidak dapat dikunci oleh request asal-asalan.
+- **Feedback Lock** — pesan "akun terkunci 5 menit" kini tampil tepat pada percobaan ke-5 (sebelumnya baru muncul pada percobaan ke-6), dan username yang tidak terdaftar dibedakan pesannya.
+- **Pertumbuhan Tabel** — baris `tb_login_attempts` yang lebih tua dari 1 hari dibersihkan otomatis saat ada percobaan login gagal.
+- **Pesan Error Login Admin Tidak Muncul** — `Admin::login()` menghapus flashdata `failed` sebelum view dirender, sehingga pesan "Username atau Password Salah" (dan pesan lock) tidak pernah tampil. Penghapusan dipindah ke saat login berhasil.
+
+---
+
 ## [1.6.0] - 7 Oktober 2026
 
 ### Added

@@ -24,40 +24,46 @@ class User extends CI_Controller {
 		$username = $this->input->post('username', TRUE);
 		$password = $this->input->post('password', TRUE);
 
-		if (! is_string($username) || ! is_string($password)) {
+		if (! is_string($username) || ! is_string($password) || trim($username) === '') {
 			$this->session->set_flashdata('user_failed', 'Username atau Password salah');
 			redirect('user/login');
 			return;
 		}
 
-		if ($this->User_Model->login_attempts($username) >= 5) {
-			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login untuk akun ini. Silakan hubungi panitia.');
+		if ($this->User_Model->login_locked($username)) {
+			$this->session->set_flashdata('user_failed', 'Terlalu banyak percobaan login untuk akun ini. Tunggu 5 menit lalu coba lagi, atau hubungi panitia.');
 			redirect('user/login');
 			return;
 		}
 
 		$result = $this->User_Model->login($username, $password);
-        $valid  = $this->User_Model->valid($username);
+		$valid  = $this->User_Model->valid($username);
 
-        if ($valid === true) {
-        	$this->session->set_flashdata('block', 'Anda sudah pernah melakukan voting. Akun Anda dinonaktifkan. Jika ini kesalahan, hubungi panitia.');
-        	redirect('user/login');
-        }
+		if ($valid === true) {
+			$this->session->set_flashdata('block', 'Anda sudah pernah melakukan voting. Akun Anda dinonaktifkan. Jika ini kesalahan, hubungi panitia.');
+			redirect('user/login');
+		}
 
-        if (is_array($result)) {
-        	$this->User_Model->reset_login_attempts($username);
-        	$this->session->sess_regenerate(TRUE);
-        	$this->session->set_userdata([
-        		'nisn' => $result['username']
-]);
+		if (is_array($result)) {
+			$this->session->sess_regenerate(TRUE);
+			$this->User_Model->reset_login_attempts($username);
+			$this->session->set_userdata([
+				'nisn' => $result['username']
+			]);
 
-        	redirect('user/index');
-        } else {
-        	$this->User_Model->record_login_attempt($username);
-        	$this->session->set_flashdata('user_failed', 'Username atau Password salah');
-        	redirect('user/login');
-        }
-    }
+			redirect('user/index');
+		}
+		else {
+			$this->User_Model->record_login_attempt($username);
+			if ($this->User_Model->login_locked($username)) {
+				$this->session->set_flashdata('user_failed', 'Password salah 5 kali. Akun terkunci 5 menit, lalu coba lagi atau hubungi panitia.');
+			}
+			else {
+				$this->session->set_flashdata('user_failed', 'Username atau Password salah');
+			}
+			redirect('user/login');
+		}
+	}
 
     public function logout() {
     	$this->session->unset_userdata('nisn');

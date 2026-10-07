@@ -71,18 +71,27 @@ class User_Model extends CI_Model {
 		])->num_rows() > 0;
 	}
 
-	public function login_attempts($username) {
+	public function login_attempts_count($username) {
 		$row = $this->db->get_where('tb_login_attempts', array('username' => substr($username, 0, 32)))->row_array();
 		return $row ? (int) $row['attempts'] : 0;
 	}
 
-	public function record_login_attempt($username) {
-		$this->db->query(
-			'INSERT INTO tb_login_attempts (username, attempts) VALUES (?, 1)
-			 ON DUPLICATE KEY UPDATE attempts = attempts + 1',
+	public function login_locked($username) {
+		return (bool) $this->db->query(
+			'SELECT 1 FROM tb_login_attempts WHERE username = ? AND attempts >= 5 AND updated_at >= NOW() - INTERVAL 5 MINUTE',
 			array(substr($username, 0, 32))
+		)->row_array();
+	}
+
+	public function record_login_attempt($username) {
+		$username = substr($username, 0, 32);
+		$this->db->query(
+			'INSERT INTO tb_login_attempts (username, attempts, updated_at) VALUES (?, 1, NOW())
+			 ON DUPLICATE KEY UPDATE attempts = IF(updated_at < NOW() - INTERVAL 5 MINUTE, 1, attempts + 1), updated_at = NOW()',
+			array($username)
 		);
-		return $this->db->affected_rows();
+		$this->db->query('DELETE FROM tb_login_attempts WHERE updated_at < NOW() - INTERVAL 1 DAY');
+		return $this->login_attempts_count($username);
 	}
 
 	public function reset_login_attempts($username) {

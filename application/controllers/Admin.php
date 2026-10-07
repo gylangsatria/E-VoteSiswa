@@ -23,8 +23,6 @@ Class Admin extends CI_Controller {
 		}
 	}
 	public function login() {
-		// Bersihkan flashdata 'failed' dari session siswa (User) agar tidak muncul di halaman admin
-		$this->session->unset_userdata('failed');
 		if($this->session->userdata('admin'))
 		{
 			redirect('admin/index');
@@ -68,14 +66,14 @@ Class Admin extends CI_Controller {
 		$username = $this->input->post('username', TRUE);
 		$password = $this->input->post('password', TRUE);
 
-		if (! is_string($username) || ! is_string($password)) {
+		if (! is_string($username) || ! is_string($password) || trim($username) === '') {
 			$this->session->set_flashdata('failed', 'Username atau Password salah');
 			redirect('admin/login');
 			return;
 		}
 
-		if ($this->Admin_Model->login_attempts($username) >= 5) {
-			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login untuk akun ini. Hubungi panitia atau tunggu 5 menit.');
+		if ($this->Admin_Model->login_locked($username)) {
+			$this->session->set_flashdata('failed', 'Terlalu banyak percobaan login untuk akun ini. Tunggu 5 menit lalu coba lagi, atau hubungi panitia.');
 			redirect('admin/login');
 			return;
 		}
@@ -83,8 +81,8 @@ Class Admin extends CI_Controller {
 		$result = $this->Admin_Model->login($username, $password);
 		if($result == true) {
 			$this->Admin_Model->reset_login_attempts($username);
-			$this->session->sess_regenerate(TRUE);
 			$this->session->unset_userdata('failed');
+			$this->session->sess_regenerate(TRUE);
 			$this->session->set_userdata(array(
 				'admin'	=> $username
 			));
@@ -92,8 +90,15 @@ Class Admin extends CI_Controller {
 		}
 		else
 		{
-			$this->Admin_Model->record_login_attempt($username);
-			$this->session->set_flashdata('failed', 'Username atau Password Salah');
+			if (! $this->Admin_Model->admin_exists($username)) {
+				$this->session->set_flashdata('failed', 'Username tidak terdaftar');
+			}
+			elseif ($this->Admin_Model->record_login_attempt($username) >= 5) {
+				$this->session->set_flashdata('failed', 'Password salah 5 kali. Akun terkunci 5 menit, lalu coba lagi atau hubungi panitia.');
+			}
+			else {
+				$this->session->set_flashdata('failed', 'Username atau Password Salah');
+			}
 			redirect('admin/login');
 		}
 	}
