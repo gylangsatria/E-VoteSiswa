@@ -11,7 +11,7 @@ foreach ($vote as $v) {
     $jumlah = isset($v['jumlah']) ? (int) $v['jumlah'] : 0;
     $key    = ($v['opsi_mpkosis'] == 1) ? 1 : 0;
     $kategori[$key]['total']   += $jumlah;
-    $kategori[$key]['labels'][] = addslashes($v['nama'] . ' / ' . $v['nama_wakil']);
+    $kategori[$key]['labels'][] = $v['nama'] . ' / ' . $v['nama_wakil'];
     $kategori[$key]['data'][]   = $jumlah;
 }
 ?>

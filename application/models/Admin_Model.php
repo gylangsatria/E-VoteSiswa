@@ -103,7 +103,9 @@ Class Admin_Model extends CI_Model {
 	}
 
 	public function delete_all_votes() {
-		return $this->db->truncate('tb_pilih');
+		$truncate = $this->db->truncate('tb_pilih');
+		$this->db->update('tb_siswa', array('hadir' => 'Tidak Hadir'));
+		return $truncate;
 	}
 
 	public function hapussemuadpt() {
