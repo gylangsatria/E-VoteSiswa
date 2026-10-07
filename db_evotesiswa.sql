@@ -21,9 +21,11 @@ DROP TABLE IF EXISTS `tb_datapilketos`;
 CREATE TABLE `tb_datapilketos` (
   `id` int NOT NULL DEFAULT '1',
   `tapel` varchar(30) NOT NULL,
-  `tgl` date NOT NULL,
+  `tgl` date DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+INSERT INTO `tb_datapilketos` (`id`, `tapel`, `tgl`) VALUES (1, '', NULL);
 
 DROP TABLE IF EXISTS `tb_identitassekolah`;
 CREATE TABLE `tb_identitassekolah` (

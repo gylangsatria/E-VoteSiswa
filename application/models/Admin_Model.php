@@ -51,11 +51,12 @@ Class Admin_Model extends CI_Model {
 		return $this->db->get_where('tb_datapilketos', array('id' => 1))->result_array();
 	}
 	public function updatedatapilketos($tapel, $tgl){
-		$this->db->where('id', 1);
-		return $this->db->update('tb_datapilketos', array(
-			'tapel' => $tapel,
-			'tgl'   => $tgl
-		));
+		$tgl = ($tgl === '' || $tgl === null) ? null : $tgl;
+		return (bool) $this->db->query(
+			"INSERT INTO tb_datapilketos (id, tapel, tgl) VALUES (1, ?, ?)
+			 ON DUPLICATE KEY UPDATE tapel = VALUES(tapel), tgl = VALUES(tgl)",
+			array($tapel, $tgl)
+		);
 	}
 	public function resetuser($username) {
 		return $this->db->delete('tb_pilih', array('username' => $username));
@@ -68,7 +69,7 @@ Class Admin_Model extends CI_Model {
 		$this->db->query("DELETE FROM tb_pilih");
 		$this->db->query("DELETE FROM tb_siswa");
 		$this->db->query("DELETE FROM tb_pilihan");
-		$this->db->query("UPDATE tb_datapilketos SET tapel='', tgl='' WHERE id='1'");
+		$this->db->query("UPDATE tb_datapilketos SET tapel='', tgl=NULL WHERE id='1'");
 		return true;
 	}
 	public function idsekolah() {
