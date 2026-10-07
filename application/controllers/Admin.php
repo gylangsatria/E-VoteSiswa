@@ -161,9 +161,29 @@ Class Admin extends CI_Controller {
 	}
 	public function updatedatapilketos(){
 		$this->require_post();
-		$tapel  = $this->input->post("tapel");
-		$tgl    = $this->input->post('tgl');
-		$update = $this->Admin_Model->updatedatapilketos($tapel, $tgl);
+		$tapel       = $this->input->post("tapel");
+		$tgl         = $this->input->post('tgl');
+		$jam_mulai   = $this->input->post('jam_mulai');
+		$jam_selesai = $this->input->post('jam_selesai');
+		$aktif       = $this->input->post('aktif') ? 1 : 0;
+
+		$tgl         = ($tgl === '' || $tgl === null) ? null : $tgl;
+		$jam_mulai   = ($jam_mulai === '' || $jam_mulai === null) ? null : $jam_mulai;
+		$jam_selesai = ($jam_selesai === '' || $jam_selesai === null) ? null : $jam_selesai;
+
+		if ($aktif && ($tgl === null || $jam_mulai === null || $jam_selesai === null)) {
+			$this->session->set_flashdata('updatefailed', 'Tanggal, jam mulai, dan jam selesai wajib diisi untuk mengaktifkan batas waktu voting.');
+			redirect('admin/index');
+			return;
+		}
+
+		if ($jam_mulai !== null && $jam_selesai !== null && strtotime($jam_selesai) <= strtotime($jam_mulai)) {
+			$this->session->set_flashdata('updatefailed', 'Jam selesai harus lebih besar dari jam mulai.');
+			redirect('admin/index');
+			return;
+		}
+
+		$update = $this->Admin_Model->updatedatapilketos($tapel, $tgl, $jam_mulai, $jam_selesai, $aktif);
 
     if($update){  // perbandingan benar
     	$this->session->set_flashdata('update', 'Berhasil Menyimpan Data');

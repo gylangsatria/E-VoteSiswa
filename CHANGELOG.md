@@ -5,6 +5,18 @@
 
 ---
 
+## [1.6.0] - Unreleased
+
+### Added
+- **Batas Waktu Voting** — Admin dapat menetapkan tanggal, jam mulai, dan jam selesai pelaksanaan pada halaman utama (`Data Pilketos`) serta mengaktifkannya. Bila diaktifkan, siswa hanya dapat memilih pada rentang waktu tersebut; tombol voting dinonaktifkan dan `User::vote` menolak di luar jadwal (guard server-side). Bila tidak diaktifkan, voting selalu terbuka.
+- Kolom DB `jam_mulai`, `jam_selesai`, `aktif` pada `tb_datapilketos` (tersedia di `db_evotesiswa.sql` dan `db_migrate_from_md5.sql`).
+- Helper `tgl_jadwal()` untuk menampilkan jadwal dalam format Indonesia.
+
+### Fixed
+- **Timezone Jadwal Voting** — timezone PHP kini di-set eksplisit (`Asia/Jakarta`, dapat dioverride via `APP_TIMEZONE`) pada `index.php`. Sebelumnya aplikasi mengandalkan timezone server; di container Docker (default UTC) jadwal voting meleset 7 jam sehingga rentang waktu yang seharusnya terbuka terbaca tertutup (dan sebaliknya).
+
+---
+
 ## [1.5.1] - 7 Oktober 2026
 
 ### Security

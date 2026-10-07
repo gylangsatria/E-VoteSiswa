@@ -37,6 +37,11 @@ ALTER TABLE tb_datapilketos MODIFY tgl DATE DEFAULT NULL;
 INSERT INTO tb_datapilketos (id, tapel, tgl) VALUES (1, '', NULL)
   ON DUPLICATE KEY UPDATE id = id;
 
+-- 7b. Jadwal batas waktu voting (jam mulai/selesai + aktif)
+ALTER TABLE tb_datapilketos ADD COLUMN jam_mulai TIME DEFAULT NULL AFTER tgl;
+ALTER TABLE tb_datapilketos ADD COLUMN jam_selesai TIME DEFAULT NULL AFTER jam_mulai;
+ALTER TABLE tb_datapilketos ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 0 AFTER jam_selesai;
+
 -- 8. Tabel rate-limit login (persisten, tahan lintas session)
 CREATE TABLE IF NOT EXISTS tb_login_attempts (
   username VARCHAR(32) NOT NULL,

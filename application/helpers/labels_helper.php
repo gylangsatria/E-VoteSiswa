@@ -27,3 +27,21 @@ if ( ! function_exists('org_label')) {
 		return isset($map[$key]) ? $map[$key] : '';
 	}
 }
+
+if ( ! function_exists('tgl_jadwal')) {
+	function tgl_jadwal($jadwal) {
+		if (empty($jadwal['tgl'])) {
+			return '';
+		}
+		$bulan = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+		$ts    = strtotime($jadwal['tgl']);
+		$out   = date('j', $ts) . ' ' . $bulan[(int) date('n', $ts)] . ' ' . date('Y', $ts);
+
+		$mulai   = !empty($jadwal['jam_mulai']) ? substr($jadwal['jam_mulai'], 0, 5) : '';
+		$selesai = !empty($jadwal['jam_selesai']) ? substr($jadwal['jam_selesai'], 0, 5) : '';
+		if ($mulai !== '' && $selesai !== '') {
+			$out .= ', pukul ' . str_replace(':', '.', $mulai) . ' - ' . str_replace(':', '.', $selesai);
+		}
+		return $out;
+	}
+}

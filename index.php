@@ -57,6 +57,16 @@
 
 /*
  *---------------------------------------------------------------
+ * DEFAULT TIMEZONE
+ *---------------------------------------------------------------
+ *
+ * Aplikasi memakai waktu lokal untuk jadwal voting. Container Docker
+ * default UTC, jadi timezone di-set eksplisit (bisa dioverride via APP_TIMEZONE).
+ */
+	date_default_timezone_set(getenv('APP_TIMEZONE') ?: 'Asia/Jakarta');
+
+/*
+ *---------------------------------------------------------------
  * ERROR REPORTING
  *---------------------------------------------------------------
  *

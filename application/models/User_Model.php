@@ -24,6 +24,21 @@ class User_Model extends CI_Model {
 		return $this->db->order_by('no', 'ASC')->get('tb_pilihan')->result_array();
 	}
 
+	public function voting_schedule() {
+		return $this->db->get_where('tb_datapilketos', ['id' => 1])->row_array();
+	}
+
+	public function is_voting_open() {
+		$row = $this->voting_schedule();
+		if (empty($row['aktif']) || empty($row['tgl'])) {
+			return true;
+		}
+		$mulai   = $row['tgl'] . ' ' . (!empty($row['jam_mulai']) ? $row['jam_mulai'] : '00:00:00');
+		$selesai = $row['tgl'] . ' ' . (!empty($row['jam_selesai']) ? $row['jam_selesai'] : '23:59:59');
+		$now     = date('Y-m-d H:i:s');
+		return ($now >= $mulai && $now <= $selesai);
+	}
+
 	public function vote($username, $calon_nisn) {
 		$calon = $this->calon_select($calon_nisn);
 		if ($calon === NULL) {

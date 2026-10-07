@@ -22,10 +22,13 @@ CREATE TABLE `tb_datapilketos` (
   `id` int NOT NULL DEFAULT '1',
   `tapel` varchar(30) NOT NULL,
   `tgl` date DEFAULT NULL,
+  `jam_mulai` time DEFAULT NULL,
+  `jam_selesai` time DEFAULT NULL,
+  `aktif` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-INSERT INTO `tb_datapilketos` (`id`, `tapel`, `tgl`) VALUES (1, '', NULL);
+INSERT INTO `tb_datapilketos` (`id`, `tapel`, `tgl`, `jam_mulai`, `jam_selesai`, `aktif`) VALUES (1, '', NULL, NULL, NULL, 0);
 
 DROP TABLE IF EXISTS `tb_identitassekolah`;
 CREATE TABLE `tb_identitassekolah` (

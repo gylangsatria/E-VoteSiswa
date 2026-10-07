@@ -50,12 +50,16 @@ Class Admin_Model extends CI_Model {
 	public function datapilketos() {
 		return $this->db->get_where('tb_datapilketos', array('id' => 1))->result_array();
 	}
-	public function updatedatapilketos($tapel, $tgl){
-		$tgl = ($tgl === '' || $tgl === null) ? null : $tgl;
+	public function updatedatapilketos($tapel, $tgl, $jam_mulai = null, $jam_selesai = null, $aktif = 0){
+		$tgl         = ($tgl === '' || $tgl === null) ? null : $tgl;
+		$jam_mulai   = ($jam_mulai === '' || $jam_mulai === null) ? null : $jam_mulai;
+		$jam_selesai = ($jam_selesai === '' || $jam_selesai === null) ? null : $jam_selesai;
+		$aktif       = $aktif ? 1 : 0;
 		return (bool) $this->db->query(
-			"INSERT INTO tb_datapilketos (id, tapel, tgl) VALUES (1, ?, ?)
-			 ON DUPLICATE KEY UPDATE tapel = VALUES(tapel), tgl = VALUES(tgl)",
-			array($tapel, $tgl)
+			"INSERT INTO tb_datapilketos (id, tapel, tgl, jam_mulai, jam_selesai, aktif) VALUES (1, ?, ?, ?, ?, ?)
+			 ON DUPLICATE KEY UPDATE tapel = VALUES(tapel), tgl = VALUES(tgl),
+			   jam_mulai = VALUES(jam_mulai), jam_selesai = VALUES(jam_selesai), aktif = VALUES(aktif)",
+			array($tapel, $tgl, $jam_mulai, $jam_selesai, $aktif)
 		);
 	}
 	public function resetuser($username) {
@@ -69,7 +73,7 @@ Class Admin_Model extends CI_Model {
 		$this->db->query("DELETE FROM tb_pilih");
 		$this->db->query("DELETE FROM tb_siswa");
 		$this->db->query("DELETE FROM tb_pilihan");
-		$this->db->query("UPDATE tb_datapilketos SET tapel='', tgl=NULL WHERE id='1'");
+		$this->db->query("UPDATE tb_datapilketos SET tapel='', tgl=NULL, jam_mulai=NULL, jam_selesai=NULL, aktif=0 WHERE id='1'");
 		return true;
 	}
 	public function idsekolah() {

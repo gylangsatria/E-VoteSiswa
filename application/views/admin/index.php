@@ -35,6 +35,11 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
         <?php if($this->session->flashdata('updatefailed')) { ?>
             <div class="alert alert-danger"><?php echo $this->session->flashdata('updatefailed'); ?></div>
         <?php } ?>
+        <?php
+        $jam_mulai   = isset($loaddata['jam_mulai']) ? $loaddata['jam_mulai'] : '';
+        $jam_selesai = isset($loaddata['jam_selesai']) ? $loaddata['jam_selesai'] : '';
+        $jadwal_aktif = !empty($loaddata['aktif']);
+        ?>
         <?php echo form_open('admin/updatedatapilketos', array('method' => 'post')); ?>
         <label class="label" for="tapel">Tahun Pelajaran</label>
         <?php
@@ -44,6 +49,25 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
         <?php
         echo form_input(array('type' => 'date', 'class' => 'input', 'id' => 'tgl', 'name' => 'tgl', 'value' => $loaddata['tgl']));
         ?>
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+                <label class="label" for="jam_mulai">Jam Mulai</label>
+                <?php
+                echo form_input(array('type' => 'time', 'class' => 'input', 'id' => 'jam_mulai', 'name' => 'jam_mulai', 'value' => $jam_mulai));
+                ?>
+            </div>
+            <div>
+                <label class="label" for="jam_selesai">Jam Selesai</label>
+                <?php
+                echo form_input(array('type' => 'time', 'class' => 'input', 'id' => 'jam_selesai', 'name' => 'jam_selesai', 'value' => $jam_selesai));
+                ?>
+            </div>
+        </div>
+        <label class="mt-4 flex items-center gap-2 text-sm text-slate-600">
+            <?php echo form_checkbox(array('name' => 'aktif', 'id' => 'aktif', 'value' => '1', 'checked' => $jadwal_aktif, 'class' => 'h-4 w-4')); ?>
+            <span>Aktifkan batas waktu voting (siswa hanya bisa memilih pada tanggal &amp; jam di atas)</span>
+        </label>
+        <p class="mt-2 text-xs text-slate-400">Jika tidak diaktifkan, voting selalu terbuka.</p>
         <button type="submit" class="btn btn-primary mt-4"><i class="fa fa-save"></i> Simpan Data</button>
         <?php echo form_close(); ?>
     </div>

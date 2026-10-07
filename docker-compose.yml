@@ -17,6 +17,7 @@ services:
       - SESS_SAVE_PATH=/tmp/sessions
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8080}
+      - APP_TIMEZONE=${APP_TIMEZONE:-Asia/Jakarta}
       - CI_ENV=${CI_ENV:-production}
     depends_on:
       db:

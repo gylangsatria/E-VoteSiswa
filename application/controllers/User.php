@@ -80,7 +80,9 @@ class User extends CI_Controller {
     		'username'            => $username,
     		'datacalon'           => $this->User_Model->datamodel(),
     		'sudah_memilih_osis'  => $this->User_Model->sudah_vote($username, 1),
-    		'sudah_memilih_mpk'   => $this->User_Model->sudah_vote($username, 0)
+    		'sudah_memilih_mpk'   => $this->User_Model->sudah_vote($username, 0),
+    		'voting_open'         => $this->User_Model->is_voting_open(),
+    		'jadwal'              => $this->User_Model->voting_schedule()
     	];
 
     	$navbar_data = ['username' => $username];
@@ -117,6 +119,12 @@ class User extends CI_Controller {
     }
 
     $opsi = (int) $calon['opsi_mpkosis'];
+
+    if (! $this->User_Model->is_voting_open()) {
+    	$this->session->set_flashdata('block', 'Voting hanya dapat dilakukan pada waktu yang telah ditentukan.');
+    	redirect('user/index');
+    	return;
+    }
 
     // Cek apakah sudah vote untuk kategori ini
     if ($this->User_Model->sudah_vote($username, $opsi)) {

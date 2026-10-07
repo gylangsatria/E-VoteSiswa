@@ -6,6 +6,19 @@
         </h2>
         <p class="text-sm text-blue-600/80">Pilihlah Calon Ketua dan Wakil Ketua <?= org_label('organisasi'); ?> dan MPK dengan bijak!</p>
 
+        <?php if (!empty($jadwal) && !empty($jadwal['aktif'])): ?>
+            <div class="mt-4 flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm <?= $voting_open ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'; ?>">
+                <i class="fa fa-clock-o"></i>
+                <span>
+                    <?php if ($voting_open): ?>
+                        Voting dibuka sampai <strong><?= tgl_jadwal($jadwal); ?></strong>.
+                    <?php else: ?>
+                        Voting hanya dibuka pada <strong><?= tgl_jadwal($jadwal); ?></strong>.
+                    <?php endif; ?>
+                </span>
+            </div>
+        <?php endif; ?>
+
         <div class="mt-5 flex items-center justify-center gap-2">
             <?php foreach ([[org_label('organisasi'), $sudah_memilih_osis, '1'], ['MPK', $sudah_memilih_mpk, '2']] as $i => $step): ?>
                 <?php if ($i === 1): ?>
@@ -62,9 +75,13 @@
                                 <h4 class="text-lg font-bold text-slate-800"><?= htmlspecialchars($loaddata['nama'], ENT_QUOTES, 'UTF-8'); ?></h4>
                                 <p class="text-sm text-slate-500">Calon Ketua dan Wakil Ketua <?= $section['badge']; ?></p>
                                 <p class="mb-4 text-sm text-slate-500">Wakil: <?= htmlspecialchars($loaddata['nama_wakil'], ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php if (!$section['done']): ?>
+                                <?php if (!$section['done'] && !empty($voting_open)): ?>
                                     <button type="button" class="vote-trigger inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition <?= $section['target'] === 'osis' ? 'bg-red-600 hover:bg-red-700' : 'bg-brand-500 hover:bg-brand-600'; ?>">
                                         <i class="fa fa-check"></i> Pilih No <?= htmlspecialchars($loaddata['no'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </button>
+                                <?php elseif (!$section['done']): ?>
+                                    <button class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-500" disabled>
+                                        <i class="fa fa-clock-o"></i> Voting Ditutup
                                     </button>
                                 <?php else: ?>
                                     <button class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-500" disabled>
