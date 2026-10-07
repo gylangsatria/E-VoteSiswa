@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 7 Oktober 2026 | 1.6.0 | Batas waktu voting (tanggal & jam yang diatur admin, guard server-side) + perbaikan timezone jadwal (Docker UTC → `Asia/Jakarta`) |
 | 7 Oktober 2026 | 1.5.1 | Keamanan lanjutan (uji brutal): atasi Host Header Injection, Reflected XSS keyword, ballot manipulation, forced-action GET (wajib POST), session fixation (rotasi ID), SameSite cookie, array-injection DoS, validasi ekstensi upload, tutup kebocoran docker-compose/ini/entrypoint |
 | 7 Oktober 2026 | 1.5.0 | Perbaikan keamanan: guard semua endpoint admin, CSRF + POST untuk aksi destruktif, rate-limit login persisten (DB), escape output XSS, hardening Docker (DB/PMA tidak terekspos) |
 | 7 Oktober 2026 | 1.4.1 | Perbaikan bug: status voting OSIS/MPK tertukar, isolasi sesi admin vs siswa, ganti password admin, cegah duplikat DPT, validasi MIME import, hapus dead code |
@@ -48,6 +49,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 - **Hasil Pemilihan** — Melihat hasil voting real-time dengan grafik
 - **Daftar Hadir** — Mengunduh daftar kehadiran pemilih (PDF)
 - **Laporan** — Mengunduh laporan hasil pemilihan (PDF)
+- **Batas Waktu Voting** — Menetapkan tanggal, jam mulai, dan jam selesai pelaksanaan; siswa hanya dapat memilih pada rentang waktu tersebut (bila diaktifkan)
 
 ---
 
@@ -119,7 +121,7 @@ docker compose down          # hentikan
 docker compose down -v       # hentikan + hapus data database
 ```
 
-Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `SESS_SAVE_PATH`, `ENCRYPTION_KEY`, `CI_ENV`) sehingga lokal tanpa Docker tetap jalan dengan nilai default XAMPP.
+Konfigurasi aplikasi membaca variabel environment (`DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `SESS_SAVE_PATH`, `ENCRYPTION_KEY`, `APP_TIMEZONE`, `CI_ENV`) sehingga lokal tanpa Docker tetap jalan dengan nilai default XAMPP. Variabel `APP_TIMEZONE` (default `Asia/Jakarta`) dipakai untuk perhitungan jadwal voting.
 
 
 ---

@@ -5,7 +5,7 @@
 
 ---
 
-## [1.6.0] - Unreleased
+## [1.6.0] - 7 Oktober 2026
 
 ### Added
 - **Batas Waktu Voting** — Admin dapat menetapkan tanggal, jam mulai, dan jam selesai pelaksanaan pada halaman utama (`Data Pilketos`) serta mengaktifkannya. Bila diaktifkan, siswa hanya dapat memilih pada rentang waktu tersebut; tombol voting dinonaktifkan dan `User::vote` menolak di luar jadwal (guard server-side). Bila tidak diaktifkan, voting selalu terbuka.
