@@ -541,7 +541,7 @@ public function simpanmassaldpt() {
 		$reader = new SpreadsheetReader($target);
 		$rows = iterator_to_array($reader);
 	} catch (Throwable $e) {
-		$log[] = '❌ Gagal membaca file: ' . $e->getMessage();
+		$log[] = '❌ Gagal membaca file' . ((defined('ENVIRONMENT') && ENVIRONMENT === 'production') ? '.' : ': ' . $e->getMessage());
 		unlink($target);
 		$this->session->set_flashdata('failed', 'Gagal membaca file. Pastikan format CSV/Excel benar.');
 		$this->session->set_flashdata('log', $log);
@@ -574,11 +574,15 @@ public function simpanmassaldpt() {
 		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
 		if ($nisn && $nama && $jk && $kelas) {
-			$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
-			if ($simpan === true) {
-				$berhasil++;
-			} else {
-				$log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
+			try {
+				$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
+				if ($simpan === true) {
+					$berhasil++;
+				} else {
+					$log[] = "❌ Gagal simpan ke DB: $nisn | $nama | $jk | $kelas";
+				}
+			} catch (Throwable $e) {
+				$log[] = "❌ Baris " . ($i + 1) . " (NISN $nisn) ditolak database, kemungkinan NISN duplikat.";
 			}
 		} else {
 			$log[] = "⚠️ Data tidak lengkap di baris " . ($i + 1) . ", dilewati.";
@@ -603,8 +607,9 @@ public function simpanmassaldpt() {
 
 // akhir simpan masal 
 
-public function hapusdpt($username) {
+public function hapusdpt($username = NULL) {
 	$this->require_post();
+	$username = ($username === NULL) ? $this->input->post('username') : $username;
 	$hapus	= $this->Admin_Model->hapusdpt($username);
 	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
@@ -616,8 +621,14 @@ public function hapusdpt($username) {
 		redirect('admin/datadpt/');
 	}
 }
-public function editdpt($username) {
+public function editdpt($username = NULL) {
+	if ($username === NULL) {
+		$username = $this->input->get('nisn', TRUE);
+	}
+
+	$username = is_string($username) ? trim($username) : '';
 	$data['datakddpt']	= $this->Admin_Model->datakddpt($username);
+	$data['nisn']		= $username;
 	$data['datakelas']	= $this->Admin_Model->datakelas();
 	$data['idsekolah']	= $this->Admin_Model->idsekolah();
 	$this->load->view('admin/head');
@@ -625,22 +636,21 @@ public function editdpt($username) {
 	$this->load->view('admin/editdpt', $data);
 	$this->load->view('admin/footer', $data);
 }
-public function updatedpt($username){
+public function updatedpt($username = NULL){
 	$this->require_post();
-	$username	= $this->input->post('nisn');
+	$username	= (string) $this->input->post('nisn');
 	$nm_siswa	= $this->input->post('nm_siswa');
 	$jk			= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
 	if($update === true) {
 		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
-		redirect('admin/editdpt/'.$username);
 	}
 	else
 	{
 		$this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
-		redirect('admin/editdpt/'.$username);
 	}
+	redirect('admin/datadpt');
 }
 
 public function editcalon($nisn) {

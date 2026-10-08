@@ -1,9 +1,18 @@
 <?php
-foreach($datakddpt as $load) { $dpt = $load; }
+$dpt = isset($datakddpt[0]) ? $datakddpt[0] : array(
+	'username'   => isset($nisn) ? $nisn : '',
+	'nm_siswa'   => '',
+	'jk'         => '',
+	'kd_kelas'   => '',
+	'nm_kelas'   => '',
+);
 ?>
 <div class="card">
 	<div class="card-header"><h2>Update DPT (Daftar Pemilih Tetap)</h2></div>
 	<div class="card-body">
+		<?php if(! isset($datakddpt[0])) { ?>
+			<div class="alert alert-danger">Data DPT dengan NISN <strong><?php echo htmlspecialchars($dpt['username'], ENT_QUOTES, 'UTF-8'); ?></strong> tidak ditemukan. <a class="underline" href="<?php echo base_url('index.php/admin/datadpt'); ?>">Kembali ke Data DPT</a></div>
+		<?php } ?>
 		<?php if($this->session->flashdata('info')) { ?>
 			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
 		<?php } ?>

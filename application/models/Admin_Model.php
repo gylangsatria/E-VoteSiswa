@@ -167,7 +167,7 @@ Class Admin_Model extends CI_Model {
 	public function datakddpt($username) {
 		$this->db->select('tb_siswa.*, tb_kelas.nm_kelas');
 		$this->db->from('tb_siswa');
-		$this->db->join('tb_kelas', 'tb_kelas.kd_kelas = tb_siswa.kd_kelas');
+		$this->db->join('tb_kelas', 'tb_kelas.kd_kelas = tb_siswa.kd_kelas', 'left');
 		$this->db->where('tb_siswa.username', $username);
 		return $this->db->get()->result_array();
 	}

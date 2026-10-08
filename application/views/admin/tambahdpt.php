@@ -1,9 +1,17 @@
-<?php if($this->session->flashdata('log')) { ?>
+<?php
+$log = $this->session->flashdata('log');
+if ($log && defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
+    $log = array_values(array_filter($log, function ($baris) {
+        return strpos($baris, '🔍') !== 0;
+    }));
+}
+?>
+<?php if($log) { ?>
     <div class="alert alert-warning">
         <div>
-            <strong>Log Debug:</strong>
+            <strong><?php echo (defined('ENVIRONMENT') && ENVIRONMENT === 'production') ? 'Catatan Import' : 'Log Debug'; ?></strong>
             <ul class="ml-5 list-disc">
-                <?php foreach($this->session->flashdata('log') as $baris) { ?>
+                <?php foreach($log as $baris) { ?>
                     <li><?php echo htmlspecialchars($baris); ?></li>
                 <?php } ?>
             </ul>
