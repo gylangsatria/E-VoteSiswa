@@ -23,8 +23,8 @@ foreach ($vote as $v) {
     <div class="alert alert-warning"><?= $this->session->flashdata('warning'); ?></div>
 <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
 <div class="card">
     <div class="card-header">
