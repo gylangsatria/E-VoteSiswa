@@ -562,20 +562,33 @@ public function simpanmassaldpt() {
 	}
 
 	$berhasil = 0;
+	$kelas_baru = array();
 
 	// Baris 0 = header, data dimulai dari baris 1
 	for ($i = 1; $i < $jumlah_baris; $i++) {
 		$row = $rows[$i];
 		$nisn  = trim($row[0] ?? '');
 		$nama  = trim($row[1] ?? '');
-		$jk    = trim($row[2] ?? '');
+		$jk    = strtoupper(substr(trim($row[2] ?? ''), 0, 1));
 		$kelas = trim($row[3] ?? '');
 
 		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
-		if ($nisn && $nama && $jk && $kelas) {
+		if ($nisn && $nama && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
 			try {
-				$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $kelas);
+				$info_kelas = $this->Admin_Model->kelas_id_dari($kelas);
+
+				if ($info_kelas === FALSE) {
+					$log[] = "⚠️ Baris " . ($i + 1) . ": kelas kosong, dilewati.";
+					continue;
+				}
+
+				if ($info_kelas['dibuat']) {
+					$kelas_baru[] = $info_kelas['nm_kelas'];
+					$log[] = "➕ Kelas baru dibuat: " . $info_kelas['nm_kelas'] . " (kode " . $info_kelas['kd_kelas'] . ")";
+				}
+
+				$simpan = $this->Admin_Model->simpanmassaldpt($nisn, $nama, $jk, $info_kelas['kd_kelas']);
 				if ($simpan === true) {
 					$berhasil++;
 				} else {
@@ -593,6 +606,10 @@ public function simpanmassaldpt() {
 
 	$gagal = $jumlah_baris - 1 - $berhasil;
 	$log[] = "✅ Total berhasil: $berhasil | ❌ Total gagal: $gagal";
+
+	if ($kelas_baru) {
+		$log[] = '➕ Kelas dibuat otomatis: ' . implode(', ', array_unique($kelas_baru));
+	}
 
 	if ($berhasil > 0) {
 		$this->session->set_flashdata('info', "Berhasil menambahkan $berhasil data. Gagal: $gagal");

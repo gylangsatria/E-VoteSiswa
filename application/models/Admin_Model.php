@@ -191,6 +191,28 @@ Class Admin_Model extends CI_Model {
 		);
 		return $this->db->insert('tb_siswa', $data);
 	}
+	public function kelas_id_dari($nilai) {
+		$nilai = trim(preg_replace('/\s+/', ' ', (string) $nilai));
+
+		if ($nilai === '') {
+			return FALSE;
+		}
+
+		$row = $this->db->get_where('tb_kelas', array('kd_kelas' => $nilai))->row_array();
+		if ($row) {
+			return array('kd_kelas' => $row['kd_kelas'], 'nm_kelas' => $row['nm_kelas'], 'dibuat' => FALSE);
+		}
+
+		$row = $this->db->get_where('tb_kelas', array('nm_kelas' => $nilai))->row_array();
+		if ($row) {
+			return array('kd_kelas' => $row['kd_kelas'], 'nm_kelas' => $row['nm_kelas'], 'dibuat' => FALSE);
+		}
+
+		$this->db->insert('tb_kelas', array('nm_kelas' => $nilai));
+
+		return array('kd_kelas' => $this->db->insert_id(), 'nm_kelas' => $nilai, 'dibuat' => TRUE);
+	}
+
 	public function hapusdpt($username) {
 		return $this->db->delete('tb_siswa', array('username' => $username));
 	}
