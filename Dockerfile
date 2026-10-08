@@ -4,9 +4,11 @@ FROM php:8.1-apache
 RUN a2enmod rewrite
 
 # Install required PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql && \
-    docker-php-ext-enable mysqli && \
-    docker-php-ext-enable opcache
+RUN apt-get update && apt-get install -y --no-install-recommends libzip-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip \
+    && docker-php-ext-enable mysqli zip \
+    && docker-php-ext-enable opcache \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /var/www/html

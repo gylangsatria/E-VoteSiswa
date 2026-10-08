@@ -540,7 +540,7 @@ public function simpanmassaldpt() {
 	try {
 		$reader = new SpreadsheetReader($target);
 		$rows = iterator_to_array($reader);
-	} catch (Exception $e) {
+	} catch (Throwable $e) {
 		$log[] = '❌ Gagal membaca file: ' . $e->getMessage();
 		unlink($target);
 		$this->session->set_flashdata('failed', 'Gagal membaca file. Pastikan format CSV/Excel benar.');
