@@ -13,6 +13,9 @@ $dpt = isset($datakddpt[0]) ? $datakddpt[0] : array(
 		<?php if(! isset($datakddpt[0])) { ?>
 			<div class="alert alert-danger">Data DPT dengan NISN <strong><?php echo htmlspecialchars($dpt['username'], ENT_QUOTES, 'UTF-8'); ?></strong> tidak ditemukan. <a class="underline" href="<?php echo base_url('index.php/admin/datadpt'); ?>">Kembali ke Data DPT</a></div>
 		<?php } ?>
+		<?php if(isset($datakddpt[0]) && $dpt['nm_kelas'] === NULL) { ?>
+			<div class="alert alert-warning">Siswa ini belum memiliki kelas yang terdaftar (kode kelas lama: <strong><?php echo htmlspecialchars($dpt['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?></strong>). Pilih kelas yang benar lalu simpan.</div>
+		<?php } ?>
 		<?php if($this->session->flashdata('info')) { ?>
 			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
 		<?php } ?>
@@ -35,6 +38,15 @@ $dpt = isset($datakddpt[0]) ? $datakddpt[0] : array(
 			</select>
 			<label class="label mt-4" for="edp-kelas">Kelas</label>
 			<select class="input" name="kd_kelas" id="edp-kelas" required>
+				<?php
+				$punya_kelas = FALSE;
+				foreach($datakelas as $kelas) {
+					if ($kelas['kd_kelas'] == $dpt['kd_kelas']) { $punya_kelas = TRUE; }
+				}
+				?>
+				<?php if(! $punya_kelas) { ?>
+					<option value="" disabled selected>-- Pilih kelas --</option>
+				<?php } ?>
 				<?php foreach($datakelas as $kelas) { ?>
 					<option value="<?php echo htmlspecialchars($kelas['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?>" <?php echo ($kelas['kd_kelas'] == $dpt['kd_kelas']) ? 'selected' : ''; ?>> <?php echo htmlspecialchars($kelas['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?> </option>
 				<?php } ?>

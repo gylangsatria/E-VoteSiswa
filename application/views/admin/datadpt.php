@@ -43,7 +43,7 @@
                             <td class="text-center"><?php echo htmlspecialchars($load['username'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo htmlspecialchars($load['nm_siswa'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td class="text-center"><?php echo htmlspecialchars($load['jk'], ENT_QUOTES, 'UTF-8'); ?></td>
-                            <td><?php echo htmlspecialchars($load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
+                            <td><?php echo htmlspecialchars($load['nm_kelas'] === NULL ? '—' : $load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td>
                                 <div class="flex flex-wrap gap-2">
                                     <a class="btn btn-primary btn-sm" href="<?php echo base_url('index.php/admin/editdpt').'?nisn='.rawurlencode($load['username']); ?>"><i class="fa fa-pencil"></i> Edit</a>
