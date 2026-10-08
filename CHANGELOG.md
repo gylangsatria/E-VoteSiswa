@@ -5,6 +5,20 @@
 
 ---
 
+## [1.6.2] - 8 Oktober 2026
+
+### Fixed
+- **Impor DPT Massal Gagal pada `.xlsx`** — ekstensi `zip` belum aktif di image PHP sehingga pembaca `SpreadsheetReader_XLSX` fatal. `ext-zip` ditambahkan ke Dockerfile; impor `.xls`, `.xlsx`, dan `.csv` kini terbaca di dalam container.
+- **Impor DPT Berhenti di Tengah (HTTP 500)** — galat database saat impor (mis. NISN duplikat) kini ditangkap sebagai `Throwable` dan dicatat sebagai baris gagal, bukan mematikan proses. CI 3.1.8 di PHP 8.1 melempar `mysqli_sql_exception`, sehingga `catch (Exception)` sebelumnya tidak menangkapnya.
+- **Nama Kelas dari Excel Menjadi Kosong di DPT** — kolom ke-4 file impor sering berisi **nama kelas** (mis. `VII B`) sedangkan `tb_siswa.kd_kelas` bertipe `int`; MySQL mengubahnya menjadi `0` tanpa error sehingga kolom Kelas tampak kosong. Impor kini memetakan kelas lewat `Admin_Model::kelas_id_dari()`: dicari berdasarkan `kd_kelas`, lalu `nm_kelas`; bila belum ada, kelas dibuat otomatis. `jk` dinormalkan (`l` → `L`), kelas wajib diisi, dan kelas baru dilaporkan pada catatan impor.
+- **Kolom Kelas Kosong Terbaca Menyesatkan** — baris DPT tanpa kelas valid kini ditampilkan sebagai `—` dengan peringatan, dan opsi kelas kosong pada form ditandai `-- Pilih kelas --` (bukan baris kosong tanpa label).
+- **Edit/Hapus DPT Gagal (400 / 404 / salah data)** — tautan aksi memakai parameter query/POST (bukan segmen URI), sehingga NISN berawalan `'` tidak lagi ditolak `permitted_uri_chars`; `editdpt`, `updatedpt`, dan `hapusdpt` menerima nilai `NULL` dan melakukan fallback. `datakddpt` memakai `LEFT JOIN` agar siswa tanpa kelas tetap tampil, dan halaman DPT menampilkan pesan hasil (flashdata) setelah simpan.
+- **Mode Production Tidak Terpakai** — `ENVIRONMENT` dibaca langsung dari `getenv('CI_ENV')`; sebelumnya `variables_order = "EGPCS"` membuat `$_SERVER` tidak memuat variabel environment sehingga aplikasi tetap berjalan sebagai `development` meski `CI_ENV=production`.
+- **Catatan Impor Kurang Informasi di Production** — pesan penyebab kegagalan kini tetap tampil di mode production, sedangkan baris debug (`🔍`) disembunyikan; galat pembacaan file tidak lagi membocorkan path server.
+- **Background Halaman Login Kadang Hilang** — background login tidak lagi bergantung pada utility Tailwind CDN yang digenerate saat runtime; dipindah ke inline `<style> body.login-bg` pada view login siswa dan admin.
+
+---
+
 ## [1.6.1] - 8 Oktober 2026
 
 ### Fixed
