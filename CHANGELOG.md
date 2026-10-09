@@ -8,10 +8,14 @@
 ## [1.6.3] - 9 Oktober 2026
 
 ### Security
+- **Validasi Server-Side Aksi Admin** — input bertipe array (`username[]=`, `nm_kelas[]=`, `password[]=`) kini ditolak sebelum diproses pada `updatepassword`, `simpankelas`, `simpandpt`, `updatedpt`, `simpancalon`, dan `updatecalon`. Sebelumnya `password[]=` menyebabkan HTTP 500 (`password_hash(): Argument #1 must be of type string, array given`) dan `nm_kelas[]=` memicu `Unknown column 'Array' in 'field list'`; kini pesan validasi tampil tanpa error 500.
+- **Validasi Nilai Aksi Admin** — `simpankelas` menolak nama kelas kosong/terlalu panjang (maks. 32 karakter, sesuai kolom `varchar(32)`); `simpancalon`/`updatecalon` menolak nomor urut non-angka, nama calon/wakil kosong, dan jenis kandidat di luar 0/1.
+- **Pesan Sukses Palsu `updatepassword`** — password kosong atau 1 karakter sebelumnya diterima dengan pesan "Berhasil Memperbarui Password"; kini minimal 6 karakter (konsisten dengan atribut `minlength` pada form).
 - **Stored XSS pada Pesan Flash** — seluruh pesan `flashdata` yang dirender ke HTML kini di-escape dengan `htmlspecialchars(..., ENT_QUOTES, 'UTF-8')` pada 12 view (admin & user). Nilai yang berasal dari input pengguna (mis. NISN pada pesan duplikat DPT) sebelumnya ditampilkan mentah; karena CSP memakai nonce dan jQuery mem-patch tag `<script>` saat runtime, payload `<script>` dapat dieksekusi. Ini menutup kanal tersebut.
 - **NISN Non-Numerik pada Impor Massal** — `simpanmassaldpt` kini menolak baris dengan NISN non-numerik (`ctype_digit`).
 
 ### Fixed
+- **`updatedpt` Menulis Data Tak Valid** — `updatedpt` kini melakukan validasi server-side yang sama dengan `simpandpt` (NISN numerik, nama wajib, jenis kelamin L/P, kelas harus terdaftar). Sebelumnya `jk=Z`, `kd_kelas=999` (kelas tidak ada), dan nama kosong tersimpan langsung ke database.
 - **Pengecekan "Sudah Memilih" Tidak Pernah Aktif** — `view_vote` masih membandingkan `tb_pilihan.nisn` dengan `tb_pilih.nisn` (kini berisi NISN pemilih) sehingga selalu mengembalikan 0 baris. Join diperbaiki ke `tb_pilih.calon_nisn`. Akibat bug ini, siswa yang sudah memilih tetap dapat login kembali dan tombol voting tetap tampil. Diperbaiki pada `db_evotesiswa.sql`, migrasi `db_migrate_from_md5.sql`, dan database berjalan.
 - **`simpandpt` Tidak Memvalidasi Input** — NISN kosong/non-numerik/terlalu pendek, nama kosong, jenis kelamin tidak valid, dan kelas yang tidak terdaftar kini ditolak dengan pesan jelas. Sebelumnya baris tidak masuk database namun pesan "Berhasil Menambahkan Data" tetap tampil.
 - **Pesan Salah pada `hapusdpt` Gagal** — flashdata `failed` sebelumnya berisi "Berhasil Menghapus Data"; kini "Gagal Menghapus Data".
