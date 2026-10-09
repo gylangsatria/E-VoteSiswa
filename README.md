@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 9 Oktober 2026 | 1.6.3 | Keamanan: escape pesan flash (stored XSS), validasi NISN impor; memperbaiki `view_vote` (pengecekan "sudah memilih" kembali aktif) & validasi `simpandpt` |
 | 8 Oktober 2026 | 1.6.2 | Impor DPT massal: dukungan `.xlsx` (ext-zip), nama kelas dipetakan/dibuat otomatis, kegagalan baris tidak lagi menghentikan proses; mode production benar-benar aktif; edit/hapus DPT & kolom kelas kosong diperbaiki |
 | 8 Oktober 2026 | 1.6.1 | Lock login tidak permanen: terkunci 5 menit lalu terbuka otomatis (khususnya akun admin), username kosong tidak lagi dihitung sebagai percobaan gagal |
 | 7 Oktober 2026 | 1.6.0 | Batas waktu voting (tanggal & jam yang diatur admin, guard server-side) + perbaikan timezone jadwal (Docker UTC → `Asia/Jakarta`) |
