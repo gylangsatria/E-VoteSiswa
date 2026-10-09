@@ -351,8 +351,9 @@ public function tambahcalon() {
 	$this->load->view('admin/tambahcalon');
 	$this->load->view('admin/footer', $data);
 }
-public function hapuscalon($nisn) {
+public function hapuscalon($nisn = NULL) {
 	$this->require_post();
+	$nisn = ($nisn === NULL) ? $this->input->post('nisn') : $nisn;
 	$hapus = $this->Admin_Model->hapuscalon($nisn);
 	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');

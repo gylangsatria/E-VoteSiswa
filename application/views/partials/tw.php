@@ -15,6 +15,19 @@ tailwind.config = {
 };
 </script>
 <script>
+document.addEventListener('submit', function (e) {
+    var form = e.target.closest ? e.target.closest('form[data-confirm]') : null;
+    if (form && !window.confirm(form.dataset.confirm)) e.preventDefault();
+});
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-confirm]');
+    if (btn && btn.matches('button, input[type="submit"]') && !window.confirm(btn.dataset.confirm)) {
+        e.preventDefault();
+    }
+});
+document.addEventListener('error', function (e) {
+    if (e.target.matches('img[data-hide-on-error]')) e.target.style.display = 'none';
+}, true);
 document.addEventListener('click', function (e) {
     var opener = e.target.closest('[data-open-dialog]');
     if (opener) {

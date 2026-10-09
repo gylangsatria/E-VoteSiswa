@@ -1,12 +1,22 @@
-<?php if($this->session->flashdata('info')) { ?>
-    <script>alert("Berhasil Menghapus Data");</script>
-<?php } ?>
-<?php if($this->session->flashdata('failed')) { ?>
-    <script>alert("Gagal Menghapus Data");</script>
-<?php } ?>
+<?php
+if ($this->session->flashdata('info')) {
+    $terhapus = TRUE;
+    $pesan    = 'Berhasil Menghapus Data';
+} elseif ($this->session->flashdata('failed')) {
+    $terhapus = FALSE;
+    $pesan    = 'Gagal Menghapus Data';
+} else {
+    $terhapus = NULL;
+    $pesan    = '';
+}
+?>
 <div class="card">
     <div class="card-header"><h2>Data Calon Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
     <div class="card-body">
+        <?php if(isset($terhapus)) { ?>
+            <div class="alert alert-<?php echo $terhapus ? 'success' : 'danger'; ?>"><?php echo $pesan; ?></div>
+        <?php } ?>
+        <?php echo form_open('admin/hapuscalon', array('id' => 'hapusCalonForm')); ?>
         <div class="table-wrap">
             <table class="table">
                 <thead>
@@ -37,9 +47,7 @@
                                 <a class="btn btn-info btn-sm" href="<?php echo base_url('index.php/admin/editcalon/'.htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8')); ?>">
                                     <i class="fa fa-pencil"></i> Edit
                                 </a>
-                                <?php echo form_open('admin/hapuscalon/'.$loaddata['nisn'], array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?');")); ?>
-                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>
-                                <?php echo form_close(); ?>
+                                <button type="submit" form="hapusCalonForm" name="nisn" value="<?php echo htmlspecialchars($loaddata['nisn'], ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-danger btn-sm" data-confirm="Apakah anda yakin ingin menghapus data ini?"><i class="fa fa-trash"></i> Hapus</button>
                             </div>
                         </td>
                     </tr>
@@ -49,6 +57,7 @@
                 </tbody>
             </table>
         </div>
+        <?php echo form_close(); ?>
     </div>
 </div>
 

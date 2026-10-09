@@ -55,6 +55,8 @@ if (empty($config['base_url'])) {
 */
 $config['index_page'] = 'index.php';
 
+$config['security_headers'] = TRUE;
+
 /*
 |--------------------------------------------------------------------------
 | URI PROTOCOL

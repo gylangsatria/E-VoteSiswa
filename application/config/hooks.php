@@ -20,3 +20,11 @@ $hook['pre_system'][] = array(
 	'params'   => array()
 );
 
+$hook['post_controller'][] = array(
+	'class'    => '',
+	'function' => 'securityheaders_post_controller',
+	'filename' => 'Securityheaders.php',
+	'filepath' => 'hooks',
+	'params'   => array()
+);
+

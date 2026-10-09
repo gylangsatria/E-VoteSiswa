@@ -31,7 +31,7 @@
 <div class="card">
 	<div class="card-header">
 		<h2>Data Kelas</h2>
-		<?php echo form_open('admin/hapussemuakelas', array('onsubmit' => "return confirm('Apakah anda yakin ingin menghapus semua data kelas?');")); ?>
+		<?php echo form_open('admin/hapussemuakelas', array('data-confirm' => 'Apakah anda yakin ingin menghapus semua data kelas?')); ?>
 			<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
 		<?php echo form_close(); ?>
 	</div>
@@ -56,7 +56,7 @@
 							<td><?php echo htmlspecialchars($load['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
 							<td><?php echo htmlspecialchars($load['nm_kelas'], ENT_QUOTES, 'UTF-8'); ?></td>
 							<td>
-								<?php echo form_open('admin/hapuskelas/'.$load['kd_kelas'], array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?');")); ?>
+								<?php echo form_open('admin/hapuskelas/'.$load['kd_kelas'], array('class' => 'inline', 'data-confirm' => 'Apakah anda yakin ingin menghapus data ini?')); ?>
 									<button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-remove"></i> Hapus</button>
 								<?php echo form_close(); ?>
 							</td>

@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <h2>Data Pemilih Tetap (DPT)</h2>
-        <?php echo form_open('admin/hapussemuadpt', array('onsubmit' => "return confirm('Apakah anda yakin ingin menghapus semua data DPT?');")); ?>
+        <?php echo form_open('admin/hapussemuadpt', array('data-confirm' => 'Apakah anda yakin ingin menghapus semua data DPT?')); ?>
             <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus semua data</button>
         <?php echo form_close(); ?>
     </div>
@@ -47,7 +47,7 @@
                             <td>
                                 <div class="flex flex-wrap gap-2">
                                     <a class="btn btn-primary btn-sm" href="<?php echo base_url('index.php/admin/editdpt').'?nisn='.rawurlencode($load['username']); ?>"><i class="fa fa-pencil"></i> Edit</a>
-                                    <?php echo form_open('admin/hapusdpt', array('class' => 'inline', 'onsubmit' => "return confirm('Apakah anda yakin ingin menghapus data ini?')")); ?>
+                                    <?php echo form_open('admin/hapusdpt', array('class' => 'inline', 'data-confirm' => 'Apakah anda yakin ingin menghapus data ini?')); ?>
                                         <input type="hidden" name="username" value="<?php echo htmlspecialchars($load['username'], ENT_QUOTES, 'UTF-8'); ?>" />
                                         <button type="submit" class="btn btn-warning btn-sm"><i class="fa fa-remove"></i> Hapus</button>
                                     <?php echo form_close(); ?>

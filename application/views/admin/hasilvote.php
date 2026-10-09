@@ -29,7 +29,7 @@ foreach ($vote as $v) {
 <div class="card">
     <div class="card-header">
         <h2>Hasil Voting</h2>
-        <?php echo form_open('admin/reset_vote', array('onsubmit' => "return confirm('Yakin ingin mereset semua hasil vote?');")); ?>
+        <?php echo form_open('admin/reset_vote', array('data-confirm' => 'Yakin ingin mereset semua hasil vote?')); ?>
             <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-refresh"></i> Reset hasil vote</button>
         <?php echo form_close(); ?>
     </div>
