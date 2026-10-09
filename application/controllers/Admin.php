@@ -202,15 +202,22 @@ Class Admin extends CI_Controller {
 
 public function resetuser() {
 	$this->require_post();
-	$username	= $this->input->post('username');
+	$username	= trim((string) $this->input->post('username'));
+
+	if (! $this->Admin_Model->dataadadpt($username)) {
+		$this->session->set_flashdata('resetuser_failed', 'NISN ' . $username . ' tidak ditemukan di DPT.');
+		redirect('admin/index');
+		return;
+	}
+
 	$reset		= $this->Admin_Model->resetuser($username);
-	if($reset === true) {
-		$updateuser	= $this->Admin_Model->updateuser($username);
-		$this->session->set_flashdata('info', 'Berhasil Mereset User');
+	$updateuser	= $this->Admin_Model->updateuser($username);
+	if($reset === true && $updateuser === true) {
+		$this->session->set_flashdata('resetuser_info', 'Berhasil Mereset User');
 		redirect('admin/index');
 	}
 	else {
-		$this->session->set_flashdata('failed', 'Gagal Mereset User');
+		$this->session->set_flashdata('resetuser_failed', 'Gagal Mereset User');
 		redirect('admin/index');
 	}
 }
@@ -427,6 +434,11 @@ public function simpandpt() {
 		redirect('admin/tambahdpt/');
 	}
 
+	if ($this->Admin_Model->dataadacalon($username)) {
+		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar sebagai kandidat. Tidak boleh ada data ganda.');
+		redirect('admin/tambahdpt/');
+	}
+
 	try {
 		$save = $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
 	} catch (Throwable $e) {
@@ -584,6 +596,10 @@ public function simpanmassaldpt() {
 		if ($nisn && $nama && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
 			if ($this->Admin_Model->dataadadpt($nisn)) {
 				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar, dilewati (tidak boleh ada data ganda).";
+				continue;
+			}
+			if ($this->Admin_Model->dataadacalon($nisn)) {
+				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar sebagai kandidat, dilewati (tidak boleh ada data ganda).";
 				continue;
 			}
 			try {
