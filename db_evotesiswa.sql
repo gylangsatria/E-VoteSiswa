@@ -112,5 +112,5 @@ SELECT `tb_pilihan`.`nisn` AS `nisn`,
        `tb_pilihan`.`no` AS `no`,
        `tb_siswa`.`username` AS `username`
 FROM (`tb_pilih`
-      JOIN `tb_pilihan` ON (`tb_pilihan`.`nisn` = `tb_pilih`.`nisn`))
+      JOIN `tb_pilihan` ON (`tb_pilihan`.`nisn` = `tb_pilih`.`calon_nisn`))
 JOIN `tb_siswa` ON (`tb_siswa`.`username` = `tb_pilih`.`username`);

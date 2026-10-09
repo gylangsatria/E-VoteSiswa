@@ -50,3 +50,17 @@ CREATE TABLE IF NOT EXISTS tb_login_attempts (
   PRIMARY KEY (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+
+-- 9. Perbaiki view_vote: join ke kolom calon_nisn (bukan nisn)
+-- Sebelumnya view membandingkan tb_pilihan.nisn dengan tb_pilih.nisn (NISN pemilih)
+-- sehingga selalu 0 baris dan pengecekan "sudah pernah voting" tidak pernah aktif.
+CREATE OR REPLACE VIEW view_vote AS
+SELECT `tb_pilihan`.`nisn` AS `nisn`,
+       `tb_pilihan`.`nama` AS `nama`,
+       `tb_pilihan`.`photo` AS `photo`,
+       `tb_pilihan`.`no` AS `no`,
+       `tb_siswa`.`username` AS `username`
+FROM (`tb_pilih`
+      JOIN `tb_pilihan` ON (`tb_pilihan`.`nisn` = `tb_pilih`.`calon_nisn`))
+JOIN `tb_siswa` ON (`tb_siswa`.`username` = `tb_pilih`.`username`);
+
