@@ -425,9 +425,33 @@ public function simpandpt() {
 	$this->require_post();
 	$username	= trim((string) $this->input->post('nisn'));
 	$password	= $username;
-	$nm_siswa	= $this->input->post('nm_siswa');
-	$jk 		= $this->input->post('jk');
-	$kd_kelas	= $this->input->post('kd_kelas');
+	$nm_siswa	= trim((string) $this->input->post('nm_siswa'));
+	$jk 		= strtoupper(substr(trim((string) $this->input->post('jk')), 0, 1));
+	$kd_kelas	= (int) $this->input->post('kd_kelas');
+
+	if (! preg_match('/^[0-9]{8,20}$/', $username)) {
+		$this->session->set_flashdata('failed', 'NISN wajib berupa angka 8-20 digit.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	if ($nm_siswa === '') {
+		$this->session->set_flashdata('failed', 'Nama siswa wajib diisi.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	if ($jk !== 'L' && $jk !== 'P') {
+		$this->session->set_flashdata('failed', 'Jenis kelamin tidak valid.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	if (! $this->db->get_where('tb_kelas', array('kd_kelas' => $kd_kelas))->row_array()) {
+		$this->session->set_flashdata('failed', 'Kelas tidak ditemukan. Pilih kelas yang terdaftar.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
 
 	if ($this->Admin_Model->dataadadpt($username)) {
 		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar di DPT. Tidak boleh ada data ganda.');
@@ -593,7 +617,7 @@ public function simpanmassaldpt() {
 
 		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
-		if ($nisn && $nama && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
+		if ($nisn && $nama && ctype_digit($nisn) && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
 			if ($this->Admin_Model->dataadadpt($nisn)) {
 				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar, dilewati (tidak boleh ada data ganda).";
 				continue;
@@ -661,7 +685,7 @@ public function hapusdpt($username = NULL) {
 	}
 	else
 	{
-		$this->session->set_flashdata('failed', 'Berhasil Menghapus Data');
+		$this->session->set_flashdata('failed', 'Gagal Menghapus Data');
 		redirect('admin/datadpt/');
 	}
 }
