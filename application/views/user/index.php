@@ -1,4 +1,11 @@
 <div class="mx-auto max-w-5xl">
+    <?php if ($this->session->flashdata('user_failed')): ?>
+        <div class="alert alert-danger mt-6"><?php echo htmlspecialchars($this->session->flashdata('user_failed'), ENT_QUOTES, 'UTF-8'); ?></div>
+    <?php endif; ?>
+
+    <?php if ($this->session->flashdata('block')): ?>
+        <div class="alert alert-danger mt-6"><?php echo htmlspecialchars($this->session->flashdata('block'), ENT_QUOTES, 'UTF-8'); ?></div>
+    <?php endif; ?>
     <div class="relative mb-9 mt-6 overflow-hidden rounded-2xl border border-blue-100 bg-blue-50 px-6 py-8 text-center text-slate-800 shadow-sm">
         <h2 class="mb-1 flex items-center justify-center gap-2 text-xl font-bold text-blue-700 sm:text-2xl">
             <img class="h-9 w-9 object-contain" src="<?= base_url(); ?>asset/img/logomt11.png" alt="Logo" data-hide-on-error>

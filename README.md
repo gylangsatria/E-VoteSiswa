@@ -10,6 +10,7 @@ Aplikasi ini tersedia secara gratis untuk digunakan oleh sekolah dan madrasah.
 
 | Tanggal | Versi | Keterangan |
 |---------|-------|------------|
+| 9 Oktober 2026 | 1.6.4 | Tinjauan ulang 1.6.3: validasi array pada aksi hapus & jadwal, batas panjang nama/NISN/kelas, validasi tanggal-jam, guard cetak daftar hadir (instalasi bersih), dan perbaikan pesan flash yang tak tampil |
 | 9 Oktober 2026 | 1.6.3 | Keamanan: validasi server-side aksi admin (tolak input array, nilai kosong/tak valid), escape pesan flash (stored XSS); memperbaiki `view_vote`, `simpandpt`, `updatedpt`, `updatepassword`, dan pesan flash yang muncul lagi setiap reload (PHP 8 vs CI 3.1.8) |
 | 8 Oktober 2026 | 1.6.2 | Impor DPT massal: dukungan `.xlsx` (ext-zip), nama kelas dipetakan/dibuat otomatis, kegagalan baris tidak lagi menghentikan proses; mode production benar-benar aktif; edit/hapus DPT & kolom kelas kosong diperbaiki |
 | 8 Oktober 2026 | 1.6.1 | Lock login tidak permanen: terkunci 5 menit lalu terbuka otomatis (khususnya akun admin), username kosong tidak lagi dihitung sebagai percobaan gagal |

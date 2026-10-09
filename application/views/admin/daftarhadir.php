@@ -10,6 +10,12 @@
     </div>
 
     <div class="card-body">
+        <?php if($this->session->flashdata('info')) { ?>
+            <div class="alert alert-success mb-4"><?php echo htmlspecialchars($this->session->flashdata('info'), ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php } ?>
+        <?php if($this->session->flashdata('failed')) { ?>
+            <div class="alert alert-danger mb-4"><?php echo htmlspecialchars($this->session->flashdata('failed'), ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php } ?>
         <div class="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div class="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
                 <div class="text-xs text-slate-500">Jumlah DPT</div>

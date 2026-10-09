@@ -35,6 +35,9 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
         <?php if($this->session->flashdata('updatefailed')) { ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($this->session->flashdata('updatefailed'), ENT_QUOTES, 'UTF-8'); ?></div>
         <?php } ?>
+        <?php if($this->session->flashdata('regfailed')) { ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($this->session->flashdata('regfailed'), ENT_QUOTES, 'UTF-8'); ?></div>
+        <?php } ?>
         <?php
         $jam_mulai   = isset($loaddata['jam_mulai']) ? $loaddata['jam_mulai'] : '';
         $jam_selesai = isset($loaddata['jam_selesai']) ? $loaddata['jam_selesai'] : '';

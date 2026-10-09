@@ -5,6 +5,23 @@
 
 ---
 
+## [1.6.4] - 9 Oktober 2026
+
+### Security
+- **Validasi Array pada Aksi Hapus & Jadwal** — `hapusdpt` (`username[]=`), `hapuscalon` (`nisn[]=`), `resetuser`, dan `updatedatapilketos` (`tapel[]=`) kini menolak input bertipe array sebelum diproses. Sebelumnya `hapusdpt`/`hapuscalon` memicu `Exception: Unknown column 'Array' in 'where clause'` yang dikirim sebagai HTTP 200 berisi halaman error, `resetuser` menimbulkan `Array to string conversion` dan pesan hasil hilang, sedangkan `tapel[]=` tersimpan sebagai string `"x"` tanpa error.
+- **Batas Panjang Nominal Kolom** — `simpandpt`, `updatedpt`, `simpancalon`, dan `updatecalon` menolak nama melebihi `varchar(100)`; `simpanmassaldpt` melewati baris dengan NISN > 32, nama > 100, atau kelas > 32 karakter dan mencatatnya di log impor.
+- **Tanggal & Jam Jadwal Tak Valid** — `updatedatapilketos` kini memvalidasi tanggal dengan `checkdate()` dan jam dengan pola `HH:MM`/`HH:MM:SS` (00–23 : 00–59).
+
+### Fixed
+- **Nilai Invalid Terpotong Senyap** — `application/config/database.php` memakai `stricton => FALSE`, sehingga CI 3.1.8 menjalankan `SET SESSION sql_mode = REPLACE(...STRICT_TRANS_TABLES...)` dan sesi aplikasi menjadi non-strict. MySQL 8 lalu memotong nilai secara senyap: nama 200 karakter tersimpan 100 karakter, NISN 40 digit tersimpan 32 digit, kelas 40 karakter tersimpan 32 karakter, `9999-99-99` menjadi `0000-00-00`, dan `99:99:99` menjadi `00:00:00` — semuanya tetap dilaporkan "Berhasil". Kini dicegah di sisi aplikasi sebelum menulis ke database.
+- **HTTP 500 pada Cetak Daftar Hadir** — `cetakdaftarhadir` memakai `foreach($datasekolah as $loaddata) {}`; pada instalasi bersih (`tb_identitassekolah` kosong) variabel tersebut tidak terdefinisi sehingga FPDF melempar `Some data has already been output, can't send PDF file`. Endpoint kini menolak dengan pesan bila identitas sekolah belum diisi.
+- **Warning Halaman Daftar Hadir** — view `admin/footer` dimuat tanpa data sehingga `$idsekolah` dan `$load` tidak terdefinisi (`Cannot modify header information`); `$load` kini memiliki nilai fallback.
+- **Pesan Tidak Tampil di Halaman Daftar Hadir** — `daftarhadir.php` tidak merender flashdata `info`/`failed`, sehingga pesan cetak daftar hadir dan reset hasil voting tidak pernah terlihat.
+- **Pesan Kandidat Tertimpa** — `datacalon.php` mengganti seluruh isi `flashdata` dengan teks tetap ("Berhasil/Gagal Menghapus Data"), sehingga pesan validasi terbaru (mis. NISN kandidat tidak valid) tidak pernah tampil; kini nilai asli yang dipakai.
+- **Path Upload Foto Kandidat** — `upload_path` memakai path relatif `./asset/img/` yang bergantung pada working directory proses; diganti `FCPATH . 'asset/img/'`.
+
+---
+
 ## [1.6.3] - 9 Oktober 2026
 
 ### Security

@@ -1,20 +1,14 @@
 <?php
-if ($this->session->flashdata('info')) {
-    $terhapus = TRUE;
-    $pesan    = 'Berhasil Menghapus Data';
-} elseif ($this->session->flashdata('failed')) {
-    $terhapus = FALSE;
-    $pesan    = 'Gagal Menghapus Data';
-} else {
-    $terhapus = NULL;
-    $pesan    = '';
-}
+$info     = $this->session->flashdata('info');
+$failed   = $this->session->flashdata('failed');
+$terhapus = ($info !== NULL && $info !== FALSE) ? TRUE : (($failed !== NULL && $failed !== FALSE) ? FALSE : NULL);
+$pesan    = $terhapus ? $info : $failed;
 ?>
 <div class="card">
     <div class="card-header"><h2>Data Calon Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
     <div class="card-body">
         <?php if(isset($terhapus)) { ?>
-            <div class="alert alert-<?php echo $terhapus ? 'success' : 'danger'; ?>"><?php echo $pesan; ?></div>
+            <div class="alert alert-<?php echo $terhapus ? 'success' : 'danger'; ?>"><?php echo htmlspecialchars($pesan, ENT_QUOTES, 'UTF-8'); ?></div>
         <?php } ?>
         <?php echo form_open('admin/hapuscalon', array('id' => 'hapusCalonForm')); ?>
         <div class="table-wrap">

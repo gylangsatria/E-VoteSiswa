@@ -134,7 +134,7 @@ Class Admin extends CI_Controller {
 	}
 	public function regsekolah() {
 		$data = $this->Admin_Model->regvalid();
-		if(!empty($data)) {
+		if(!empty($data) && ! $this->session->flashdata('regfailed')) {
 			redirect('admin/index');
 		}
 		$this->load->view('admin/head');
@@ -144,6 +144,28 @@ Class Admin extends CI_Controller {
 		$this->require_post();
 		$npsn		= $this->input->post('npsn');
 		$nm_sekolah	= $this->input->post('nm_sekolah');
+
+		if (! is_string($npsn) || ! is_string($nm_sekolah)) {
+			$this->session->set_flashdata('regfailed', 'Data sekolah tidak valid.');
+			redirect('admin/regsekolah');
+			return;
+		}
+
+		$npsn		= trim($npsn);
+		$nm_sekolah	= trim($nm_sekolah);
+
+		if ($npsn === '' || strlen($npsn) > 15) {
+			$this->session->set_flashdata('regfailed', 'NPSN wajib diisi (maks. 15 karakter).');
+			redirect('admin/regsekolah');
+			return;
+		}
+
+		if ($nm_sekolah === '' || strlen($nm_sekolah) > 100) {
+			$this->session->set_flashdata('regfailed', 'Nama sekolah wajib diisi (maks. 100 karakter).');
+			redirect('admin/regsekolah');
+			return;
+		}
+
 		$reg		= $this->Admin_Model->regsekolah($npsn,$nm_sekolah);
 		if($reg === true) {
 			redirect('admin/index');
@@ -179,9 +201,50 @@ Class Admin extends CI_Controller {
 		$jam_selesai = $this->input->post('jam_selesai');
 		$aktif       = $this->input->post('aktif') ? 1 : 0;
 
-		$tgl         = ($tgl === '' || $tgl === null) ? null : $tgl;
-		$jam_mulai   = ($jam_mulai === '' || $jam_mulai === null) ? null : $jam_mulai;
-		$jam_selesai = ($jam_selesai === '' || $jam_selesai === null) ? null : $jam_selesai;
+		if (! is_string($tapel)) {
+			$this->session->set_flashdata('updatefailed', 'Tahun pelajaran tidak valid.');
+			redirect('admin/index');
+			return;
+		}
+
+		$tapel = trim($tapel);
+
+		if (strlen($tapel) > 20) {
+			$this->session->set_flashdata('updatefailed', 'Tahun pelajaran maksimal 20 karakter.');
+			redirect('admin/index');
+			return;
+		}
+
+		foreach (array('tgl' => 'Tanggal', 'jam_mulai' => 'Jam mulai', 'jam_selesai' => 'Jam selesai') as $field => $label) {
+			$value = $this->input->post($field);
+			if ($value !== NULL && $value !== '' && ! is_string($value)) {
+				$this->session->set_flashdata('updatefailed', $label . ' tidak valid.');
+				redirect('admin/index');
+				return;
+			}
+		}
+
+		$tgl         = ($tgl === '' || $tgl === null) ? null : trim($tgl);
+		$jam_mulai   = ($jam_mulai === '' || $jam_mulai === null) ? null : trim($jam_mulai);
+		$jam_selesai = ($jam_selesai === '' || $jam_selesai === null) ? null : trim($jam_selesai);
+
+		if ($tgl !== null) {
+			$bagian = explode('-', $tgl);
+			if (count($bagian) !== 3 || ! checkdate((int) $bagian[1], (int) $bagian[2], (int) $bagian[0])) {
+				$this->session->set_flashdata('updatefailed', 'Tanggal tidak valid.');
+				redirect('admin/index');
+				return;
+			}
+		}
+
+		foreach (array('jam_mulai' => 'Jam mulai', 'jam_selesai' => 'Jam selesai') as $field => $label) {
+			$value = ($field === 'jam_mulai') ? $jam_mulai : $jam_selesai;
+			if ($value !== null && ! preg_match('/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/', $value)) {
+				$this->session->set_flashdata('updatefailed', $label . ' tidak valid (HH:MM).');
+				redirect('admin/index');
+				return;
+			}
+		}
 
 		if ($aktif && ($tgl === null || $jam_mulai === null || $jam_selesai === null)) {
 			$this->session->set_flashdata('updatefailed', 'Tanggal, jam mulai, dan jam selesai wajib diisi untuk mengaktifkan batas waktu voting.');
@@ -209,7 +272,21 @@ Class Admin extends CI_Controller {
 
 public function resetuser() {
 	$this->require_post();
-	$username	= trim((string) $this->input->post('username'));
+	$username	= $this->input->post('username');
+
+	if (! is_string($username)) {
+		$this->session->set_flashdata('resetuser_failed', 'NISN tidak valid.');
+		redirect('admin/index');
+		return;
+	}
+
+	$username = trim($username);
+
+	if ($username === '') {
+		$this->session->set_flashdata('resetuser_failed', 'NISN wajib diisi.');
+		redirect('admin/index');
+		return;
+	}
 
 	if (! $this->Admin_Model->dataadadpt($username)) {
 		$this->session->set_flashdata('resetuser_failed', 'NISN ' . $username . ' tidak ditemukan di DPT.');
@@ -257,16 +334,42 @@ public function idsekolah() {
 }
 public function updateidsekolah() {
 	$this->require_post();
-	$npsn			= $this->input->post('npsn');
-	$nm_sekolah		= $this->input->post('nm_sekolah');
-	$jln			= $this->input->post('jln');
-	$desa			= $this->input->post('desa');
-	$kec			= $this->input->post('kec');
-	$kab			= $this->input->post('kab');
-	$kpl_sekolah	= $this->input->post('kpl_sekolah');
-	$nip			= $this->input->post('nip');
+	$limits = array(
+		'npsn'        => 15,
+		'nm_sekolah'  => 100,
+		'jln'         => 100,
+		'desa'        => 100,
+		'kec'         => 100,
+		'kab'         => 100,
+		'kpl_sekolah' => 100,
+		'nip'         => 25
+	);
+
+	$data = array();
+	foreach ($limits as $field => $len) {
+		$value = $this->input->post($field);
+		if (! is_string($value)) {
+			$this->session->set_flashdata('failed', 'Data identitas sekolah tidak valid.');
+			redirect('admin/idsekolah');
+			return;
+		}
+		$value = trim($value);
+		if (strlen($value) > $len) {
+			$this->session->set_flashdata('failed', $field . ' melebihi panjang maksimal ' . $len . ' karakter.');
+			redirect('admin/idsekolah');
+			return;
+		}
+		$data[$field] = $value;
+	}
+
+	if ($data['npsn'] === '' || $data['nm_sekolah'] === '') {
+		$this->session->set_flashdata('failed', 'NPSN dan nama sekolah wajib diisi.');
+		redirect('admin/idsekolah');
+		return;
+	}
+
 	$jenis			= ($this->input->post('jenis') === 'madrasah') ? 'madrasah' : 'sekolah';
-	$save			= $this->Admin_Model->updateidsekolah($npsn, $nm_sekolah, $jln, $desa, $kec, $kab, $kpl_sekolah, $nip, $jenis);
+	$save			= $this->Admin_Model->updateidsekolah($data['npsn'], $data['nm_sekolah'], $data['jln'], $data['desa'], $data['kec'], $data['kab'], $data['kpl_sekolah'], $data['nip'], $jenis);
 	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Memperbarui Data');
 		redirect('admin/idsekolah');
@@ -383,6 +486,27 @@ public function tambahcalon() {
 public function hapuscalon($nisn = NULL) {
 	$this->require_post();
 	$nisn = ($nisn === NULL) ? $this->input->post('nisn') : $nisn;
+
+	if (! is_string($nisn)) {
+		$this->session->set_flashdata('failed', 'NISN kandidat tidak valid.');
+		redirect('admin/datacalon/');
+		return;
+	}
+
+	$nisn = trim($nisn);
+
+	if ($nisn === '') {
+		$this->session->set_flashdata('failed', 'NISN kandidat wajib diisi.');
+		redirect('admin/datacalon/');
+		return;
+	}
+
+	if (! $this->Admin_Model->dataadacalon($nisn)) {
+		$this->session->set_flashdata('failed', 'NISN ' . $nisn . ' tidak ditemukan di daftar kandidat.');
+		redirect('admin/datacalon/');
+		return;
+	}
+
 	$hapus = $this->Admin_Model->hapuscalon($nisn);
 	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
@@ -465,6 +589,12 @@ public function simpandpt() {
 
 	if (! preg_match('/^[0-9]{8,20}$/', $username)) {
 		$this->session->set_flashdata('failed', 'NISN wajib berupa angka 8-20 digit.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	if (strlen($nm_siswa) > 100) {
+		$this->session->set_flashdata('failed', 'Nama siswa maksimal 100 karakter.');
 		redirect('admin/tambahdpt/');
 		return;
 	}
@@ -652,6 +782,10 @@ public function simpanmassaldpt() {
 		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
 		if ($nisn && $nama && ctype_digit($nisn) && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
+			if (strlen($nisn) > 32 || strlen($nama) > 100 || strlen($kelas) > 32) {
+				$log[] = "⚠️ Baris " . ($i + 1) . ": terlalu panjang (NISN maks 32, Nama maks 100, Kelas maks 32), dilewati.";
+				continue;
+			}
 			if ($this->Admin_Model->dataadadpt($nisn)) {
 				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar, dilewati (tidak boleh ada data ganda).";
 				continue;
@@ -712,6 +846,27 @@ public function simpanmassaldpt() {
 public function hapusdpt($username = NULL) {
 	$this->require_post();
 	$username = ($username === NULL) ? $this->input->post('username') : $username;
+
+	if (! is_string($username)) {
+		$this->session->set_flashdata('failed', 'NISN tidak valid.');
+		redirect('admin/datadpt');
+		return;
+	}
+
+	$username = trim($username);
+
+	if ($username === '') {
+		$this->session->set_flashdata('failed', 'NISN wajib diisi.');
+		redirect('admin/datadpt');
+		return;
+	}
+
+	if (! $this->Admin_Model->dataadadpt($username)) {
+		$this->session->set_flashdata('failed', 'NISN ' . $username . ' tidak ditemukan di DPT.');
+		redirect('admin/datadpt');
+		return;
+	}
+
 	$hapus	= $this->Admin_Model->hapusdpt($username);
 	if($hapus === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menghapus Data');
@@ -764,6 +919,12 @@ public function updatedpt($username = NULL){
 
 	if ($nm_siswa === '') {
 		$this->session->set_flashdata('failed', 'Nama siswa wajib diisi.');
+		redirect('admin/editdpt?nisn=' . rawurlencode($username));
+		return;
+	}
+
+	if (strlen($nm_siswa) > 100) {
+		$this->session->set_flashdata('failed', 'Nama siswa maksimal 100 karakter.');
 		redirect('admin/editdpt?nisn=' . rawurlencode($username));
 		return;
 	}
@@ -842,6 +1003,12 @@ public function simpancalon() {
 		return;
 	}
 
+	if (strlen($nama) > 100 || strlen($nama_wakil) > 100) {
+		$this->session->set_flashdata('failed', 'Nama calon dan wakil maksimal 100 karakter.');
+		redirect('admin/tambahcalon');
+		return;
+	}
+
 	if ($opsi_mpkosis !== '0' && $opsi_mpkosis !== '1') {
 		$this->session->set_flashdata('failed', 'Jenis kandidat tidak valid.');
 		redirect('admin/tambahcalon');
@@ -854,7 +1021,7 @@ public function simpancalon() {
 		return;
 	}
 
-    $config['upload_path']   = './asset/img/';
+    $config['upload_path']   = FCPATH . 'asset/img/';
     $config['allowed_types'] = 'gif|jpg|jpeg|png';
     $config['max_size']      = 1024;
     $config['file_name']     = $nisn;
@@ -932,6 +1099,12 @@ public function simpancalon() {
 		return;
 	}
 
+	if (strlen($nama) > 100 || strlen($nama_wakil) > 100) {
+		$this->session->set_flashdata('failed', 'Nama calon dan wakil maksimal 100 karakter.');
+		redirect('admin/editcalon/' . $nisn);
+		return;
+	}
+
 	if ($opsi_mpkosis !== '0' && $opsi_mpkosis !== '1') {
 		$this->session->set_flashdata('failed', 'Jenis kandidat tidak valid.');
 		redirect('admin/editcalon/' . $nisn);
@@ -939,7 +1112,7 @@ public function simpancalon() {
 	}
 
     // Konfigurasi upload
-		$config['upload_path']   = './asset/img/';
+			$config['upload_path']   = FCPATH . 'asset/img/';
 		$config['allowed_types'] = 'jpg|jpeg|png';
     $config['max_size']      = 2048; // 2MB
     $config['file_name']     = 'calon_' . $nisn;
@@ -1018,7 +1191,7 @@ public function daftarhadir() {
     $this->load->view('admin/head');
     $this->load->view('admin/admin-navbar');
     $this->load->view('admin/daftarhadir', $data);
-    $this->load->view('admin/footer');
+    $this->load->view('admin/footer', $data);
 }
 
 public function tgl_indo($tanggal){
@@ -1043,7 +1216,17 @@ public function cetakdaftarhadir(){
 	$this->require_post();
 	$datasekolah	= $this->Admin_Model->idsekolah();
 	$data			=	$this->Admin_Model->daftarhadir();
-	foreach($datasekolah as $loaddata) {}
+
+	if (empty($datasekolah)) {
+		$this->session->set_flashdata('failed', 'Identitas sekolah belum diisi. Lengkapi data sekolah terlebih dahulu.');
+		redirect('admin/daftarhadir');
+		return;
+	}
+
+	$loaddata = array_merge(
+		array('nm_sekolah' => '', 'desa' => '', 'kpl_sekolah' => '', 'nip' => ''),
+		$datasekolah[0]
+	);
 		ob_start();
 	$pdf = new FPDF('p', 'mm', 'a4');
 	$pdf->AddPage();
