@@ -30,10 +30,10 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
     <div class="card-header"><h2>Data Pilketos</h2></div>
     <div class="card-body">
         <?php if($this->session->flashdata('update')) { ?>
-            <div class="alert alert-success"><?php echo $this->session->flashdata('update'); ?></div>
+            <div class="alert alert-success"><?php echo htmlspecialchars($this->session->flashdata('update'), ENT_QUOTES, 'UTF-8'); ?></div>
         <?php } ?>
         <?php if($this->session->flashdata('updatefailed')) { ?>
-            <div class="alert alert-danger"><?php echo $this->session->flashdata('updatefailed'); ?></div>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($this->session->flashdata('updatefailed'), ENT_QUOTES, 'UTF-8'); ?></div>
         <?php } ?>
         <?php
         $jam_mulai   = isset($loaddata['jam_mulai']) ? $loaddata['jam_mulai'] : '';
@@ -80,10 +80,10 @@ $loaddata = isset($datapilketos[0]) ? $datapilketos[0] : ['tapel' => '', 'tgl' =
             <p class="text-sm text-slate-600">Fitur ini akan menghapus semua data kecuali Identitas <?php echo org_label('satuan'); ?> dan Data Kelas.</p>
             <p class="mt-2 text-sm text-slate-600">Gunakan apabila pemilihan telah selesai dan Anda telah mengunduh <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/daftarhadir'); ?>">Daftar Hadir</a> dan <a class="text-brand-600 hover:underline" href="<?php echo base_url('index.php/admin/laporan'); ?>">Laporan Pemilihan</a>.</p>
             <?php if($this->session->flashdata('reset')) { ?>
-                <div class="alert alert-success mt-4"><?php echo $this->session->flashdata('reset'); ?></div>
+                <div class="alert alert-success mt-4"><?php echo htmlspecialchars($this->session->flashdata('reset'), ENT_QUOTES, 'UTF-8'); ?></div>
             <?php } ?>
             <?php if($this->session->flashdata('resetfailed')) { ?>
-                <div class="alert alert-danger mt-4"><?php echo $this->session->flashdata('resetfailed'); ?></div>
+                <div class="alert alert-danger mt-4"><?php echo htmlspecialchars($this->session->flashdata('resetfailed'), ENT_QUOTES, 'UTF-8'); ?></div>
             <?php } ?>
             <button type="button" class="btn btn-primary mt-4" data-open-dialog="reset"><i class="fa fa-trash"></i> Reset Data Pemilihan</button>
 

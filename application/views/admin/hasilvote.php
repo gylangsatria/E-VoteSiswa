@@ -17,10 +17,10 @@ foreach ($vote as $v) {
 ?>
 
 <?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
+    <div class="alert alert-success"><?= htmlspecialchars($this->session->flashdata('success'), ENT_QUOTES, 'UTF-8'); ?></div>
 <?php endif; ?>
 <?php if ($this->session->flashdata('warning')): ?>
-    <div class="alert alert-warning"><?= $this->session->flashdata('warning'); ?></div>
+    <div class="alert alert-warning"><?= htmlspecialchars($this->session->flashdata('warning'), ENT_QUOTES, 'UTF-8'); ?></div>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>

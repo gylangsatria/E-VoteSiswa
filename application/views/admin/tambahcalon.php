@@ -2,10 +2,10 @@
 	<div class="card-header"><h2>Tambah Kandidat Ketua <?php echo org_label('organisasi'); ?> dan MPK</h2></div>
 	<div class="card-body">
 		<?php if($this->session->flashdata('info')) { ?>
-			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+			<div class="alert alert-success"><?php echo htmlspecialchars($this->session->flashdata('info'), ENT_QUOTES, 'UTF-8'); ?></div>
 		<?php } ?>
 		<?php if($this->session->flashdata('failed')) { ?>
-			<div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+			<div class="alert alert-danger"><?php echo htmlspecialchars($this->session->flashdata('failed'), ENT_QUOTES, 'UTF-8'); ?></div>
 		<?php } ?>
 		<?php echo form_open_multipart('admin/simpancalon', array('method' => 'post', 'class' => 'mx-auto max-w-3xl')); ?>
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">

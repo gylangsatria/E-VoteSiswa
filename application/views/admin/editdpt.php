@@ -17,10 +17,10 @@ $dpt = isset($datakddpt[0]) ? $datakddpt[0] : array(
 			<div class="alert alert-warning">Siswa ini belum memiliki kelas yang terdaftar (kode kelas lama: <strong><?php echo htmlspecialchars($dpt['kd_kelas'], ENT_QUOTES, 'UTF-8'); ?></strong>). Pilih kelas yang benar lalu simpan.</div>
 		<?php } ?>
 		<?php if($this->session->flashdata('info')) { ?>
-			<div class="alert alert-success"><?php echo $this->session->flashdata('info'); ?></div>
+			<div class="alert alert-success"><?php echo htmlspecialchars($this->session->flashdata('info'), ENT_QUOTES, 'UTF-8'); ?></div>
 		<?php } ?>
 		<?php if($this->session->flashdata('failed')) { ?>
-			<div class="alert alert-danger"><?php echo $this->session->flashdata('failed'); ?></div>
+			<div class="alert alert-danger"><?php echo htmlspecialchars($this->session->flashdata('failed'), ENT_QUOTES, 'UTF-8'); ?></div>
 		<?php } ?>
 		<?php echo form_open('admin/updatedpt', array('method' => 'post', 'class' => 'mx-auto max-w-md')); ?>
 			<label class="label" for="edp-nisn">NISN</label>
