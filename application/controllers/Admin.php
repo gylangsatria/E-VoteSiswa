@@ -46,6 +46,13 @@ Class Admin extends CI_Controller {
 		$this->require_post();
 		$username		= $this->session->userdata('admin');
 		$password		= $this->input->post('password');
+
+		if (! is_string($password) || strlen(trim($password)) < 6) {
+			$this->session->set_flashdata('updatefailed', 'Password minimal 6 karakter.');
+			redirect('admin/gantipassword');
+			return;
+		}
+
 		$password_hash	= password_hash($password, PASSWORD_DEFAULT);
 		$update			= $this->Admin_Model->gantipassword($username, $password_hash);
 		if($update === true) {
@@ -285,6 +292,21 @@ public function datakelas() {
 public function simpankelas() {
 	$this->require_post();
 	$nm_kelas	= $this->input->post('nm_kelas');
+
+	if (! is_string($nm_kelas)) {
+		$this->session->set_flashdata('failed', 'Nama kelas tidak valid.');
+		redirect('admin/datakelas');
+		return;
+	}
+
+	$nm_kelas	= trim($nm_kelas);
+
+	if ($nm_kelas === '' || strlen($nm_kelas) > 32) {
+		$this->session->set_flashdata('failed', 'Nama kelas wajib diisi (maks. 32 karakter).');
+		redirect('admin/datakelas');
+		return;
+	}
+
 	$save		= $this->Admin_Model->simpankelas($nm_kelas);
 	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
@@ -423,11 +445,23 @@ public function datadpt() {
 
 public function simpandpt() {
 	$this->require_post();
-	$username	= trim((string) $this->input->post('nisn'));
+	$username	= $this->input->post('nisn');
 	$password	= $username;
-	$nm_siswa	= trim((string) $this->input->post('nm_siswa'));
-	$jk 		= strtoupper(substr(trim((string) $this->input->post('jk')), 0, 1));
-	$kd_kelas	= (int) $this->input->post('kd_kelas');
+	$nm_siswa	= $this->input->post('nm_siswa');
+	$jk 		= $this->input->post('jk');
+	$kd_kelas	= $this->input->post('kd_kelas');
+
+	if (! is_string($username) || ! is_string($nm_siswa) || ! is_string($jk) || ! is_string($kd_kelas)) {
+		$this->session->set_flashdata('failed', 'Data DPT tidak valid.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
+
+	$username	= trim($username);
+	$nm_siswa	= trim($nm_siswa);
+	$jk 		= strtoupper(substr(trim($jk), 0, 1));
+	$kd_kelas	= (int) $kd_kelas;
+	$password	= $username;
 
 	if (! preg_match('/^[0-9]{8,20}$/', $username)) {
 		$this->session->set_flashdata('failed', 'NISN wajib berupa angka 8-20 digit.');
@@ -706,10 +740,46 @@ public function editdpt($username = NULL) {
 }
 public function updatedpt($username = NULL){
 	$this->require_post();
-	$username	= (string) $this->input->post('nisn');
+	$username	= $this->input->post('nisn');
 	$nm_siswa	= $this->input->post('nm_siswa');
 	$jk			= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
+
+	if (! is_string($username) || ! is_string($nm_siswa) || ! is_string($jk) || ! is_string($kd_kelas)) {
+		$this->session->set_flashdata('failed', 'Data DPT tidak valid.');
+		redirect('admin/datadpt');
+		return;
+	}
+
+	$username	= trim($username);
+	$nm_siswa	= trim($nm_siswa);
+	$jk			= strtoupper(substr(trim($jk), 0, 1));
+	$kd_kelas	= (int) $kd_kelas;
+
+	if (! preg_match('/^[0-9]{8,20}$/', $username)) {
+		$this->session->set_flashdata('failed', 'NISN tidak valid.');
+		redirect('admin/datadpt');
+		return;
+	}
+
+	if ($nm_siswa === '') {
+		$this->session->set_flashdata('failed', 'Nama siswa wajib diisi.');
+		redirect('admin/editdpt?nisn=' . rawurlencode($username));
+		return;
+	}
+
+	if ($jk !== 'L' && $jk !== 'P') {
+		$this->session->set_flashdata('failed', 'Jenis kelamin tidak valid.');
+		redirect('admin/editdpt?nisn=' . rawurlencode($username));
+		return;
+	}
+
+	if (! $this->db->get_where('tb_kelas', array('kd_kelas' => $kd_kelas))->row_array()) {
+		$this->session->set_flashdata('failed', 'Kelas tidak ditemukan. Pilih kelas yang terdaftar.');
+		redirect('admin/editdpt?nisn=' . rawurlencode($username));
+		return;
+	}
+
 	$update		= $this->Admin_Model->updatedpt($username, $nm_siswa, $jk,$kd_kelas);
 	if($update === true) {
 		$this->session->set_flashdata('info', 'Berhasil Mengupdate Data');
@@ -738,11 +808,45 @@ public function simpancalon() {
 		redirect('admin/login');
 	}
 
-	$nisn          = trim((string) $this->input->post('nisn'));
+	$nisn          = $this->input->post('nisn');
 	$no            = $this->input->post('no');
 	$nama          = $this->input->post('nama');
 	$nama_wakil    = $this->input->post('nama_wakil');
     $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIM
+
+	if (! is_string($nisn) || ! is_string($no) || ! is_string($nama) || ! is_string($nama_wakil) || ! is_string($opsi_mpkosis)) {
+		$this->session->set_flashdata('failed', 'Data kandidat tidak valid.');
+		redirect('admin/tambahcalon');
+		return;
+	}
+
+	$nisn       = trim($nisn);
+	$nama       = trim($nama);
+	$nama_wakil = trim($nama_wakil);
+
+	if (! preg_match('/^[0-9]{8,20}$/', $nisn)) {
+		$this->session->set_flashdata('failed', 'NISN calon wajib berupa angka 8-20 digit.');
+		redirect('admin/tambahcalon');
+		return;
+	}
+
+	if (! preg_match('/^[0-9]{1,3}$/', $no)) {
+		$this->session->set_flashdata('failed', 'Nomor urut paslon wajib berupa angka.');
+		redirect('admin/tambahcalon');
+		return;
+	}
+
+	if ($nama === '' || $nama_wakil === '') {
+		$this->session->set_flashdata('failed', 'Nama calon dan wakil wajib diisi.');
+		redirect('admin/tambahcalon');
+		return;
+	}
+
+	if ($opsi_mpkosis !== '0' && $opsi_mpkosis !== '1') {
+		$this->session->set_flashdata('failed', 'Jenis kandidat tidak valid.');
+		redirect('admin/tambahcalon');
+		return;
+	}
 
 	if ($this->Admin_Model->dataadacalon($nisn)) {
 		$this->session->set_flashdata('failed', 'NISN ' . $nisn . ' sudah terdaftar sebagai kandidat. Tidak boleh ada data ganda.');
@@ -805,6 +909,34 @@ public function simpancalon() {
 		$nama          = $this->input->post('nama');
 		$nama_wakil    = $this->input->post('nama_wakil');
 		$opsi_mpkosis  = $this->input->post('opsi_mpkosis');
+
+	if (! is_string($nisn) || ! is_string($no) || ! is_string($nama) || ! is_string($nama_wakil) || ! is_string($opsi_mpkosis)) {
+		$this->session->set_flashdata('failed', 'Data kandidat tidak valid.');
+		redirect('admin/datacalon');
+		return;
+	}
+
+	$nisn       = trim($nisn);
+	$nama       = trim($nama);
+	$nama_wakil = trim($nama_wakil);
+
+	if (! preg_match('/^[0-9]{1,3}$/', $no)) {
+		$this->session->set_flashdata('failed', 'Nomor urut paslon wajib berupa angka.');
+		redirect('admin/editcalon/' . $nisn);
+		return;
+	}
+
+	if ($nama === '' || $nama_wakil === '') {
+		$this->session->set_flashdata('failed', 'Nama calon dan wakil wajib diisi.');
+		redirect('admin/editcalon/' . $nisn);
+		return;
+	}
+
+	if ($opsi_mpkosis !== '0' && $opsi_mpkosis !== '1') {
+		$this->session->set_flashdata('failed', 'Jenis kandidat tidak valid.');
+		redirect('admin/editcalon/' . $nisn);
+		return;
+	}
 
     // Konfigurasi upload
 		$config['upload_path']   = './asset/img/';
