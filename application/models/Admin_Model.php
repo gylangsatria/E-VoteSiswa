@@ -230,6 +230,9 @@ Class Admin_Model extends CI_Model {
 	public function dataadadpt($username) {
 		return $this->db->get_where('tb_siswa', array('username' => $username))->num_rows() > 0;
 	}
+	public function dataadacalon($nisn) {
+		return $this->db->get_where('tb_pilihan', array('nisn' => $nisn))->num_rows() > 0;
+	}
 	public function login_attempts_count($username) {
 		$row = $this->db->get_where('tb_login_attempts', array('username' => substr($username, 0, 32)))->row_array();
 		return $row ? (int) $row['attempts'] : 0;

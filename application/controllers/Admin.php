@@ -415,18 +415,24 @@ public function datadpt() {
 
 public function simpandpt() {
 	$this->require_post();
-	$username	= $this->input->post('nisn');
-	$password	= $this->input->post('nisn');
+	$username	= trim((string) $this->input->post('nisn'));
+	$password	= $username;
 	$nm_siswa	= $this->input->post('nm_siswa');
 	$jk 		= $this->input->post('jk');
 	$kd_kelas	= $this->input->post('kd_kelas');
 
 	if ($this->Admin_Model->dataadadpt($username)) {
-		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar di DPT.');
+		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar di DPT. Tidak boleh ada data ganda.');
 		redirect('admin/tambahdpt/');
 	}
 
-	$save 		= $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
+	try {
+		$save = $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
+	} catch (Throwable $e) {
+		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar di DPT. Tidak boleh ada data ganda.');
+		redirect('admin/tambahdpt/');
+		return;
+	}
 	if($save === true) {
 		$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
 		redirect('admin/tambahdpt/');
@@ -575,6 +581,10 @@ public function simpanmassaldpt() {
 		$log[] = "🔍 Baris " . ($i + 1) . ": NISN=$nisn | Nama=$nama | JK=$jk | Kelas=$kelas";
 
 		if ($nisn && $nama && ($jk === 'L' || $jk === 'P') && $kelas !== '') {
+			if ($this->Admin_Model->dataadadpt($nisn)) {
+				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar, dilewati (tidak boleh ada data ganda).";
+				continue;
+			}
 			try {
 				$info_kelas = $this->Admin_Model->kelas_id_dari($kelas);
 
@@ -687,11 +697,17 @@ public function simpancalon() {
 		redirect('admin/login');
 	}
 
-	$nisn          = $this->input->post('nisn');
+	$nisn          = trim((string) $this->input->post('nisn'));
 	$no            = $this->input->post('no');
 	$nama          = $this->input->post('nama');
 	$nama_wakil    = $this->input->post('nama_wakil');
     $opsi_mpkosis  = $this->input->post('opsi_mpkosis'); // 0 = MPK, 1 = OSIM
+
+	if ($this->Admin_Model->dataadacalon($nisn)) {
+		$this->session->set_flashdata('failed', 'NISN ' . $nisn . ' sudah terdaftar sebagai kandidat. Tidak boleh ada data ganda.');
+		redirect('admin/tambahcalon');
+		return;
+	}
 
     $config['upload_path']   = './asset/img/';
     $config['allowed_types'] = 'gif|jpg|jpeg|png';
@@ -705,7 +721,13 @@ public function simpancalon() {
     	$photo       = $upload_data['file_name'];
 
         // Pastikan method tambahcalon di Admin_Model menerima parameter tambahan
-    	$this->Admin_Model->tambahcalon($nisn, $no, $nama, $nama_wakil, $photo, $opsi_mpkosis);
+    	try {
+    		$this->Admin_Model->tambahcalon($nisn, $no, $nama, $nama_wakil, $photo, $opsi_mpkosis);
+    	} catch (Throwable $e) {
+    		$this->session->set_flashdata('failed', 'NISN ' . $nisn . ' sudah terdaftar sebagai kandidat. Tidak boleh ada data ganda.');
+    		redirect('admin/tambahcalon');
+    		return;
+    	}
     	$this->session->set_flashdata('info', 'Berhasil Menambahkan Data');
     } else {
     	$this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $this->upload->display_errors('', ''));
