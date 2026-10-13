@@ -622,11 +622,6 @@ public function simpandpt() {
 		redirect('admin/tambahdpt/');
 	}
 
-	if ($this->Admin_Model->dataadacalon($username)) {
-		$this->session->set_flashdata('failed', 'NISN ' . $username . ' sudah terdaftar sebagai kandidat. Tidak boleh ada data ganda.');
-		redirect('admin/tambahdpt/');
-	}
-
 	try {
 		$save = $this->Admin_Model->simpandpt($username, $password, $nm_siswa, $jk ,$kd_kelas);
 	} catch (Throwable $e) {
@@ -788,10 +783,6 @@ public function simpanmassaldpt() {
 			}
 			if ($this->Admin_Model->dataadadpt($nisn)) {
 				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar, dilewati (tidak boleh ada data ganda).";
-				continue;
-			}
-			if ($this->Admin_Model->dataadacalon($nisn)) {
-				$log[] = "⚠️ Baris " . ($i + 1) . ": NISN $nisn sudah terdaftar sebagai kandidat, dilewati (tidak boleh ada data ganda).";
 				continue;
 			}
 			try {
