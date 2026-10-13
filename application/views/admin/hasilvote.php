@@ -96,7 +96,8 @@ foreach ($vote as $v) {
             datalabels: {
                 formatter: (value, ctx) => {
                     let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                    return sum > 0 ? (value / sum * 100).toFixed(1) + '%' : '0%';
+                    if (sum === 0 || value === 0) return null;
+                    return (value / sum * 100).toFixed(1) + '%';
                 },
                 color: '#fff',
                 font: { weight: 'bold', size: 14 }
